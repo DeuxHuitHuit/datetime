@@ -127,7 +127,7 @@
 			$this->_engine->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 201, false);	
 			
 			// title and help
-			$wrapper->setValue($this->get('label') . '<i>' . __('Click <code>alt</code> to add a range') . '</i>');
+			$wrapper->setValue($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
 
 			// settings
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
