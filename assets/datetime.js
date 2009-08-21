@@ -17,7 +17,7 @@
 			// language
 			if(Calendar.settings == undefined) Calendar.settings = eval('(' + input.filter(':hidden').val() + ')');
 			// init
-			if(Calendar.settings.prepopulate == 'yes' && input.filter(':first').val == '') input.filter(':first').val(Calendar.setRelativeDate(Date.parse('now')));
+			if(Calendar.settings.prepopulate == 'yes' && !input.filter(':first').val) input.filter(':first').val(Calendar.setRelativeDate(Date.parse('now')));
 			if(Calendar.settings.multiple == 'no') field.find('a.new').remove();
 			Calendar.create(label);	
 			Calendar.toggleInput(label, 0);
