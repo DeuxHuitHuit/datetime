@@ -280,8 +280,10 @@
 			// get timeline 
 			$timeline = $data['start'];
 			sort($timeline);
-
+			
 			// generate XML
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['start'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
 				$date = new XMLElement('date');
 				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
