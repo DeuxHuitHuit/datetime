@@ -9,4 +9,4 @@
 This extension adds a new field to Symphony CMS that allows the addition of single dates, multiple dates and date ranges.  
 Dates can be sorted manually for data source output, but data source filtering is not yet possible.
 
-This extension is based and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/).
+This extension is based on and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/).
