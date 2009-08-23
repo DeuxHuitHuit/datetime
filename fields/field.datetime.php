@@ -282,7 +282,7 @@
 			
 			// generate XML
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
-			if(!is_array($data['start'])) $data['end'] = array($data['end']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
 				$date = new XMLElement('date');
 				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
@@ -296,7 +296,7 @@
 				);
 				$date->appendChild($start);
 				if(!empty($data['end'][$id])) {
-					$timestamp = strtotime($data['end'][$id]);
+					$timestamp = strtotime($data['end'][$id]);	
 					$end = new XMLElement('end', DateTimeObj::get('Y-m-d', $timestamp), array(
 							'iso' => $data['end'][$id], 
 							'time' => DateTimeObj::get('H:i', $timestamp), 
