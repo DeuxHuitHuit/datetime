@@ -219,7 +219,7 @@
 			current.clearTime();
 			current.set({ day: 1 });
 			if (!current.is().sunday()) current.last().sunday();
-			calendar.find('tbody td').removeClass('start').removeClass('end').removeClass('today').removeClass('range').each(function() {
+			calendar.find('tbody td').removeClass('start').removeClass('end').removeClass('today').removeClass('range').removeClass('last').removeClass('next').each(function() {
 				var day = $(this);
 				day.text(current.toString('d'));
 				// month context
