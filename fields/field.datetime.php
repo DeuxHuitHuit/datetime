@@ -249,6 +249,8 @@
 		function prepareTableValue($data, XMLElement $link=NULL){
 		
 			$value = '';
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
 				if(!empty($data['end'][$id])) {
 					if($value != '') $value .= ', <br />'; 
