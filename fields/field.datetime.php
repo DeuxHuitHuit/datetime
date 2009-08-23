@@ -159,11 +159,8 @@
 			}
 			else {
 				$count = count($data['start']);
-				if($count == 1) {
-					$data['start'] = array($data['start']);
-					$data['end'] = array($data['end']);
-				}
-
+				if(!is_array($data['start'])) $data['start'] = array($data['start']);
+				if(!is_array($data['end'])) $data['end'] = array($data['end']);
 				for($i = 1; $i <= $count; $i++) {
 					$label = Widget::Label();
 					if($i == 1 && $i != $count) { 
@@ -207,7 +204,7 @@
 			$status = self::__OK__;
 			if(!is_array($data)) return NULL;
 			if(empty($data)) return NULL;
-		
+
 			$result = array('entry_id' => array(), 'start' => array(), 'end' => array());		
 			$count = count($data['start']);
 			for($i = 0; $i < $count; $i++) {
@@ -215,7 +212,7 @@
 				$result['start'][] = date('c', strtotime($data['start'][$i]));
 				$result['end'][] = empty($data['end'][$i]) ? NULL : date('c', strtotime($data['end'][$i]));
 			}
-
+			
 			return $result;
 
 		}
@@ -225,13 +222,13 @@
 		 */
 		
 		function createTable(){
-				
+			
 			return Administration::instance()->Database->query(
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 				`id` int(11) unsigned NOT NULL auto_increment,
 				`entry_id` int(11) unsigned NOT NULL,
 				`start` varchar(80) NOT NULL,
-				`end` varchar(80) NOT NULL,
+				`end` varchar(80) NULL,
 				PRIMARY KEY (`id`),
 			  	KEY `entry_id` (`entry_id`)
 				);"
