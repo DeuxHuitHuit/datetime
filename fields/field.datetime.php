@@ -18,15 +18,23 @@
 		 * Allow data source filtering
 		 */
 		
-		function canFilter(){
+		function canFilter() {
 			return false;
+		}		
+		
+		/**
+		 * Allow data source sorting
+		 */
+		
+		function isSortable() {
+			return true;
 		}		
 		
 		/**
 		 * Allow data source parameter output
 		 */
 		
-		function allowDatasourceParamOutput(){
+		function allowDatasourceParamOutput() {
 			return true;
 		}	
 
@@ -243,7 +251,7 @@
 		 * @param XMLElement $link
 		 */
 
-		function prepareTableValue($data, XMLElement $link=NULL){
+		function prepareTableValue($data, XMLElement $link=NULL) {
 		
 			$value = '';
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
@@ -261,6 +269,20 @@
 			return $value;
 		
 		}
+		
+		/**
+		 * Build data source sorting sql
+		 *
+		 * @param string $joins
+		 * @param string $where
+		 * @param string $sort
+		 * @param string $order
+		 */
+		 
+		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
+			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `dt` ON (`e`.`id` = `dt`.`entry_id`) ";
+			$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`dt`.`start` $order");
+		}		 
 		
  		/**
 		 * Generate data source output.
