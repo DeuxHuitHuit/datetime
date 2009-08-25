@@ -8,6 +8,12 @@
 		 * Initialize Mediathek as unrequired field
 		 */
 
+		const SIMPLE = 0;
+		const REGEXP = 1;
+		const RANGE = 3;
+		const ERROR = 4;
+		private $key;
+		
 		function __construct(&$parent) {
 			parent::__construct($parent);
 			$this->_name = __('Date/Time');
@@ -19,7 +25,7 @@
 		 */
 		
 		function canFilter() {
-			return false;
+			return true;
 		}		
 		
 		/**
@@ -28,6 +34,14 @@
 		
 		function isSortable() {
 			return true;
+		}
+		
+		/**
+		 * Allow prepopulation of other fields
+		 */
+		
+		function canPrePopulate(){
+			return false;
 		}		
 		
 		/**
@@ -208,7 +222,7 @@
 		 */
 		
 		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
-
+		
 			$status = self::__OK__;
 			if(!is_array($data)) return NULL;
 			if(empty($data)) return NULL;
@@ -220,7 +234,6 @@
 				$result['start'][] = date('c', strtotime($data['start'][$i]));
 				$result['end'][] = empty($data['end'][$i]) ? NULL : date('c', strtotime($data['end'][$i]));
 			}
-			
 			return $result;
 
 		}
@@ -282,8 +295,213 @@
 		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
 			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `dt` ON (`e`.`id` = `dt`.`entry_id`) ";
 			$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`dt`.`start` $order");
-		}		 
+		}
 		
+		/**
+		 * Build data source retrival sql
+		 *
+		 * @param array $data
+		 * @param string $joins
+		 * @param string $where
+		 * @param boolean $andOperation
+		 */
+		 
+		function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
+			
+			if(self::isFilterRegex($data[0])) return parent::buildDSRetrivalSQL($data, $joins, $where, $andOperation);
+		
+			$parsed = array();
+
+			foreach($data as $string) {
+				$type = self::__parseFilter($string);
+				if($type == self::ERROR) return false;
+				if(!is_array($parsed[$type])) $parsed[$type] = array();
+				$parsed[$type][] = $string;
+			}
+
+			foreach($parsed as $type => $value) {
+				
+				switch($type) {
+				
+					case self::RANGE:
+						if(!empty($value)) $this->__buildRangeFilterSQL($value, $joins, $where, $andOperation);
+						break;
+						
+					case self::SIMPLE:
+						if(!empty($value)) $this->__buildSimpleFilterSQL($value, $joins, $where, $andOperation);
+						break;
+				}
+				
+			}
+
+			return true;
+			
+		}
+		
+		/**
+		 * Build sql for single dates
+		 *
+		 * @param array $data
+		 * @param string $joins
+		 * @param string $where
+		 * @param boolean $andOperation
+		 */
+		 
+		protected function __buildSimpleFilterSQL($data, &$joins, &$where, $andOperation = false) {
+		
+			$field_id = $this->get('id');
+			
+			$connector = ' OR ';
+			if($andOperation == 1) $connector = ' AND ';
+							
+			foreach($data as $date) {
+				$tmp[] = "'" . DateTimeObj::get('Y-m-d', strtotime($date)) . "' BETWEEN 
+					DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') AND 
+					DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d')";
+			}
+			$joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
+			$where .= " AND (".@implode($connector, $tmp).") ";
+			$this->key++;
+			
+		}
+		
+		/**
+		 * Build sql for dates ranges
+		 *
+		 * @param array $data
+		 * @param string $joins
+		 * @param string $where
+		 * @param boolean $andOperation
+		 */
+		 
+		protected function __buildRangeFilterSQL($data, &$joins, &$where, $andOperation=false) {	
+			
+			$field_id = $this->get('id');
+			
+			$connector = ' OR ';
+			if($andOperation == 1) $connector = ' AND ';
+							
+			foreach($data as $date) {
+				$tmp[] = "(DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') BETWEEN			
+					'" . DateTimeObj::get('Y-m-d', strtotime($date['start'])) . "' AND 
+					'" . DateTimeObj::get('Y-m-d', strtotime($date['end'])) . "' OR 
+					DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d') BETWEEN
+					'" . DateTimeObj::get('Y-m-d', strtotime($date['start'])) . "' AND 
+					'" . DateTimeObj::get('Y-m-d', strtotime($date['end'])) . "')";
+			}
+			$joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
+			$where .= " AND (".@implode($connector, $tmp).") ";
+			$this->key++;
+	
+		}
+		
+		/**
+		 * Clean up date string
+		 * This function is a copy from the core date field
+		 *
+		 * @param string $string
+		 */
+		 
+		protected static function __cleanFilterString($string) {
+
+			$string = trim($string);
+			$string = trim($string, '-/');
+			return $string;
+
+		}
+		
+		/**
+		 * Parse filter string for shorthand dates and ranges
+		 * This function is a copy from the core date field
+		 *
+		 * @param string $string
+		 */
+		 
+		protected static function __parseFilter(&$string) {
+			
+			$string = self::__cleanFilterString($string);
+			
+			## Check its not a regexp
+			if(preg_match('/^regexp:/i', $string)) {
+				$string = str_replace('regexp:', '', $string);
+				return self::REGEXP;
+			}
+			
+			## Look to see if its a shorthand date (year only), and convert to full date
+			elseif(preg_match('/^(1|2)\d{3}$/i', $string)) {
+				$string = "$string-01-01 to $string-12-31";
+			}	
+			
+			elseif(preg_match('/^(earlier|later) than (.*)$/i', $string, $match)) {
+										
+				$string = $match[2];
+				
+				if(!self::__isValidDateString($string)) return self::ERROR;	
+				
+				$time = strtotime($string);
+
+				switch($match[1]){
+					case 'later': $string = DateTimeObj::get('Y-m-d H:i:s', $time+1) . ' to 2038-01-01'; break;
+					case 'earlier': $string = '1970-01-03 to ' . DateTimeObj::get('Y-m-d H:i:s', $time-1); break;
+				}
+
+			}
+
+			## Look to see if its a shorthand date (year and month), and convert to full date
+			elseif(preg_match('/^(1|2)\d{3}[-\/]\d{1,2}$/i', $string)) {
+				
+				$start = "$string-01";
+				
+				if(!self::__isValidDateString($start)) return self::ERROR;
+				
+				$string = "$start to $string-" . date('t', strtotime($start));
+			}
+					
+			## Match for a simple date (Y-m-d), check its ok using checkdate() and go no further
+			elseif(!preg_match('/to/i', $string)) {
+
+				if(!self::__isValidDateString($string)) return self::ERROR;
+				
+				$string = DateTimeObj::get('Y-m-d H:i:s', strtotime($string));
+				return self::SIMPLE;
+				
+			}
+		
+			## Parse the full date range and return an array
+			
+			if(!$parts = preg_split('/to/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
+			
+			$parts = array_map(array('self', '__cleanFilterString'), $parts);
+
+			list($start, $end) = $parts;
+			
+			if(!self::__isValidDateString($start) || !self::__isValidDateString($end)) return self::ERROR;
+			
+			$string = array('start' => $start, 'end' => $end);
+
+			return self::RANGE;
+		}
+		
+		/**
+		 * Validate date
+		 * This function is a copy from the core date field
+		 *
+		 * @param string $string
+		 */
+		 
+		protected static function __isValidDateString($string) {
+
+			$string = trim($string);
+			
+			if(empty($string)) return false;
+			
+			## Its not a valid date, so just return it as is
+			if(!$info = getdate(strtotime($string))) return false;
+			elseif(!checkdate($info['mon'], $info['mday'], $info['year'])) return false;
+
+			return true;	
+		}
+						
  		/**
 		 * Generate data source output.
 		 *
@@ -294,7 +512,7 @@
 		 */
 			
 		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
-				
+
 			// create date and time element
 			$datetime = new XMLElement($this->get('element_name'));			
 
