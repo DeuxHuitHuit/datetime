@@ -5,7 +5,7 @@
 	Class fieldDatetime extends Field {
 	
 		/**
-		 * Initialize Mediathek as unrequired field
+		 * Initialize Mediathek as unrequired field.
 		 */
 
 		const SIMPLE = 0;
@@ -21,7 +21,7 @@
 		}
 		
 		/**
-		 * Allow data source filtering
+		 * Allow data source filtering.
 		 */
 		
 		function canFilter() {
@@ -29,7 +29,7 @@
 		}		
 		
 		/**
-		 * Allow data source sorting
+		 * Allow data source sorting.
 		 */
 		
 		function isSortable() {
@@ -37,15 +37,23 @@
 		}
 		
 		/**
-		 * Allow prepopulation of other fields
+		 * Allow prepopulation of other fields.
 		 */
 		
 		function canPrePopulate(){
 			return false;
-		}		
+		}
 		
 		/**
-		 * Allow data source parameter output
+		 * Allow data source output grouping.
+		 */
+		
+		function allowDatasourceOutputGrouping(){
+			return true;
+		}			
+		
+		/**
+		 * Allow data source parameter output.
 		 */
 		
 		function allowDatasourceParamOutput() {
@@ -284,7 +292,7 @@
 		}
 		
 		/**
-		 * Build data source sorting sql
+		 * Build data source sorting sql.
 		 *
 		 * @param string $joins
 		 * @param string $where
@@ -298,7 +306,7 @@
 		}
 		
 		/**
-		 * Build data source retrival sql
+		 * Build data source retrival sql.
 		 *
 		 * @param array $data
 		 * @param string $joins
@@ -339,7 +347,7 @@
 		}
 		
 		/**
-		 * Build sql for single dates
+		 * Build sql for single dates.
 		 *
 		 * @param array $data
 		 * @param string $joins
@@ -351,8 +359,8 @@
 		
 			$field_id = $this->get('id');
 			
-			$connector = ' OR ';
-			if($andOperation == 1) $connector = ' AND ';
+			$connector = ' OR '; // filter separated with commas
+			if($andOperation == 1) $connector = ' AND '; // filter conntected with plus signs
 							
 			foreach($data as $date) {
 				$tmp[] = "'" . DateTimeObj::get('Y-m-d', strtotime($date)) . "' BETWEEN 
@@ -366,7 +374,7 @@
 		}
 		
 		/**
-		 * Build sql for dates ranges
+		 * Build sql for dates ranges.
 		 *
 		 * @param array $data
 		 * @param string $joins
@@ -378,8 +386,8 @@
 			
 			$field_id = $this->get('id');
 			
-			$connector = ' OR ';
-			if($andOperation == 1) $connector = ' AND ';
+			$connector = ' OR '; // filter separated with commas
+			if($andOperation == 1) $connector = ' AND '; // filter conntected with plus signs
 							
 			foreach($data as $date) {
 				$tmp[] = "(DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') BETWEEN			
@@ -396,8 +404,8 @@
 		}
 		
 		/**
-		 * Clean up date string
-		 * This function is a copy from the core date field
+		 * Clean up date string.
+		 * This function is a copy from the core date field.
 		 *
 		 * @param string $string
 		 */
@@ -411,8 +419,8 @@
 		}
 		
 		/**
-		 * Parse filter string for shorthand dates and ranges
-		 * This function is a copy from the core date field
+		 * Parse filter string for shorthand dates and ranges.
+		 * This function is a copy from the core date field.
 		 *
 		 * @param string $string
 		 */
@@ -421,13 +429,13 @@
 			
 			$string = self::__cleanFilterString($string);
 			
-			## Check its not a regexp
+			// Check its not a regexp
 			if(preg_match('/^regexp:/i', $string)) {
 				$string = str_replace('regexp:', '', $string);
 				return self::REGEXP;
 			}
 			
-			## Look to see if its a shorthand date (year only), and convert to full date
+			// Look to see if its a shorthand date (year only), and convert to full date
 			elseif(preg_match('/^(1|2)\d{3}$/i', $string)) {
 				$string = "$string-01-01 to $string-12-31";
 			}	
@@ -447,7 +455,7 @@
 
 			}
 
-			## Look to see if its a shorthand date (year and month), and convert to full date
+			// Look to see if its a shorthand date (year and month), and convert to full date
 			elseif(preg_match('/^(1|2)\d{3}[-\/]\d{1,2}$/i', $string)) {
 				
 				$start = "$string-01";
@@ -457,7 +465,7 @@
 				$string = "$start to $string-" . date('t', strtotime($start));
 			}
 					
-			## Match for a simple date (Y-m-d), check its ok using checkdate() and go no further
+			// Match for a simple date (Y-m-d), check its ok using checkdate() and go no further
 			elseif(!preg_match('/to/i', $string)) {
 
 				if(!self::__isValidDateString($string)) return self::ERROR;
@@ -467,7 +475,7 @@
 				
 			}
 		
-			## Parse the full date range and return an array
+			// Parse the full date range and return an array
 			
 			if(!$parts = preg_split('/to/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
 			
@@ -483,8 +491,8 @@
 		}
 		
 		/**
-		 * Validate date
-		 * This function is a copy from the core date field
+		 * Validate date.
+		 * This function is a copy from the core date field.
 		 *
 		 * @param string $string
 		 */
@@ -495,13 +503,64 @@
 			
 			if(empty($string)) return false;
 			
-			## Its not a valid date, so just return it as is
+			// Its not a valid date, so just return it as is
 			if(!$info = getdate(strtotime($string))) return false;
 			elseif(!checkdate($info['mon'], $info['mday'], $info['year'])) return false;
 
 			return true;	
 		}
 						
+ 		/**
+		 * Group records by year and month (calendar view).
+		 *
+		 * @param $wrapper
+		 */
+			
+		function groupRecords($records){
+
+			if(!is_array($records) || empty($records)) return;
+
+			$groups = array('year' => array());
+			
+			// walk through dates
+			foreach($records as $entry) {
+				$data = $entry->getData($this->get('id'));
+				if(!is_array($data['start'])) $data['start'] = array($data['start']);
+				if(!is_array($data['end'])) $data['end'] = array($data['end']);
+				// create calendar
+				foreach($data['start'] as $id => $start) {
+					$start = date('Y-m-01', strtotime($start));
+					if(empty($data['end'][$id])) $data['end'][$id] = $start; 
+					$end = date('Y-m-01', strtotime($data['end'][$id]));
+					$starttime = strtotime($start);
+					$endtime = strtotime($end);
+					// find matching months
+					while($starttime <= $endtime) {
+						$year = date('Y', $starttime);
+						$month[1] = date('n', $starttime);
+						$month[2] = date('m', $starttime);
+						// add entry
+						$groups['year'][$year]['attr']['value'] = $year;
+						$groups['year'][$year]['groups']['month'][$month[1]]['attr']['value'] = $month[2];
+						$groups['year'][$year]['groups']['month'][$month[1]]['records'][] = $entry;
+						// jump to next month
+						$starttime = strtotime(date('Y-m-01', $starttime) . ' +1 month'); 
+					}
+				}
+			}
+
+			// sort years and months
+			ksort($groups['year']);
+			foreach($groups['year'] as $year) {
+				$current = $year['attr']['value'];
+				ksort($groups['year'][$current]['groups']['month']);
+			}
+			
+			// return calendar groups
+			return $groups;
+
+		}
+		
  		/**
 		 * Generate data source output.
 		 *
@@ -576,7 +635,7 @@
 		}
 			
  		/**
-		 * Sample markup for the event editor!
+		 * Sample markup for the event editor.
 		 */
 		
 		public function getExampleFormMarkup(){
