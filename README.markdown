@@ -13,6 +13,6 @@ This extension is based on and inspired by Scott Hughes' [calendar mock-up](http
 
 ## Change log
 
-**Version 1.2:** Added support for data source grouping (calendar view).
-**Version 1.1:** Added support for data source filtering.
-**Version 1.0:** Initial release.
+- **Version 1.2:** Added support for data source grouping (calendar view).
+- **Version 1.1:** Added support for data source filtering.
+- **Version 1.0:** Initial release.
