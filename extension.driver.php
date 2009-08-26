@@ -9,8 +9,8 @@
 		public function about() {
 			return array(
 				'name' => 'Field: Date and Time',
-				'version' => '1.1',
-				'release-date' => '2009-08-25',
+				'version' => '1.2',
+				'release-date' => '2009-08-26',
 				'author' => array(
 					'name' => 'Nils Hörrmann',
 					'website' => 'http://www.nilshoerrmann.de',

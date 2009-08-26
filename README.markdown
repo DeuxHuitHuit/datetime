@@ -1,7 +1,7 @@
 # Date and Time
 
-- Version: 1.1
-- Date: 25th August 2009
+- Version: 1.2
+- Date: 26th August 2009
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Repository: <http://github.com/nilshoerrmann/datetime/tree/master>
 - Requirements: Symphony CMS 2.0.6 or newer, <http://github.com/symphony/symphony-2/tree/master>
