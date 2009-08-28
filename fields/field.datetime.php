@@ -576,12 +576,12 @@
 			$datetime = new XMLElement($this->get('element_name'));			
 
 			// get timeline 
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			$timeline = $data['start'];
 			sort($timeline);
 			
 			// generate XML
-			if(!is_array($data['start'])) $data['start'] = array($data['start']);
-			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
 				$date = new XMLElement('date');
 				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
