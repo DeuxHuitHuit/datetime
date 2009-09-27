@@ -638,11 +638,13 @@
 		 * Sample markup for the event editor.
 		 */
 		
-		public function getExampleFormMarkup(){
+		public function getExampleFormMarkup() {
 
-			parent::getExampleFormMarkup();
+			$label = Widget::Label($this->get('label'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').']'));
+			return $label;
 
 		}
-
+		
 	}
 	
