@@ -9,7 +9,7 @@
 (function($) {
 
 	$.fn.datetime = function() {
-	
+
 		return this.each(function() {
 			var label = $(this);
 			var field = label.parent('.field-datetime');
@@ -19,7 +19,7 @@
 			// init
 			if(Calendar.settings.prepopulate == 'yes' && !input.filter(':first').val()) input.filter(':first').val(Calendar.setRelativeDate(Date.parse('now')));
 			if(Calendar.settings.multiple == 'no') field.find('a.new').remove();
-			Calendar.create(label);	
+			Calendar.create(label);
 			Calendar.toggleInput(label, 0);
 			input.filter(':not(:hidden)').each(function() {
 				if(this.value != '') {
@@ -28,7 +28,7 @@
 				}
 			});
 			// events
-			input.click(function(event) { 
+			input.click(function(event) {
 				event.preventDefault();
 				var date = Calendar.getDate($(this).val());
 				if(date !== null) {
@@ -60,7 +60,12 @@
 				var day = $(this);
 				var month = select[0].value;
 				var year = select[1].value;
-				var date = Date.parse(select[0].value + ' ' + select[1].value + ' ' + day.text());
+				if(day.text().indexOf("/") == -1) {
+					var date = Date.parse(month + ' ' + year + ' ' + day.text());
+				} else {
+					var date = Date.parse(day.text());
+				}
+
 				if(day.hasClass('last')) {
 					if(date.is().january()) date.last().year();
 					date.last().month();
@@ -89,16 +94,16 @@
 				});
 				event.stopPropagation();
 			});
-		
+
 		});
 	};
-	
+
 	/*
 	 * Calendar object
 	 */
-	
+
 	var Calendar = {
-	
+
 		toggleInput: function(label, time) {
 			if(!time && time !== 0) time = 100;
 			var input = label.find('input:not([type=hidden])');
@@ -113,7 +118,7 @@
 				label.find('span.start em').text(this.settings.FROM);
 			}
 		},
-	
+
 		open: function(calendar, date) {
 			calendar.slideDown(250).siblings('.calendar').slideUp(250);
 			var label = calendar.prev('label');
@@ -124,7 +129,7 @@
 			labels.removeClass('active');
 			this.update(calendar, date);
 		},
-		
+
 		create: function(label) {
 			// calendar
 			var calendar = $('<div class="calendar"><div class="nav"><select class="month" /><select class="year" /></div><table><thead><tr /></thead><tbody /></table><div class="capsule"><div class="start time"><strong>' + this.settings.START + '</strong><em>--:--</em></div><div class="end time"><strong>' + this.settings.END + '</strong><em>--:--</em></div></div></div>').insertAfter(label).slideUp(0);
@@ -190,7 +195,7 @@
 				}
 			});
 		},
-		
+
 		update: function(calendar, date) {
 			var startInput = calendar.prev('label').find('.start input').removeClass();
 			var endInput = calendar.prev('label').find('.end input').removeClass();
@@ -199,7 +204,7 @@
 			var start = this.getDate(startInput.val());
 			var end = this.getDate(endInput.val());
 			// fallback dates
-			if(end == null) { 
+			if(end == null) {
 				end = start;
 				if(endInput.val() != '') endInput.addClass('error');
 			}
@@ -230,13 +235,13 @@
 				if(current.equals(start.clearTime())) day.addClass('start');
 				if(current.between(start.clearTime(), end.clearTime())) day.addClass('range');
 				if(end != start) {
-					if(current.equals(end.clearTime())) day.addClass('end');			
+					if(current.equals(end.clearTime())) day.addClass('end');
 				}
 				// move to next day
 				current.next().day();
 			})
 		},
-		
+
 		updateSelect: function(calendar, date) {
 			// set month
 			calendar.find('select.month option[value=' + date.toString('M') + ']').attr('selected', true);
@@ -249,10 +254,10 @@
 				plus++;
 				select.prepend('<option value="' + plus + '">' + plus + '</option>');
 				minus--;
-				select.append('<option value="' + minus + '">' + minus + '</option>');		
+				select.append('<option value="' + minus + '">' + minus + '</option>');
 			}
 		},
-			
+
 		setStart: function(calendar, date) {
 			var label = calendar.prev('label');
 			var start = label.find('span.start input');
@@ -271,7 +276,7 @@
 			this.updateSelect(calendar, date);
 			this.update(calendar, date);
 		},
-		
+
 		setEnd: function(calendar, date) {
 			var label = calendar.prev('label');
 			var start = label.find('span.start input');
@@ -294,7 +299,7 @@
 			this.updateSelect(calendar, date);
 			this.update(calendar, date);
 		},
-		
+
 		setRelativeDate: function(date) {
 			var current = date.clone().clearTime();
 			var textFull = date.toString(this.settings.FORMAT);
@@ -313,22 +318,22 @@
 			}
 			return date.toString(this.settings.FORMAT);
 		},
-		
+
 		getDate: function(date) {
 			if(date.search(Date.CultureInfo.regexPatterns.yesterday) != -1 || date.search(Date.CultureInfo.regexPatterns.today) != -1 || date.search(Date.CultureInfo.regexPatterns.now) != -1 || date.search(Date.CultureInfo.regexPatterns.tomorrow) != -1) {
 				return Date.parse(date);
 			}
 			else {
-				return Date.parseExact(date, this.settings.FORMAT);		
+				return Date.parseExact(date, this.settings.FORMAT);
 			}
 		},
-		
+
 		setTime: function(input, hour, minute) {
 			var date = this.getDate(input.val());
 			date.setHours(hour, minute, 0);
 			input.val(this.setRelativeDate(date));
 		},
-		
+
 		setTimeSlider: function(timer, hour, minute) {
 			// set timer
 			var time = new Date();
@@ -342,7 +347,7 @@
 			// compare start and end time
 			this.compareTimes(timer.parents('.calendar'));
 		},
-		
+
 		compareTimes: function(calendar) {
 			var startInput = calendar.prev('label').find('span.start input');
 			var endInput = calendar.prev('label').find('span.end input');
@@ -358,7 +363,7 @@
 				}
 			}
 		},
-		
+
 		addPanel: function(field) {
 			var label = field.find('label:first').clone().removeClass();
 			label.find('span.end').hide();
@@ -372,7 +377,7 @@
 			label.datetime();
 			this.resetPanel(field.find('label'));
 		},
-		
+
 		removePanel: function(label) {
 			var field = label.parents('.field-datetime');
 			var labels = field.find('label');
@@ -389,13 +394,13 @@
 
 			}
 		},
-		
+
 		resetPanel: function(labels) {
 			labels.removeClass('first').removeClass('last');
 			labels.filter(':first').addClass('first');
 			labels.filter(':last').addClass('last');
 		}
-			
+
 	}
 
 	/*
@@ -450,10 +455,10 @@
 
 
 /**
- * Version: 1.0 Alpha-1 
+ * Version: 1.0 Alpha-1
  * Build Date: 13-Nov-2007
  * Copyright (c) 2006-2007, Coolite Inc. (http://www.coolite.com/). All rights reserved.
- * License: Licensed under The MIT License. See license.txt and http://www.datejs.com/license/. 
+ * License: Licensed under The MIT License. See license.txt and http://www.datejs.com/license/.
  * Website: http://www.datejs.com/ or http://www.coolite.com/datejs/
  */
 Date.CultureInfo={name:"en-US",englishName:"English (United States)",nativeName:"English (United States)",dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],abbreviatedDayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],shortestDayNames:["Su","Mo","Tu","We","Th","Fr","Sa"],firstLetterDayNames:["S","M","T","W","T","F","S"],monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],abbreviatedMonthNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],amDesignator:"AM",pmDesignator:"PM",firstDayOfWeek:0,twoDigitYearMax:2029,dateElementOrder:"mdy",formatPatterns:{shortDate:"M/d/yyyy",longDate:"dddd, MMMM dd, yyyy",shortTime:"h:mm tt",longTime:"h:mm:ss tt",fullDateTime:"dddd, MMMM dd, yyyy h:mm:ss tt",sortableDateTime:"yyyy-MM-ddTHH:mm:ss",universalSortableDateTime:"yyyy-MM-dd HH:mm:ssZ",rfc1123:"ddd, dd MMM yyyy HH:mm:ss GMT",monthDay:"MMMM dd",yearMonth:"MMMM, yyyy"},regexPatterns:{jan:/^jan(uary)?/i,feb:/^feb(ruary)?/i,mar:/^mar(ch)?/i,apr:/^apr(il)?/i,may:/^may/i,jun:/^jun(e)?/i,jul:/^jul(y)?/i,aug:/^aug(ust)?/i,sep:/^sep(t(ember)?)?/i,oct:/^oct(ober)?/i,nov:/^nov(ember)?/i,dec:/^dec(ember)?/i,sun:/^su(n(day)?)?/i,mon:/^mo(n(day)?)?/i,tue:/^tu(e(s(day)?)?)?/i,wed:/^we(d(nesday)?)?/i,thu:/^th(u(r(s(day)?)?)?)?/i,fri:/^fr(i(day)?)?/i,sat:/^sa(t(urday)?)?/i,future:/^next/i,past:/^last|past|prev(ious)?/i,add:/^(\+|after|from)/i,subtract:/^(\-|before|ago)/i,yesterday:/^yesterday/i,today:/^t(oday)?/i,tomorrow:/^tomorrow/i,now:/^n(ow)?/i,millisecond:/^ms|milli(second)?s?/i,second:/^sec(ond)?s?/i,minute:/^min(ute)?s?/i,hour:/^h(ou)?rs?/i,week:/^w(ee)?k/i,month:/^m(o(nth)?s?)?/i,day:/^d(ays?)?/i,year:/^y((ea)?rs?)?/i,shortMeridian:/^(a|p)/i,longMeridian:/^(a\.?m?\.?|p\.?m?\.?)/i,timezone:/^((e(s|d)t|c(s|d)t|m(s|d)t|p(s|d)t)|((gmt)?\s*(\+|\-)\s*\d\d\d\d?)|gmt)/i,ordinalSuffix:/^\s*(st|nd|rd|th)/i,timeContext:/^\s*(\:|a|p)/i},abbreviatedTimeZoneStandard:{GMT:"-000",EST:"-0400",CST:"-0500",MST:"-0600",PST:"-0700"},abbreviatedTimeZoneDST:{GMT:"-000",EDT:"-0500",CDT:"-0600",MDT:"-0700",PDT:"-0800"}};
