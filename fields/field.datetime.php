@@ -209,7 +209,7 @@
 					$span->appendChild($delete);
 					$label->appendChild($span);
 					$span = new XMLElement('span', '<em>' . __('to') . '</em>', array('class' => 'end'));
-					$end = Widget::Input($fieldname . '[end][]', $data['end'][$i - 1], 'text');
+					$end = Widget::Input($fieldname . '[end][]', ($data['end'][$i - 1] == '0000-00-00 00:00:00' || $data['end'][$i - 1] == '0000-00-00T00:00:00+00:00') ? '' : $data['end'][$i - 1], 'text');
 					$span->appendChild($end);
 					$label->appendChild($span);
 					if($i == 1) $label->appendChild($settings);
