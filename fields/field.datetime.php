@@ -40,7 +40,7 @@
 		 * Allow prepopulation of other fields.
 		 */
 		
-		function canPrePopulate(){
+		function canPrePopulate() {
 			return false;
 		}
 		
@@ -48,7 +48,7 @@
 		 * Allow data source output grouping.
 		 */
 		
-		function allowDatasourceOutputGrouping(){
+		function allowDatasourceOutputGrouping() {
 			return true;
 		}			
 		
@@ -153,8 +153,8 @@
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 		
 			$this->_engine->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
-			$this->_engine->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 200, false);
-			$this->_engine->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 201, false);	
+			$this->_engine->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
+			$this->_engine->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);	
 			
 			// title and help
 			$wrapper->setValue($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
@@ -219,7 +219,7 @@
 		
 			// add new
 			if($this->get('allow_multiple_dates') == 'yes') {
-				$new = new XMLElement('a', 'Add new date', array('class' => 'new'));
+				$new = new XMLElement('a', __('Add new date'), array('class' => 'new'));
 				$wrapper->appendChild($new);
 			}
 		
@@ -229,19 +229,32 @@
 		 * Prepares field values for database.
 		 */
 		
-		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
-		
+		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL) {
+					
 			$status = self::__OK__;
 			if(!is_array($data)) return NULL;
 			if(empty($data)) return NULL;
-
+			
+			// Replace relative and locale date and time strings
+			$english = array(
+				'yesterday', 'today', 'tomorrow', 'now',
+				'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+				'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+				'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
+				'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
+				'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+			);
+			foreach($english as $string) {
+				$locale[] = __($string);
+			}
+			
 			$result = array('entry_id' => array(), 'start' => array(), 'end' => array());		
 			$count = count($data['start']);
 			for($i = 0; $i < $count; $i++) {
 				$result['entry_id'][] = $entry_id;
-				$result['start'][] = date('c', strtotime($data['start'][$i]));
-				$result['end'][] = empty($data['end'][$i]) ? NULL : date('c', strtotime($data['end'][$i]));
-			}
+				$result['start'][] = date('c', strtotime(str_replace($locale, $english, $data['start'][$i])));
+				$result['end'][] = empty($data['end'][$i]) ? '0000-00-00T00:00:00+00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
+			}		
 			return $result;
 
 		}
@@ -250,14 +263,14 @@
 		 * Creates database field table.
 		 */
 		
-		function createTable(){
+		function createTable() {
 			
 			return Administration::instance()->Database->query(
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 				`id` int(11) unsigned NOT NULL auto_increment,
 				`entry_id` int(11) unsigned NOT NULL,
 				`start` varchar(80) NOT NULL,
-				`end` varchar(80) NULL,
+				`end` varchar(80) NOT NULL,
 				PRIMARY KEY (`id`),
 			  	KEY `entry_id` (`entry_id`)
 				);"
@@ -516,7 +529,7 @@
 		 * @param $wrapper
 		 */
 			
-		function groupRecords($records){
+		function groupRecords($records) {
 
 			if(!is_array($records) || empty($records)) return;
 
