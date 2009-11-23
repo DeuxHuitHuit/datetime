@@ -9,8 +9,8 @@
 		public function about() {
 			return array(
 				'name' => 'Field: Date and Time',
-				'version' => '1.2',
-				'release-date' => '2009-08-26',
+				'version' => '1.3dev',
+				'release-date' => 'unreleased',
 				'author' => array(
 					'name' => 'Nils Hörrmann',
 					'website' => 'http://www.nilshoerrmann.de',
@@ -18,7 +18,37 @@
 				)
 			);
 		}
-	
+
+		/**
+		 * Add callback functions to backend delegates
+		 */
+
+		public function getSubscribedDelegates(){
+			return array(
+				array(
+					'page' => '/backend/',
+					'delegate' => 'InitaliseAdminPageHead',
+					'callback' => '__addDateJS'
+				)
+			);
+		}
+		
+		/**
+		 * Add international dateJS
+		 */
+		 
+		public function __addDateJS() {
+			// get current language
+			$lang = Administration::instance()->Configuration->get('lang', 'symphony');
+			// check dateJS language
+			if(file_exists(EXTENSIONS . '/datetime/assets/international/datejs.' . $lang . '.js')) {
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/international/datejs.' . $lang . '.js', 200, false);
+			}
+			else {
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/international/datejs.en.js', 200, false);
+			}
+		}
+			
 		/**
 		 * Function to be executed on uninstallation
 		 */
