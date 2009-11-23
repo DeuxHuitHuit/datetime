@@ -269,8 +269,8 @@
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 				`id` int(11) unsigned NOT NULL auto_increment,
 				`entry_id` int(11) unsigned NOT NULL,
-				`start` varchar(80) NOT NULL,
-				`end` varchar(80) NOT NULL,
+				`start` datetime NOT NULL,
+				`end` datetime NOT NULL,
 				PRIMARY KEY (`id`),
 			  	KEY `entry_id` (`entry_id`)
 				);"
