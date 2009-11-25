@@ -9,16 +9,17 @@
 (function($) {
 
 	$.fn.datetime = function() {
-	
+
 		return this.each(function() {
 			var label = $(this);
 			var field = label.parent('.field-datetime');
 			var input = label.find('input');
+
 			// language
 			if(Calendar.settings == undefined) Calendar.settings = eval('(' + input.filter(':hidden').val() + ')');
 			// init
 			if(Calendar.settings.multiple == 'no') field.find('a.new').remove();
-			Calendar.create(label);	
+			Calendar.create(label);
 			Calendar.toggleInput(label, 0);
 			input.filter(':not(:hidden)').each(function() {
 				if(this.value != '') {
@@ -30,11 +31,13 @@
 			});
 			if(Calendar.settings.prepopulate == 'yes' && !input.filter(':first').val()) input.filter(':first').val(Calendar.setRelativeDate(Date.parse('now')));
 			// events
-			input.click(function(event) { 
+			input.click(function(event) {
 				event.preventDefault();
 				var date = Calendar.getDate($(this).val());
-				if(date !== null) {
+				if(date !== null || Calendar.settings.prepopulate == "no") {
 					var calendar = label.next('.calendar');
+					if(Calendar.settings.prepopulate == "no") date = Date.parse('now');
+
 					Calendar.updateSelect(calendar, date);
 					Calendar.open(calendar, date);
 				}
@@ -88,17 +91,17 @@
 					$('.field-datetime .calendar').slideUp(100);
 				});
 				event.stopPropagation();
-			});	
+			});
 		});
 
 	};
-	
+
 	/*
 	 * Calendar object
 	 */
-	
+
 	var Calendar = {
-	
+
 		toggleInput: function(label, time) {
 			if(!time && time !== 0) time = 100;
 			var input = label.find('input:not([type=hidden])');
@@ -113,7 +116,7 @@
 				label.find('span.start em').text(this.settings.FROM);
 			}
 		},
-	
+
 		open: function(calendar, date) {
 			calendar.slideDown(250).siblings('.calendar').slideUp(250);
 			var label = calendar.prev('label');
@@ -124,7 +127,7 @@
 			labels.removeClass('active');
 			this.update(calendar, date);
 		},
-		
+
 		create: function(label) {
 			// calendar
 			var calendar = $('<div class="calendar"><div class="nav"><select class="month" /><select class="year" /></div><table><thead><tr /></thead><tbody /></table><div class="capsule"><div class="start time"><strong>' + this.settings.START + '</strong><em>--:--</em></div><div class="end time"><strong>' + this.settings.END + '</strong><em>--:--</em></div></div></div>').insertAfter(label).slideUp(0);
@@ -190,7 +193,7 @@
 				}
 			});
 		},
-		
+
 		update: function(calendar, date) {
 			var startInput = calendar.prev('label').find('.start input').removeClass();
 			var endInput = calendar.prev('label').find('.end input').removeClass();
@@ -199,21 +202,18 @@
 			var start = this.getDate(startInput.val());
 			var end = this.getDate(endInput.val());
 			// fallback dates
-			if(end == null) { 
+			if(start == null) {
+				start = today;
+			} else {
+				this.setTimeSlider(calendar.find('div.start'), start.toString('HH'), start.toString('mm'));
+			}
+			if(end == null) {
 				end = start;
 				if(endInput.val() != '') endInput.addClass('error');
-			}
-			else {
+			} else {
 				this.setTimeSlider(calendar.find('div.end'), end.toString('HH'), end.toString('mm'));
 			}
 			if(date == null) date = start;
-			if(start == null) {
-				startInput.addClass('error');
-				return false;
-			}
-			else {
-				this.setTimeSlider(calendar.find('div.start'), start.toString('HH'), start.toString('mm'));
-			}
 			// populate calendar
 			var current = date.clone();
 			current.clearTime();
@@ -229,14 +229,15 @@
 				if(current.equals(today.clearTime())) day.addClass('today');
 				if(current.equals(start.clearTime())) day.addClass('start');
 				if(current.between(start.clearTime(), end.clearTime())) day.addClass('range');
+
 				if(end != start) {
-					if(current.equals(end.clearTime())) day.addClass('end');			
+					if(current.equals(end.clearTime())) day.addClass('end');
 				}
 				// move to next day
 				current.next().day();
 			})
 		},
-		
+
 		updateSelect: function(calendar, date) {
 			// set month
 			calendar.find('select.month option[value=' + date.toString('M') + ']').attr('selected', true);
@@ -249,16 +250,17 @@
 				plus++;
 				select.prepend('<option value="' + plus + '">' + plus + '</option>');
 				minus--;
-				select.append('<option value="' + minus + '">' + minus + '</option>');		
+				select.append('<option value="' + minus + '">' + minus + '</option>');
 			}
 		},
-			
+
 		setStart: function(calendar, date) {
 			var label = calendar.prev('label');
 			var start = label.find('span.start input');
 			var end = label.find('span.end input');
 			var current = this.getDate(start.val());
 			// set date
+			if(current == null) current = this.getDate('now');
 			date.setHours(current.toString('HH'), current.toString('mm'));
 			start.val(this.setRelativeDate(date));
 			end.val('');
@@ -271,7 +273,7 @@
 			this.updateSelect(calendar, date);
 			this.update(calendar, date);
 		},
-		
+
 		setEnd: function(calendar, date) {
 			var label = calendar.prev('label');
 			var start = label.find('span.start input');
@@ -294,7 +296,7 @@
 			this.updateSelect(calendar, date);
 			this.update(calendar, date);
 		},
-		
+
 		setRelativeDate: function(date) {
 			var current = date.clone().clearTime();
 			var textFull = date.toString(this.settings.FORMAT);
@@ -313,22 +315,22 @@
 			}
 			return date.toString(this.settings.FORMAT);
 		},
-		
+
 		getDate: function(date) {
 			if(date.search(Date.CultureInfo.regexPatterns.yesterday) != -1 || date.search(Date.CultureInfo.regexPatterns.today) != -1 || date.search(Date.CultureInfo.regexPatterns.now) != -1 || date.search(Date.CultureInfo.regexPatterns.tomorrow) != -1) {
 				return Date.parse(date);
 			}
 			else {
-				return Date.parseExact(date, this.settings.FORMAT);		
+				return Date.parseExact(date, this.settings.FORMAT);
 			}
 		},
-		
+
 		setTime: function(input, hour, minute) {
 			var date = this.getDate(input.val());
 			date.setHours(hour, minute, 0);
 			input.val(this.setRelativeDate(date));
 		},
-		
+
 		setTimeSlider: function(timer, hour, minute) {
 			// set timer
 			var time = new Date();
@@ -342,7 +344,7 @@
 			// compare start and end time
 			this.compareTimes(timer.parents('.calendar'));
 		},
-		
+
 		compareTimes: function(calendar) {
 			var startInput = calendar.prev('label').find('span.start input');
 			var endInput = calendar.prev('label').find('span.end input');
@@ -358,7 +360,7 @@
 				}
 			}
 		},
-		
+
 		addPanel: function(field) {
 			var label = field.find('label:first').clone().removeClass();
 			label.find('span.end').hide();
@@ -379,7 +381,7 @@
 			// Reset panels
 			this.resetPanel(field.find('label'));
 		},
-		
+
 		removePanel: function(label) {
 			var field = label.parents('.field-datetime');
 			var labels = field.find('label');
@@ -401,13 +403,13 @@
 
 			}
 		},
-		
+
 		resetPanel: function(labels) {
 			labels.removeClass('first').removeClass('last');
 			labels.filter(':first').addClass('first');
 			labels.filter(':last').addClass('last');
 		}
-			
+
 	}
 
 	/*
