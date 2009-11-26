@@ -543,7 +543,7 @@
 				// create calendar
 				foreach($data['start'] as $id => $start) {
 					$start = date('Y-m-01', strtotime($start));
-					if(empty($data['end'][$id])) $data['end'][$id] = $start;
+					if($data['end'][$id] == "0000-00-00 00:00:00" or empty($data['end'][$id])) $data['end'][$id] = $start;
 					$end = date('Y-m-01', strtotime($data['end'][$id]));
 					$starttime = strtotime($start);
 					$endtime = strtotime($end);
