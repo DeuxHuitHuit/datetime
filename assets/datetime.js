@@ -239,6 +239,8 @@
 		},
 
 		updateSelect: function(calendar, date) {
+			// handle empty dates
+			if(!date) date = Date.today();			
 			// set month
 			calendar.find('select.month option[value=' + date.toString('M') + ']').attr('selected', true);
 			// set year
