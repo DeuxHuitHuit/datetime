@@ -37,7 +37,6 @@
 				if(date !== null || Calendar.settings.prepopulate == "no") {
 					var calendar = label.next('.calendar');
 					if(Calendar.settings.prepopulate == "no") date = Date.parse('now');
-
 					Calendar.updateSelect(calendar, date);
 					Calendar.open(calendar, date);
 				}
@@ -205,13 +204,13 @@
 			if(start == null) {
 				start = today;
 			} else {
-				this.setTimeSlider(calendar.find('div.start'), start.toString('HH'), start.toString('mm'));
+				this.setTimeSlider(calendar.find('div.start'), start.getHours(), start.getMinutes());
 			}
 			if(end == null) {
 				end = start;
 				if(endInput.val() != '') endInput.addClass('error');
 			} else {
-				this.setTimeSlider(calendar.find('div.end'), end.toString('HH'), end.toString('mm'));
+				this.setTimeSlider(calendar.find('div.end'), end.getHours(), end.getMinutes());
 			}
 			if(date == null) date = start;
 			// populate calendar
@@ -319,7 +318,12 @@
 		},
 
 		getDate: function(date) {
-			if(date.search(Date.CultureInfo.regexPatterns.yesterday) != -1 || date.search(Date.CultureInfo.regexPatterns.today) != -1 || date.search(Date.CultureInfo.regexPatterns.now) != -1 || date.search(Date.CultureInfo.regexPatterns.tomorrow) != -1) {
+			if(date.search(Date.RelativeDates.yesterday) != -1 || date.search(Date.RelativeDates.today) != -1 || date.search('today') != -1 || date.search(Date.RelativeDates.now) != -1 || date.search('now') != -1 || date.search(Date.RelativeDates.tomorrow) != -1) {
+				// Dirty fix for a dateJS bug which misinterprets relative dates
+				date = date.replace(Date.RelativeDates.yesterday, Date.parse('yesterday').toString('yyyy-MM-dd'));
+				date = date.replace(Date.RelativeDates.today, Date.parse('today').toString('yyyy-MM-dd'));
+				date = date.replace(Date.RelativeDates.now, Date.parse('now').toString('yyyy-MM-dd, HH:ss'));
+				date = date.replace(Date.RelativeDates.tomorrow, Date.parse('tomorrow').toString('yyyy-MM-dd'));
 				return Date.parse(date);
 			}
 			else {
