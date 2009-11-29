@@ -251,9 +251,11 @@
 			$result = array('entry_id' => array(), 'start' => array(), 'end' => array());
 			$count = count($data['start']);
 			for($i = 0; $i < $count; $i++) {
-				$result['entry_id'][] = $entry_id;
-				$result['start'][] = date('c', strtotime(str_replace($locale, $english, $data['start'][$i])));
-				$result['end'][] = empty($data['end'][$i]) ? '0000-00-00T00:00:00+00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
+				if(!empty($data['start'][$i])) {
+					$result['entry_id'][] = $entry_id;
+					$result['start'][] = date('c', strtotime(str_replace($locale, $english, $data['start'][$i])));
+					$result['end'][] = empty($data['end'][$i]) ? '0000-00-00T00:00:00+00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
+				}
 			}
 			return $result;
 
@@ -291,7 +293,8 @@
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
-				if(!empty($data['end'][$id])) {
+				if(empty($date)) continue;
+				if($data['end'][$id] != "0000-00-00 00:00:00") {
 					if($value != '') $value .= ', <br />';
 					$value .= '<span style="color: rgb(136, 136, 119);">' . __('from') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id])). ' <span style="color: rgb(136, 136, 119);">' .__('to') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['end'][$id]));
 				}
@@ -543,7 +546,7 @@
 				// create calendar
 				foreach($data['start'] as $id => $start) {
 					$start = date('Y-m-01', strtotime($start));
-					if($data['end'][$id] == "0000-00-00 00:00:00" or empty($data['end'][$id])) $data['end'][$id] = $start;
+					if($data['end'][$id] == "0000-00-00 00:00:00") $data['end'][$id] = $start;
 					$end = date('Y-m-01', strtotime($data['end'][$id]));
 					$starttime = strtotime($start);
 					$endtime = strtotime($end);
@@ -596,6 +599,7 @@
 
 			// generate XML
 			foreach($data['start'] as $id => $date) {
+				if(empty($date)) continue;
 				$date = new XMLElement('date');
 				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
 				$timestamp = strtotime($data['start'][$id]);
@@ -607,7 +611,7 @@
 					)
 				);
 				$date->appendChild($start);
-				if($data['end'][$id] != "0000-00-00 00:00:00" and !empty($data['end'][$id])) {
+				if($data['end'][$id] != "0000-00-00 00:00:00") {
 					$timestamp = strtotime($data['end'][$id]);
 					$end = new XMLElement('end', DateTimeObj::get('Y-m-d', $timestamp), array(
 							'iso' => DateTimeObj::get('c', strtotime($data['end'][$id])),

@@ -227,8 +227,8 @@
 				if(current.toString('M') == (parseInt(date.toString('M')) + 1) || (current.toString('M') == 1 && date.toString('M') == 12)) day.addClass('next');
 				// day context
 				if(current.equals(today.clearTime())) day.addClass('today');
-				if(current.equals(start.clearTime())) day.addClass('start');
-				if(current.between(start.clearTime(), end.clearTime())) day.addClass('range');
+				if(current.equals(start.clearTime()) && startInput.val() != '') day.addClass('start');
+				if(current.between(start.clearTime(), end.clearTime()) && end != start) day.addClass('range');
 
 				if(end != start) {
 					if(current.equals(end.clearTime())) day.addClass('end');
@@ -239,6 +239,8 @@
 		},
 
 		updateSelect: function(calendar, date) {
+			// handle empty dates
+			if(!date) date = Date.today();			
 			// set month
 			calendar.find('select.month option[value=' + date.toString('M') + ']').attr('selected', true);
 			// set year
@@ -366,7 +368,12 @@
 			label.find('span.end').hide();
 			label.find('span.start').removeClass('range');
 			label.find('span.start em').text(this.settings.DATE);
-			label.find('input').val('').filter(':first').val(this.getDate('now').toString('yyyy-MM-dd HH:mm:ss'));
+			if(Calendar.settings.prepopulate == "yes") {
+				label.find('input').val('').filter(':first').val(this.getDate('now').toString('yyyy-MM-dd HH:mm:ss'));
+			}
+			else {
+				label.find('input').val('').filter(':first').val('');
+			}
 			label.find('input[type=hidden]').remove();
 			field.find('a.new').before(label.hide());
 			label.slideDown(100);
