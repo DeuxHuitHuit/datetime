@@ -366,7 +366,12 @@
 			label.find('span.end').hide();
 			label.find('span.start').removeClass('range');
 			label.find('span.start em').text(this.settings.DATE);
-			label.find('input').val('').filter(':first').val(this.getDate('now').toString('yyyy-MM-dd HH:mm:ss'));
+			if(Calendar.settings.prepopulate == "yes") {
+				label.find('input').val('').filter(':first').val(this.getDate('now').toString('yyyy-MM-dd HH:mm:ss'));
+			}
+			else {
+				label.find('input').val('').filter(':first').val('');
+			}
 			label.find('input[type=hidden]').remove();
 			field.find('a.new').before(label.hide());
 			label.slideDown(100);
