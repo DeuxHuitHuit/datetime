@@ -227,8 +227,8 @@
 				if(current.toString('M') == (parseInt(date.toString('M')) + 1) || (current.toString('M') == 1 && date.toString('M') == 12)) day.addClass('next');
 				// day context
 				if(current.equals(today.clearTime())) day.addClass('today');
-				if(current.equals(start.clearTime())) day.addClass('start');
-				if(current.between(start.clearTime(), end.clearTime())) day.addClass('range');
+				if(current.equals(start.clearTime()) && startInput.val() != '') day.addClass('start');
+				if(current.between(start.clearTime(), end.clearTime()) && end != start) day.addClass('range');
 
 				if(end != start) {
 					if(current.equals(end.clearTime())) day.addClass('end');
