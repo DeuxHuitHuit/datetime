@@ -11,7 +11,7 @@
 }
 
 .field-datetime a.new {
-	padding: 5px 12px 5px 50px;
+	padding: 5px 12px 5px 55px;
 	display: block;
 	background: rgb(245, 245, 243);
 	border: 1px solid rgb(228, 228, 222);
@@ -58,7 +58,7 @@
 	border-right: 1px solid #d3d3d3;
 	border-top: 1px solid #F3F3F3;
 	margin: 0;
-	padding: 7px 39px 7px 50px;
+	padding: 7px 39px 7px 55px;
 	position: relative;
 }
 
@@ -110,7 +110,7 @@
 	background: #353533;
 	border-top: none;
 	min-width: 23em;
-	padding: 20px 0 25px 50px;
+	padding: 20px 0 25px 60px;
 }
 
 .field-datetime .calendar select {
@@ -183,6 +183,12 @@
 	background: #ffb !important;
 	border: 1px solid #fff;
 	color: #9d854c;
+}
+
+.field-datetime .calendar thead td:hover {
+	background: none !important;
+	border: inherit;
+	color: #fff;
 }
 
 .field-datetime .calendar .ui-slider-horizontal {
