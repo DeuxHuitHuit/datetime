@@ -68,7 +68,18 @@
 		public function update($previousVersion) {
 			/*	Go through all the existing datetime tables converting the start/end to datetime */
 			if(version_compare($previousVersion, '1.3', '<')){
-				$fields = $this->_Parent->Database->query("ALTER TABLE `tbl_fields_datetime` MODIFY 'end' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', MODIFY 'start' DATETIME NOT NULL '0000-00-00 00:00:00'");
+				$fields = Administration::instance()->Database->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
+
+				foreach($fields as $field) {
+					Administration::instance()->Database->query(
+								sprintf("
+									ALTER TABLE `tbl_entries_data_%d`
+									MODIFY `end` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+									MODIFY `start` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
+								", $field)
+							)
+					);
+				}
 			}
 
 			return true;
