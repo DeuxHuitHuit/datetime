@@ -254,7 +254,7 @@
 				if(!empty($data['start'][$i])) {
 					$result['entry_id'][] = $entry_id;
 					$result['start'][] = date('c', strtotime(str_replace($locale, $english, $data['start'][$i])));
-					$result['end'][] = empty($data['end'][$i]) ? '0000-00-00T00:00:00+00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
+					$result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
 				}
 			}
 			return $result;
@@ -271,8 +271,8 @@
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 				`id` int(11) unsigned NOT NULL auto_increment,
 				`entry_id` int(11) unsigned NOT NULL,
-				`start` datetime NOT NULL,
-				`end` datetime NOT NULL,
+				`start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				`end` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 				PRIMARY KEY (`id`),
 			  	KEY `entry_id` (`entry_id`)
 				);"
@@ -294,7 +294,7 @@
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
 				if(empty($date)) continue;
-				if($data['end'][$id] != "0000-00-00T00:00:00+00:00") {
+				if($data['end'][$id] != "0000-00-00 00:00:00") {
 					if($value != '') $value .= ', ';
 					$value .= '<span style="color: rgb(136, 136, 119);">' . __('from') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id])). ' <span style="color: rgb(136, 136, 119);">' .__('to') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['end'][$id]));
 				} else {

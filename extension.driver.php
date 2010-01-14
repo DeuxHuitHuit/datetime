@@ -77,8 +77,7 @@
 									MODIFY `end` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
 									MODIFY `start` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
 								", $field)
-							)
-					);
+							);
 				}
 			}
 
