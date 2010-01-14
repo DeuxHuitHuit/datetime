@@ -39,18 +39,17 @@
 					if(Calendar.settings.prepopulate == "no") date = Date.parse('now');
 					Calendar.updateSelect(calendar, date);
 					Calendar.open(calendar, date);
-				}
-				else {
+				} else {
 					$(this).addClass('error');
 				}
 			}).keyup(function(event) {
 				var calendar = $(this).parents('label').next('.calendar');
 				var date = Calendar.getDate($(this).val());
+
 				if(date !== null) {
 					Calendar.updateSelect(calendar, date);
 					Calendar.update(calendar, date);
-				}
-				else {
+				} else {
 					$(this).addClass('error');
 				}
 			});
@@ -65,16 +64,13 @@
 				var month = select[0].value;
 				var year = select[1].value;
 				var date = Date.parseExact(year + '-' + month + '-' + day.text(), 'yyyy-M-d');
-				if(day.hasClass('last')) {
-					date.last().month();
-				}
-				if(day.hasClass('next')) {
-					date.next().month();
-				}
+
+				if(day.hasClass('last')) date.last().month();
+				if(day.hasClass('next')) date.next().month();
+
 				if(event.altKey) {
 					Calendar.setEnd(label.next('.calendar'), date);
-				}
-				else {
+				} else {
 					Calendar.setStart(label.next('.calendar'), date);
 				}
 			});
@@ -200,6 +196,7 @@
 			var today = this.getDate('today');
 			var start = this.getDate(startInput.val());
 			var end = this.getDate(endInput.val());
+
 			// fallback dates
 			if(start == null) {
 				start = today;
@@ -239,7 +236,7 @@
 
 		updateSelect: function(calendar, date) {
 			// handle empty dates
-			if(!date) date = Date.today();			
+			if(!date) date = Date.today();
 			// set month
 			calendar.find('select.month option[value=' + date.toString('M') + ']').attr('selected', true);
 			// set year
@@ -299,12 +296,17 @@
 		},
 
 		setRelativeDate: function(date) {
+			var yesterday = Date.parse('yesterday'),
+				today = Date.parse('today'),
+				tomorrow = Date.parse('tomorrow');
+
 			var current = date.clone().clearTime();
-			var textFull = date.toString(this.settings.FORMAT);
-			var textShort = textFull.split(',')[0];
-			var yesterday = Date.parse('yesterday').clearTime();
-			var today = Date.parse('today').clearTime();
-			var tomorrow = Date.parse('tomorrow').clearTime();
+				formats = this.settings.FORMAT.split(",");
+
+			var textFull = date.toString(this.settings.FORMAT),
+				textShort = Date.parse(date).toString(formats[0]),
+				time = Date.parse(date).toString(formats[1]);
+
 			if(current.equals(yesterday)) {
 				return textFull.replace(textShort, Date.RelativeDates.yesterday);
 			}
@@ -318,11 +320,15 @@
 		},
 
 		getDate: function(date) {
-			if(date.search(Date.RelativeDates.yesterday) != -1 || date.search(Date.RelativeDates.today) != -1 || date.search('today') != -1 || date.search(Date.RelativeDates.now) != -1 || date.search('now') != -1 || date.search(Date.RelativeDates.tomorrow) != -1) {
+			if( date.search(Date.RelativeDates.yesterday) != -1 ||
+				date.search(Date.RelativeDates.today) != -1 || date.search('today') != -1 ||
+				date.search(Date.RelativeDates.now) != -1 || date.search('now') != -1 ||
+				date.search(Date.RelativeDates.tomorrow) != -1)
+			{
 				// Dirty fix for a dateJS bug which misinterprets relative dates
 				date = date.replace(Date.RelativeDates.yesterday, Date.parse('yesterday').toString('yyyy-MM-dd'));
 				date = date.replace(Date.RelativeDates.today, Date.parse('today').toString('yyyy-MM-dd'));
-				date = date.replace(Date.RelativeDates.now, Date.parse('now').toString('yyyy-MM-dd, HH:ss'));
+				date = date.replace(Date.RelativeDates.now, Date.parse('now').toString('yyyy-MM-dd, HH:mm'));
 				date = date.replace(Date.RelativeDates.tomorrow, Date.parse('tomorrow').toString('yyyy-MM-dd'));
 				return Date.parse(date);
 			}

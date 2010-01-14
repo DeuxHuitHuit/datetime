@@ -209,7 +209,7 @@
 					$span->appendChild($delete);
 					$label->appendChild($span);
 					$span = new XMLElement('span', '<em>' . __('to') . '</em>', array('class' => 'end'));
-					$end = Widget::Input($fieldname . '[end][]', ($data['end'][$i - 1] == '0000-00-00 00:00:00' || $data['end'][$i - 1] == '0000-00-00T00:00:00+00:00') ? '' : $data['end'][$i - 1], 'text');
+					$end = Widget::Input($fieldname . '[end][]', ($data['end'][$i - 1] == '0000-00-00T00:00:00+00:00' || $data['end'][$i - 1] == '0000-00-00T00:00:00+00:00') ? '' : $data['end'][$i - 1], 'text');
 					$span->appendChild($end);
 					$label->appendChild($span);
 					if($i == 1) $label->appendChild($settings);
@@ -294,12 +294,11 @@
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			foreach($data['start'] as $id => $date) {
 				if(empty($date)) continue;
-				if($data['end'][$id] != "0000-00-00 00:00:00") {
-					if($value != '') $value .= ', <br />';
+				if($data['end'][$id] != "0000-00-00T00:00:00+00:00") {
+					if($value != '') $value .= ', ';
 					$value .= '<span style="color: rgb(136, 136, 119);">' . __('from') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id])). ' <span style="color: rgb(136, 136, 119);">' .__('to') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['end'][$id]));
-				}
-				else {
-					if($value != '') $value .= ', <br />';
+				} else {
+					if($value != '') $value .= ', ';
 					$value .= DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
 				}
 			}
@@ -546,7 +545,7 @@
 				// create calendar
 				foreach($data['start'] as $id => $start) {
 					$start = date('Y-m-01', strtotime($start));
-					if($data['end'][$id] == "0000-00-00 00:00:00") $data['end'][$id] = $start;
+					if($data['end'][$id] == "0000-00-00T00:00:00+00:00") $data['end'][$id] = $start;
 					$end = date('Y-m-01', strtotime($data['end'][$id]));
 					$starttime = strtotime($start);
 					$endtime = strtotime($end);
@@ -611,7 +610,7 @@
 					)
 				);
 				$date->appendChild($start);
-				if($data['end'][$id] != "0000-00-00 00:00:00") {
+				if($data['end'][$id] != "0000-00-00T00:00:00+00:00") {
 					$timestamp = strtotime($data['end'][$id]);
 					$end = new XMLElement('end', DateTimeObj::get('Y-m-d', $timestamp), array(
 							'iso' => DateTimeObj::get('c', strtotime($data['end'][$id])),
