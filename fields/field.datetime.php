@@ -1,5 +1,4 @@
 <?php
-
 if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
 Class fieldDatetime extends Field {
@@ -154,9 +153,9 @@ Class fieldDatetime extends Field {
 
     function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 
-        $this->_engine->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
-        $this->_engine->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
-        $this->_engine->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);
+        Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
+        Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
+        Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);
 
         // title and help
         $wrapper->setValue($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
@@ -192,13 +191,14 @@ Class fieldDatetime extends Field {
                 Widget::Input($fieldname . '[end][]', '', 'text')
             );
             $label->appendChild($span);
+
             $label->appendChild($settings);
             $wrapper->appendChild($label);
         } else {
-            $count = count($data['start']);
             if(!is_array($data['start'])) $data['start'] = array($data['start']);
             if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
+			$count = count($data['start']);
             for($i = 1; $i <= $count; $i++) {
                 $label = Widget::Label();
 
@@ -232,8 +232,9 @@ Class fieldDatetime extends Field {
 
         // add new
         if($this->get('allow_multiple_dates') == 'yes') {
-            $new = new XMLElement('a', __('Add new date'), array('class' => 'new'));
-            $wrapper->appendChild($new);
+            $wrapper->appendChild(
+				new XMLElement('a', __('Add new date'), array('class' => 'new'))
+			);
         }
     }
 
@@ -303,6 +304,7 @@ Class fieldDatetime extends Field {
         $value = '';
         if(!is_array($data['start'])) $data['start'] = array($data['start']);
         if(!is_array($data['end'])) $data['end'] = array($data['end']);
+
         foreach($data['start'] as $id => $date) {
             if(empty($date)) continue;
             if($data['end'][$id] != "0000-00-00 00:00:00") {

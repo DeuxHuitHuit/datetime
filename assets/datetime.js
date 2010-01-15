@@ -11,17 +11,17 @@
 	$.fn.datetime = function() {
 
 		return this.each(function() {
-			var label = $(this);
-			var field = label.parent('.field-datetime');
-			var input = label.find('input');
+			var _label = $(this);
+			var _field = _label.parent('.field-datetime');
+			var _input = _label.find('input');
 
 			// language
-			if(Calendar.settings == undefined) Calendar.settings = eval('(' + input.filter(':hidden').val() + ')');
+			if(Calendar.settings == undefined) Calendar.settings = eval('(' + _input.filter(':hidden').val() + ')');
 			// init
-			if(Calendar.settings.multiple == 'no') field.find('a.new').remove();
-			Calendar.create(label);
-			Calendar.toggleInput(label, 0);
-			input.filter(':not(:hidden)').each(function() {
+			if(Calendar.settings.multiple == 'no') _field.find('a.new').remove();
+			Calendar.create(_label);
+			Calendar.toggleInput(_label, 0);
+			_input.filter(':not(:hidden)').each(function() {
 				if(this.value != '') {
 					var date = Date.parseExact(this.value, 'yyyy-MM-dd HH:mm:ss')
 					if(date == null) date = Date.parseExact(this.value.substring(0, 10) + ' ' + this.value.substring(11, 19), 'yyyy-MM-dd HH:mm:ss');
@@ -29,40 +29,41 @@
 					$(this).val(current);
 				}
 			});
-			if(Calendar.settings.prepopulate == 'yes' && !input.filter(':first').val()) input.filter(':first').val(Calendar.setRelativeDate(Date.parse('now')));
+			if(Calendar.settings.prepopulate == 'yes' && !_input.filter(':first').val()) _input.filter(':first').val(Calendar.setRelativeDate(Date.parse('now')));
+
+			var _calendar = _label.next('.calendar');
+
 			// events
-			input.click(function(event) {
+			_input.click(function(event) {
 				event.preventDefault();
 				var date = Calendar.getDate($(this).val());
 				if(date !== null || Calendar.settings.prepopulate == "no") {
-					var calendar = label.next('.calendar');
 					if(Calendar.settings.prepopulate == "no") date = Date.parse('now');
-					Calendar.updateSelect(calendar, date);
-					Calendar.open(calendar, date);
+					Calendar.updateSelect(_calendar, date);
+					Calendar.open(_calendar, date);
 				} else {
 					$(this).addClass('error');
 				}
 			}).keyup(function(event) {
-				var calendar = $(this).parents('label').next('.calendar');
 				var date = Calendar.getDate($(this).val());
-
 				if(date !== null) {
-					Calendar.updateSelect(calendar, date);
-					Calendar.update(calendar, date);
+					Calendar.updateSelect(_calendar, date);
+					Calendar.update(_calendar, date);
 				} else {
 					$(this).addClass('error');
 				}
 			});
-			label.next('.calendar').find('select').change(function() {
-				var select = $(this).parent().find('select');
-				var date = Date.parseExact(select[1].value + '-' + select[0].value, 'yyyy-M');
-				Calendar.update(select.parents('.calendar'), date);
+			_calendar.find('select').change(function() {
+				var select = $(this).siblings().andSelf();
+				var date = Date.parseExact(select[0].value + '-' + select[1].value, 'yyyy-M');
+
+				Calendar.update(_calendar, date);
 			});
-			label.next('.calendar').find('tbody td').click(function(event) {
-				var select = label.next('.calendar').find('select');
+			_calendar.find('tbody td').click(function(event) {
+				var select = _calendar.find('select');
 				var day = $(this);
-				var month = select[0].value;
-				var year = select[1].value;
+					month = select[0].value;
+					year = select[1].value;
 
 				var date = Date.parseExact(year + '-' + month + '-' + day.text(), 'yyyy-M-d');
 
@@ -70,21 +71,20 @@
 				if(day.hasClass('next')) date.next().month();
 
 				if(event.altKey) {
-					Calendar.setEnd(label.next('.calendar'), date);
+					Calendar.setEnd(_calendar, date);
 				} else {
-					Calendar.setStart(label.next('.calendar'), date);
+					Calendar.setStart(_calendar, date);
 				}
 			});
-			label.find('a.delete').click(function(event) {
+			_label.find('a.delete').click(function(event) {
 				event.preventDefault();
 				event.stopPropagation();
-				var label = $(this).parents('label');
-				Calendar.removePanel(label);
+				Calendar.removePanel(_label);
 			});
-			$('.field-datetime').click(function(event) {
+			_field.click(function(event) {
 				$('body').one('click', function() {
-					$('.field-datetime label').removeClass('active');
-					$('.field-datetime .calendar').slideUp(100);
+					_label.removeClass('active');
+					_calendar.slideUp(100);
 				});
 				event.stopPropagation();
 			});
@@ -283,8 +283,8 @@
 			date.setHours(current.toString('HH'), current.toString('mm'));
 			end.val(this.setRelativeDate(date));
 			// check start and end relation
-			var startDate = this.getDate(start.val());
-			var endDate = this.getDate(end.val());
+			var startDate = this.getDate(start.val()),
+				endDate = this.getDate(end.val());
 			if(endDate.compareTo(startDate) == -1) {
 				start.val(this.setRelativeDate(endDate));
 				end.val(this.setRelativeDate(startDate));
@@ -418,7 +418,6 @@
 					current.next('.calendar').remove();
 					current.remove();
 				});
-
 			}
 		},
 
