@@ -54,8 +54,17 @@
 				}
 			});
 			_calendar.find('select').change(function() {
-				var select = $(this).siblings().andSelf();
-				var date = Date.parseExact(select[0].value + '-' + select[1].value, 'yyyy-M');
+				var self = $(this);
+
+				if(self.hasClass("year")) {
+					var year = self.val();
+					var month = self.prev("select").val();
+				} else if(self.hasClass("month")) {
+					var year = self.next("select").val();
+					var month = self.val();
+				}
+
+				var date = Date.parseExact(year + '-' + month, 'yyyy-M');
 
 				Calendar.update(_calendar, date);
 			});
@@ -124,18 +133,28 @@
 		create: function(label) {
 			// calendar
 			var calendar = $('<div class="calendar"><div class="nav"><select class="month" /><select class="year" /></div><table><thead><tr /></thead><tbody /></table><div class="capsule"><div class="start time"><strong>' + this.settings.START + '</strong><em>--:--</em></div><div class="end time"><strong>' + this.settings.END + '</strong><em>--:--</em></div></div></div>').insertAfter(label).slideUp(0);
+
+			// Performance..
+			var c_days = c_weeks = c_months = "";
+
 			$.each(Date.CultureInfo.abbreviatedDayNames, function() {
-				calendar.find('thead tr').append('<td>' + this + '</td>');
+				c_days += '<td>' + this + '</td>';
 			});
+			calendar.find('thead tr').append(c_days);
+
 			var week = 1;
 			while(week++ <= 6) {
-				calendar.find('tbody').append('<tr><td class="even"><td class="odd"><td class="even"><td class="odd"><td class="even"><td class="odd"><td class="even"></td></tr>');
+				c_weeks += '<tr><td class="even"><td class="odd"><td class="even"><td class="odd"><td class="even"><td class="odd"><td class="even"></td></tr>';
 			}
+			calendar.find('tbody').append(c_weeks);
+
 			// select options
 			$.each(Date.CultureInfo.monthNames, function(count) {
 				count++;
-				calendar.find('select.month').append('<option value="' + count + '">' + this + '</option>');
+				c_months += '<option value="' + count + '">' + this + '</option>';
 			});
+			calendar.find('select.month').append(c_months);
+
 			// time
 			calendar.find('div.time').slider({
 				max: 96,
@@ -243,7 +262,7 @@
 			// set year
 			var year = date.toString('yyyy');
 			var select = calendar.find('select.year');
-			select.find('option').remove().end().append('<option value="' + year + '" selected="selected">' + year + '</option>');
+			select.empty().append('<option value="' + year + '" selected="selected">' + year + '</option>');
 			var plus = minus = year;
 			for(x = 1; x <= 5; x++) {
 				plus++;
@@ -382,7 +401,7 @@
 			if(Calendar.settings.prepopulate == "yes") {
 				label.find('input').val('').filter(':first').val(this.getDate('now').toString('yyyy-MM-dd HH:mm:ss'));
 			} else {
-				label.find('input').val('').filter(':first').val('');
+				label.find('input').val('');
 			}
 
 			label.find('input[type=hidden]').remove();
@@ -436,9 +455,8 @@
 	$(document).ready(function() {
 		$('.field-datetime label').datetime();
 		// make duplicatable
-		$('.field-datetime a.new').click(function(event) {
-			var field = $(this).parents('.field-datetime');
-			Calendar.addPanel(field);
+		$('.field-datetime a.new').click(function() {
+			Calendar.addPanel($(this).parents('.field-datetime'));
 		});
 		// make sortable
 		$('.field-datetime').sortable({
