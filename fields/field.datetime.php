@@ -309,8 +309,19 @@ Class fieldDatetime extends Field {
             if(empty($date)) continue;
             if($data['end'][$id] != "0000-00-00 00:00:00") {
                 if($value != '') $value .= ', ';
-                $value .= '<span style="color: rgb(136, 136, 119);">' . __('from') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
-                $value .= ' <span style="color: rgb(136, 136, 119);">' .__('to') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['end'][$id]));
+
+				/* 	If it's not the same day
+				**	from {date}{time} to {date}{time} else
+				**	{date}{time} - {time}
+				*/
+				if(DateTimeObj::get("D M Y", strtotime($data['start'][$id])) != DateTimeObj::get("D M Y", strtotime($data['end'][$id]))) {
+					$value .= '<span style="color: rgb(136, 136, 119);">' . __('from') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
+	                $value .= ' <span style="color: rgb(136, 136, 119);">' .__('to') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['end'][$id]));
+				} else {
+					$value .= '<span style="color: rgb(136, 136, 119);">' . __('from') . '</span> ' . DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
+					$value .= ' <span style="color: rgb(136, 136, 119);">-</span> ' . DateTimeObj::get(__SYM_TIME_FORMAT__, strtotime($data['end'][$id]));
+				}
+
             } else {
                 if($value != '') $value .= ', ';
                 $value .= DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
