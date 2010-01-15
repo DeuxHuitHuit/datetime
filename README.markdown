@@ -1,14 +1,13 @@
 # Date and Time
 
+A field for Symphony managing single or multiple dates as well as date ranges.
+
 - Version: 1.3
 - Date: 15th January 2010
 - Requirements: Symphony CMS 2.0.6 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
 - GitHub Repository: <http://github.com/nilshoerrmann/datetime>
-
-This extension adds a new field to Symphony CMS that allows the addition of single dates, multiple dates and date ranges.  
-Dates can be sorted manually for data source output.
 
 This extension is based on and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/). It uses [dateJS](http://www.datejs.com/) for date calculations.
 
