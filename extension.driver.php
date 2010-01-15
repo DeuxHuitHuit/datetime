@@ -17,10 +17,10 @@
 					'name' => 'Nils Hörrmann',
 					'website' => 'http://www.nilshoerrmann.de',
 					'email' => 'post@nilshoerrmann.de'
-				)
+				),
 				'description'   => 'A field for single dates, multiple dates and date ranges',
 				'compatibility' => array(
-				    '2.0.6' => true
+				    '2.0.6' => true,
 				    '2.0.7' => true
 				)
 			);
