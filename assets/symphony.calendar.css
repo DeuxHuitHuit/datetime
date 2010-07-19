@@ -1,0 +1,84 @@
+.calendar {
+	background: #353533;
+	border-top: none;
+	min-width: 23em;
+	padding: 20px 0 25px 60px;
+}
+
+.calendar select {
+	float: left;
+	margin: 0 12px 10px 0;
+	width: 114px;
+}
+
+.calendar table {
+	border-collapse: collapse;
+	clear: both;
+	width: 240px;
+}
+
+.calendar thead td {
+	background: #353533;
+	border: none;
+	height: auto;
+	padding-bottom: 2px;
+}
+
+.calendar thead td:hover {
+	background: none;
+	border: none;
+	color: #fff;
+	cursor: auto;
+}
+
+.calendar td {
+	background: #383836;
+	border: 1px inset #484846;
+	color: #fff;
+	cursor: pointer;
+	height: 2.75em;
+	text-align: center;
+	vertical-align: middle;
+	width: 35px;
+}
+
+.calendar td.last,.calendar td.next {
+	color: #686865;
+}
+
+.calendar td.odd {
+	background: #323230;
+}
+
+.calendar td.today {
+	background: #56554d;
+	border: 1px solid #898880;
+}
+
+.calendar td.selected {
+	background: #81b934;
+	border: 1px solid #fff;
+	color: #fff;
+}
+
+.calendar td.last.selected, .calendar td.next.selected {
+	background: #83a751;
+	border: 1px ridge #c2c2c2;
+}
+
+.calendar td.selected.today {
+	background: #a5bf80;
+	border: 1px solid #fff;
+}
+
+.calendar td:hover {
+	background: #ffb !important;
+	border: 1px solid #fff;
+	color: #9d854c;
+}
+
+.calendar thead td:hover {
+	background: none !important;
+	border: inherit;
+	color: #fff;
+}
