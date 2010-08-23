@@ -9,11 +9,28 @@ Class fieldDatetime extends Field {
     const ERROR = 4;
     private $key;
 
+    private static $english = array(
+            'yesterday', 'today', 'tomorrow', 'now',
+            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+            'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    );
+
+    private $locale;
+
     /**
      * Initialize Datetime as unrequired field.
      */
 
     function __construct(&$parent) {
+        // Replace relative and locale date and time strings
+        foreach(self::$english as $string) {
+            $locale[] = __($string);
+        }
+        $this->locale = $locale;
+
         parent::__construct($parent);
         $this->_name = __('Date/Time');
         $this->_required = false;
@@ -247,26 +264,13 @@ Class fieldDatetime extends Field {
         $status = self::__OK__;
         if(!is_array($data) or empty($data)) return NULL;
 
-        // Replace relative and locale date and time strings
-        $english = array(
-            'yesterday', 'today', 'tomorrow', 'now',
-            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
-            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
-            'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
-            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        );
-        foreach($english as $string) {
-            $locale[] = __($string);
-        }
-
         $result = array('entry_id' => array(), 'start' => array(), 'end' => array());
         $count = count($data['start']);
         for($i = 0; $i < $count; $i++) {
             if(!empty($data['start'][$i])) {
                 $result['entry_id'][] = $entry_id;
-                $result['start'][] = date('c', strtotime(str_replace($locale, $english, $data['start'][$i])));
-                $result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
+                $result['start'][] = date('c', strtotime(str_replace($this->locale, self::$english, $data['start'][$i])));
+                $result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime(str_replace($this->locale, self::$english, $data['end'][$i])));
             }
         }
         return $result;
@@ -327,7 +331,8 @@ Class fieldDatetime extends Field {
                 $value .= DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
             }
         }
-        return $value;
+
+        return str_replace(self::$english, $this->locale, $value);
 
     }
 
