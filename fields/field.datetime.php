@@ -361,7 +361,20 @@ Class fieldDatetime extends Field {
 
     function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
 
-        if(self::isFilterRegex($data[0])) return parent::buildDSRetrivalSQL($data, $joins, $where, $andOperation);
+        if (self::isFilterRegex($data[0])) {
+            $field_id = $this->get('id');
+            $this->_key++;
+            $pattern = str_replace('regexp:', '', $this->cleanValue($data[0]));
+            $joins .= "
+                LEFT JOIN
+                    `sym_entries_data_{$field_id}` AS t{$field_id}_{$this->_key}
+                    ON (e.id = t{$field_id}_{$this->_key}.entry_id)
+            ";
+            $where .= "
+                AND t{$field_id}_{$this->_key}.start REGEXP `{$pattern}` OR t{$field_id}_{$this->_key}.end REGEXP `{$pattern}`
+            ";
+            return true;
+        }
 
         $parsed = array();
 
