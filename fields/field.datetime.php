@@ -170,11 +170,11 @@ Class fieldDatetime extends Field {
 
     function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 
-		if (Administration instanceof Symphony) {
+		//if (Administration instanceof Symphony) {
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);
-		}
+		//}
 
         // title and help
         $wrapper->setValue($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
@@ -271,8 +271,8 @@ Class fieldDatetime extends Field {
         for($i = 0; $i < $count; $i++) {
             if(!empty($data['start'][$i])) {
                 $result['entry_id'][] = $entry_id;
-                $result['start'][] = date('c', strtotime(str_replace($this->locale, self::$english, $data['start'][$i])));
-                $result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime(str_replace($this->locale, self::$english, $data['end'][$i])));
+                $result['start'][] = date('c', strtotime($this->translateLocalizedDateString($data['start'][$i])));
+                $result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime($this->translateLocalizedDateString($data['end'][$i])));
             }
         }
         return $result;
@@ -334,8 +334,32 @@ Class fieldDatetime extends Field {
             }
         }
 
-        return str_replace(self::$english, $this->locale, $value);
+        return $this->localizeDateString($value);
 
+    }
+
+    /**
+     * Localizes an english date string safely. Opposite of translateLocalizedDateString() method, see it's comment
+     * for more details.
+     */
+    private function localizeDateString ($date) {
+        foreach (self::$english as $termIndex => $term) {
+            $date = preg_replace("/\b{$term}\b/i", $this->locale[$termIndex], $date);
+        }
+        return $date;
+    }
+
+    /**
+     * Translates every localized date term in a date string to a normalized english term for use with
+     * the PHP strtotime function. Uses preg_replace with word boundaries to make sure we don't translate parts
+     * of date terms, otherwise "tomorrow" could be translated again to "Thmorrow" for languages where "to" is
+     * the abbreviated version of "thursday".
+     */
+    private function translateLocalizedDateString ($date) {
+        foreach ($this->locale as $termIndex => $term) {
+            $date = preg_replace("/\b{$term}\b/i", self::$english[$termIndex], $date);
+        }
+        return $date;
     }
 
     /**
