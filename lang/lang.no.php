@@ -1,7 +1,7 @@
 <?php
 
 	$about = array(
-		'name' => '',
+		'name' => 'Norsk',
 		'author' => array(
 			'name' => 'Frode Danielsen',
 			'email' => 'frode@danielsen.net',
