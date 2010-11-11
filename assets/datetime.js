@@ -235,7 +235,7 @@
 			// populate calendar
 			var current = date.clone().clearTime().set({ day: 1 });
 			if (!current.is().sunday()) current.last().sunday();
-			calendar.find('tbody td').removeClass('start').removeClass('end').removeClass('today').removeClass('range').removeClass('last').removeClass('next').each(function() {
+			calendar.find('tbody td').removeClass('start end today range last next').each(function() {
 				var day = $(this);
 				day.text(current.getDate());
 				// month context
@@ -346,10 +346,10 @@
 				date.search(Date.RelativeDates.tomorrow) != -1)
 			{
 				// Dirty fix for a dateJS bug which misinterprets relative dates
-				date = date.replace(Date.RelativeDates.yesterday, Date.parse('yesterday').toString('yyyy-MM-dd'));
-				date = date.replace(Date.RelativeDates.today, Date.parse('today').toString('yyyy-MM-dd'));
-				date = date.replace(Date.RelativeDates.now, Date.parse('now').toString('yyyy-MM-dd, HH:mm'));
-				date = date.replace(Date.RelativeDates.tomorrow, Date.parse('tomorrow').toString('yyyy-MM-dd'));
+				date = date.replace(Date.RelativeDates.yesterday, Date.parse('yesterday').toString(Date.CultureInfo.formatPatterns.shortDate));
+				date = date.replace(Date.RelativeDates.today, Date.parse('today').toString(Date.CultureInfo.formatPatterns.shortDate));
+				date = date.replace(Date.RelativeDates.now, Date.parse('now').toString(Date.CultureInfo.formatPatterns.shortDate + ', ' + Date.CultureInfo.formatPatterns.shortTime));
+				date = date.replace(Date.RelativeDates.tomorrow, Date.parse('tomorrow').toString(Date.CultureInfo.formatPatterns.shortDate));
 				return Date.parse(date);
 			}
 			else {
