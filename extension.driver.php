@@ -11,8 +11,8 @@
 				'name' => 'Date and Time',
 				'type' => 'Field, Interface',
 				'repository'    => 'http://github.com/nilshoerrmann/datetime/',
-				'version' => '1.4',
-				'release-date' => '2010-08-27',
+				'version' => '1.5',
+				'release-date' => '2010-11-11',
 				'author' => array(
 					'name' => 'Nils Hörrmann',
 					'website' => 'http://nilshoerrmann.de',
@@ -21,7 +21,10 @@
 				'description'   => 'A field for single dates, multiple dates and date ranges',
 				'compatibility' => array(
 				    '2.0.6' => true,
-				    '2.0.7' => true
+				    '2.0.7' => true,
+				    '2.0.8' => true,
+				    '2.1.1' => true,
+				    '2.1.2' => true
 				)
 			);
 		}
