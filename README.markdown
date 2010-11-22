@@ -2,8 +2,8 @@
 
 A field for Symphony managing single or multiple dates as well as date ranges.
 
-- Version: 1.5
-- Date: 11th November 2010
+- Version: 1.5.1
+- Date: 22th November 2010
 - Requirements: Symphony CMS 2.0.6 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
@@ -19,9 +19,13 @@ This extension is currently not fully compatible with Localisation Manager. If y
 
 ## Change log
 
+**Version 1.5.1**
+
+- Section Schema compatibility. (Thanks, Brendan!)
+
 **Version 1.5**
 
-- Added Norwegian translation. (Thanks, Frode)
+- Added Norwegian translation. (Thanks, Frode!)
 - Updated data source filtering. (Thanks, John!)
 
 **Version 1.4**
