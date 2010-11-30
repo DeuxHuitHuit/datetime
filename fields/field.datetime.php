@@ -169,7 +169,11 @@ Class fieldDatetime extends Field {
      */
 
     function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
-		if (Administration::instance() instanceof Symphony && !is_null(Administration::instance()->Page)) {
+		if (
+			class_exists('Administration')
+			&& Administration::instance() instanceof Symphony
+			&& !is_null(Administration::instance()->Page)
+		) {
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);
