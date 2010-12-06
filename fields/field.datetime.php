@@ -494,7 +494,7 @@ Class fieldDatetime extends Field {
 
         $string = trim($string);
         $string = trim($string, '-/');
-        return $string;
+        return urldecode($string);
 
     }
 
@@ -546,7 +546,7 @@ Class fieldDatetime extends Field {
         }
 
         // Match for a simple date (Y-m-d), check its ok using checkdate() and go no further
-        elseif(!preg_match('/to/i', $string)) {
+        elseif(!preg_match('/\s+to\s+/i', $string)) {
 
             if(!self::__isValidDateString($string)) return self::ERROR;
 
@@ -555,9 +555,22 @@ Class fieldDatetime extends Field {
 
         }
 
-        // Parse the full date range and return an array
+		//	A date range, check it's ok!
+		elseif(preg_match('/\s+to\s+/i', $string)) {
 
-        if(!$parts = preg_split('/to/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
+			if(!$parts = preg_split('/\s+to\s+/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
+
+			foreach($parts as $i => &$part) {
+				if(!self::__isValidDateString($part)) return self::ERROR;
+
+				$part = DateTimeObj::get('Y-m-d H:i:s', strtotime($part));
+			}
+
+			$string = "$parts[0] to $parts[1]";
+        }
+
+        // Parse the full date range and return an array
+        if(!$parts = preg_split('/\s+to\s+/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
 
         $parts = array_map(array('self', '__cleanFilterString'), $parts);
 
