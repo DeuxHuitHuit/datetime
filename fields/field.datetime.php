@@ -351,7 +351,7 @@ Class fieldDatetime extends Field {
     /**
      * Translates every localized date term in a date string to a normalized english term for use with
      * the PHP strtotime function. Uses preg_replace with word boundaries to make sure we don't translate parts
-     * of date terms, otherwise "tomorrow" could be translated again to "Thmorrow" for languages where "to" is
+     * of date terms, otherwise "tomorrow" could be translated again to "Tomorrow" for languages where "to" is
      * the abbreviated version of "thursday".
      */
     private function translateLocalizedDateString ($date) {
@@ -443,12 +443,12 @@ Class fieldDatetime extends Field {
         if($andOperation == 1) $connector = ' AND '; // filter conntected with plus signs
 
         foreach($data as $date) {
-            $tmp[] = "'" . DateTimeObj::get('Y-m-d', strtotime($date)) . "' BETWEEN
-                DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') AND
-                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d')";
+            $tmp[] = "'" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date)) . "' BETWEEN
+                DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d %H:%i:%s') AND
+                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d %H:%i:%s')";
         }
         $joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
-        $where .= " AND (".@implode($connector, $tmp).") ";
+        $where .= " AND (".implode($connector, $tmp).") ";
         $this->key++;
 
     }
@@ -470,15 +470,15 @@ Class fieldDatetime extends Field {
         if($andOperation == 1) $connector = ' AND '; // filter conntected with plus signs
 
         foreach($data as $date) {
-            $tmp[] = "(DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') BETWEEN
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['start'])) . "' AND
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['end'])) . "' OR
-                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d') BETWEEN
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['start'])) . "' AND
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['end'])) . "')";
+            $tmp[] = "(DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d %H:%i:%s') BETWEEN
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['start'])) . "' AND
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['end'])) . "' OR
+                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d %H:%i:%s') BETWEEN
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['start'])) . "' AND
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['end'])) . "')";
         }
         $joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
-        $where .= " AND (".@implode($connector, $tmp).") ";
+        $where .= " AND (".implode($connector, $tmp).") ";
         $this->key++;
 
     }
