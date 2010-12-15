@@ -9,11 +9,28 @@ Class fieldDatetime extends Field {
     const ERROR = 4;
     private $key;
 
+    private static $english = array(
+            'yesterday', 'today', 'tomorrow', 'now',
+            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+            'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    );
+
+    private $locale;
+
     /**
      * Initialize Datetime as unrequired field.
      */
 
     function __construct(&$parent) {
+        // Replace relative and locale date and time strings
+        foreach(self::$english as $string) {
+            $locale[] = __($string);
+        }
+        $this->locale = $locale;
+
         parent::__construct($parent);
         $this->_name = __('Date/Time');
         $this->_required = false;
@@ -152,10 +169,11 @@ Class fieldDatetime extends Field {
      */
 
     function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
-
-        Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
-        Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
-        Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);
+		if (Administration::instance() instanceof Symphony && !is_null(Administration::instance()->Page)) {
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/jquery-ui.js', 100, true);
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.js', 201, false);
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.css', 'screen', 202, false);
+		}
 
         // title and help
         $wrapper->setValue($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
@@ -247,26 +265,13 @@ Class fieldDatetime extends Field {
         $status = self::__OK__;
         if(!is_array($data) or empty($data)) return NULL;
 
-        // Replace relative and locale date and time strings
-        $english = array(
-            'yesterday', 'today', 'tomorrow', 'now',
-            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
-            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
-            'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
-            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        );
-        foreach($english as $string) {
-            $locale[] = __($string);
-        }
-
         $result = array('entry_id' => array(), 'start' => array(), 'end' => array());
         $count = count($data['start']);
         for($i = 0; $i < $count; $i++) {
             if(!empty($data['start'][$i])) {
                 $result['entry_id'][] = $entry_id;
-                $result['start'][] = date('c', strtotime(str_replace($locale, $english, $data['start'][$i])));
-                $result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime(str_replace($locale, $english, $data['end'][$i])));
+                $result['start'][] = date('c', strtotime($this->translateLocalizedDateString($data['start'][$i])));
+                $result['end'][] = empty($data['end'][$i]) ? '0000-00-00 00:00:00' : date('c', strtotime($this->translateLocalizedDateString($data['end'][$i])));
             }
         }
         return $result;
@@ -327,8 +332,33 @@ Class fieldDatetime extends Field {
                 $value .= DateTimeObj::get(__SYM_DATETIME_FORMAT__, strtotime($data['start'][$id]));
             }
         }
-        return $value;
 
+        return $this->localizeDateString($value);
+
+    }
+
+    /**
+     * Localizes an english date string safely. Opposite of translateLocalizedDateString() method, see it's comment
+     * for more details.
+     */
+    private function localizeDateString ($date) {
+        foreach (self::$english as $termIndex => $term) {
+            $date = preg_replace("/\b{$term}\b/i", $this->locale[$termIndex], $date);
+        }
+        return $date;
+    }
+
+    /**
+     * Translates every localized date term in a date string to a normalized english term for use with
+     * the PHP strtotime function. Uses preg_replace with word boundaries to make sure we don't translate parts
+     * of date terms, otherwise "tomorrow" could be translated again to "Tomorrow" for languages where "to" is
+     * the abbreviated version of "thursday".
+     */
+    private function translateLocalizedDateString ($date) {
+        foreach ($this->locale as $termIndex => $term) {
+            $date = preg_replace("/\b{$term}\b/i", self::$english[$termIndex], $date);
+        }
+        return $date;
     }
 
     /**
@@ -356,7 +386,20 @@ Class fieldDatetime extends Field {
 
     function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
 
-        if(self::isFilterRegex($data[0])) return parent::buildDSRetrivalSQL($data, $joins, $where, $andOperation);
+        if (self::isFilterRegex($data[0])) {
+            $field_id = $this->get('id');
+            $this->_key++;
+            $pattern = str_replace('regexp:', '', $this->cleanValue($data[0]));
+            $joins .= "
+                LEFT JOIN
+                    `sym_entries_data_{$field_id}` AS t{$field_id}_{$this->_key}
+                    ON (e.id = t{$field_id}_{$this->_key}.entry_id)
+            ";
+            $where .= "
+                AND t{$field_id}_{$this->_key}.start REGEXP `{$pattern}` OR t{$field_id}_{$this->_key}.end REGEXP `{$pattern}`
+            ";
+            return true;
+        }
 
         $parsed = array();
 
@@ -400,12 +443,12 @@ Class fieldDatetime extends Field {
         if($andOperation == 1) $connector = ' AND '; // filter conntected with plus signs
 
         foreach($data as $date) {
-            $tmp[] = "'" . DateTimeObj::get('Y-m-d', strtotime($date)) . "' BETWEEN
-                DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') AND
-                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d')";
+            $tmp[] = "'" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date)) . "' BETWEEN
+                DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d %H:%i:%s') AND
+                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d %H:%i:%s')";
         }
         $joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
-        $where .= " AND (".@implode($connector, $tmp).") ";
+        $where .= " AND (".implode($connector, $tmp).") ";
         $this->key++;
 
     }
@@ -427,15 +470,15 @@ Class fieldDatetime extends Field {
         if($andOperation == 1) $connector = ' AND '; // filter conntected with plus signs
 
         foreach($data as $date) {
-            $tmp[] = "(DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d') BETWEEN
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['start'])) . "' AND
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['end'])) . "' OR
-                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d') BETWEEN
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['start'])) . "' AND
-                '" . DateTimeObj::get('Y-m-d', strtotime($date['end'])) . "')";
+            $tmp[] = "(DATE_FORMAT(`t$field_id".$this->key."`.start, '%Y-%m-%d %H:%i:%s') BETWEEN
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['start'])) . "' AND
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['end'])) . "' OR
+                DATE_FORMAT(`t$field_id".$this->key."`.end, '%Y-%m-%d %H:%i:%s') BETWEEN
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['start'])) . "' AND
+                '" . DateTimeObj::get('Y-m-d H:i:s', strtotime($date['end'])) . "')";
         }
         $joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
-        $where .= " AND (".@implode($connector, $tmp).") ";
+        $where .= " AND (".implode($connector, $tmp).") ";
         $this->key++;
 
     }
@@ -451,7 +494,7 @@ Class fieldDatetime extends Field {
 
         $string = trim($string);
         $string = trim($string, '-/');
-        return $string;
+        return urldecode($string);
 
     }
 
@@ -503,7 +546,7 @@ Class fieldDatetime extends Field {
         }
 
         // Match for a simple date (Y-m-d), check its ok using checkdate() and go no further
-        elseif(!preg_match('/to/i', $string)) {
+        elseif(!preg_match('/\s+to\s+/i', $string)) {
 
             if(!self::__isValidDateString($string)) return self::ERROR;
 
@@ -512,9 +555,22 @@ Class fieldDatetime extends Field {
 
         }
 
-        // Parse the full date range and return an array
+		//	A date range, check it's ok!
+		elseif(preg_match('/\s+to\s+/i', $string)) {
 
-        if(!$parts = preg_split('/to/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
+			if(!$parts = preg_split('/\s+to\s+/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
+
+			foreach($parts as $i => &$part) {
+				if(!self::__isValidDateString($part)) return self::ERROR;
+
+				$part = DateTimeObj::get('Y-m-d H:i:s', strtotime($part));
+			}
+
+			$string = "$parts[0] to $parts[1]";
+        }
+
+        // Parse the full date range and return an array
+        if(!$parts = preg_split('/\s+to\s+/', $string, 2, PREG_SPLIT_NO_EMPTY)) return self::ERROR;
 
         $parts = array_map(array('self', '__cleanFilterString'), $parts);
 

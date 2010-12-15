@@ -18,10 +18,23 @@ This extension is based on and inspired by Scott Hughes' [calendar mock-up](http
 - Implemented Stage.
 - Implemented new calendar.
 
+**Version 1.5.1**
+
+- Section Schema compatibility. (Thanks, Brendan!)
+
+**Version 1.5**
+
+- Added Norwegian translation. (Thanks, Frode!)
+- Updated data source filtering. (Thanks, John!)
+
+**Version 1.4**
+
+- Added Italian translation, improved date localisation. (Thanks, Simone!)
+
 **Version 1.3**
 
-- Added German localisation, improved date handling.
-- Fixed a lot of bugs and overall improvements by brendo (thanks!)
+- Added German translation, improved date handling.
+- Fixed a lot of bugs and overall improvements. (Thanks, Brendan!)
 
 **Version 1.2**
 
