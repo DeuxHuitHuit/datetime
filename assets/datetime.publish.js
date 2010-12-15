@@ -1,6 +1,11 @@
 
 (function($) {
 
+	// Language strings
+	Symphony.Language.add({
+	
+	});
+
 	/**
 	 * The Date and Time extension provides an interface to add 
 	 * one or more single dates or date ranges to an entry.
