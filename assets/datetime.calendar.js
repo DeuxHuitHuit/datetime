@@ -1,16 +1,7 @@
-/*
- * CALENDAR
- * for Symphony
- *
- * @author: Nils Hörrmann, post@nilshoerrmann.de
- * @source: http://github.com/nilshoerrmann/calendar
- */
 
+(function($) {
 
-/*-----------------------------------------------------------------------------
-	Language strings
------------------------------------------------------------------------------*/	 
-
+	// Language strings
 	Symphony.Language.add({
 	
 		// Months
@@ -44,14 +35,12 @@
 		
 	}); 
 	
-
-/*-----------------------------------------------------------------------------
-	Calendar plugin
------------------------------------------------------------------------------*/
-
-	jQuery.fn.symphonyCalendar = function(custom_settings) {
-
-		// Get objects
+	/**
+	 * A calendar for Symphony.
+	 *
+	 * @author: Nils Hörrmann, post@nilshoerrmann.de
+	 */
+	$.fn.symphonyCalendar = function(custom_settings) {
 		var objects = this;
 		
 		// Get settings
@@ -61,22 +50,15 @@
 			calendar:			false,
 			delay_initialize:	false
 		};
-		jQuery.extend(settings, custom_settings);
-
-
-	/*-------------------------------------------------------------------------
-		Calendar
-	-------------------------------------------------------------------------*/
-
-		objects = objects.map(function() {
+		$.extend(settings, custom_settings);
 		
-			// Get elements
+	/*-----------------------------------------------------------------------*/
+	
+		objects = objects.map(function() {
 			var object = this;
-
-		/*-------------------------------------------------------------------*/
 			
-			if (object instanceof jQuery === false) {
-				object = jQuery(object);
+			if (object instanceof $ === false) {
+				object = $(object);
 			}
 			
 			object.calendar = {
@@ -85,7 +67,7 @@
 				
 					// Get calendar
 					if(settings.calendar == false) {
-						calendar = jQuery('<div class="calendar" />').appendTo(object);
+						calendar = $('<div class="calendar" />').appendTo(object);
 					}
 					else {
 						calendar = object.find(settings.calendar);
@@ -122,8 +104,8 @@
 					today = today.getTime();
 							
 					// Create table
-					table = jQuery('<table><tbody></tbody></table>').appendTo(calendar);
-					head = jQuery(
+					table = $('<table><tbody></tbody></table>').appendTo(calendar);
+					head = $(
 						'<thead><tr>' +
 							'<td>' + Symphony.Language.get('Sun') + '</td>' +
 							'<td>' + Symphony.Language.get('Mon') + '</td>' +
@@ -153,7 +135,7 @@
 					var current = object.calendar.getFirstDayInWeek(date);
 				
 					// Create current week
-					var row = jQuery('<tr />').appendTo(table);
+					var row = $('<tr />').appendTo(table);
 					for(d = 0; d < 7; d++) {
 						row.append(object.calendar.generateDay(current));
 						current = object.calendar.getNextDayInWeek(current);
@@ -167,7 +149,7 @@
 				generateDay: function(current) {
 				
 					// Create day element				
-					var day = jQuery('<td>' + current.getDate() + '</td>');
+					var day = $('<td>' + current.getDate() + '</td>');
 					
 					// Odd column?
 					if(current.getDay() % 2 != 0) {
@@ -230,11 +212,9 @@
 
 	}
 	
-
-/*-----------------------------------------------------------------------------
-	Apply calendar plugin
------------------------------------------------------------------------------*/
-
-	jQuery(document).ready(function() {
-		jQuery('div.field-date').symphonyCalendar();
+	// Apply calendar plugin
+	$(document).ready(function() {
+		$('div.field-date').symphonyCalendar();
 	});
+	
+})(jQuery.noConflict());

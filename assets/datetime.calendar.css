@@ -1,4 +1,11 @@
-.calendar {
+/**
+ * Calendar for Symphony CMS
+ *
+ * @author: Nils Hörrmann, post@nilshoerrmann.de
+ * @source: http://github.com/nilshoerrmann/datetime
+ */
+ 
+ .calendar {
 	background: #353533;
 	border-top: none;
 	min-width: 23em;
