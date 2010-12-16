@@ -227,93 +227,67 @@
 			// Append assets
 			if(Administration::instance() instanceof Symphony && !is_null(Administration::instance()->Page)) {
 	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/draggable/draggable.publish.js?v=' . $version, 101, false);
-	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js?v=' . $version, 101, false);
+	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js?v=' . $version, 102, false);
 	//			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css?v=' . $version, 'screen', 103, false);
-	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js?v=' . $version', 201, false);
-	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.calendar.js?v=' . $version', 202, false);
-	//			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css?v=' . $version', 'screen', 203, false);
-	//			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.calendar.css?v=' . $version', 'screen', 204, false);
+	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js?v=' . $version, 104, false);
+	//			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css?v=' . $version, 'screen', 105, false);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js?v=' . $version, 106, false);
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css?v=' . $version, 'screen', 107, false);
 			}
 	
-	        // title and help
-	        $wrapper->setValue($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
-	
-	        // settings
-	        $fieldname = 'fields['  .$this->get('element_name') . ']';
-	        $setting = array(
-	            'DATE' => __('date'),
-	            'FROM' => __('from'),
-	            'START' => __('start'),
-	            'END' => __('end'),
-	            'FORMAT' => $this->get('format'),
-	            'multiple' => $this->get('allow_multiple_dates'),
-	            'prepopulate' => $this->get('prepopulate')
-	        );
-	        $settings = Widget::Input($fieldname . '[settings]', str_replace('"', "'", json_encode($setting)), 'hidden');
-	
-	        // default setup
-	        if($data == NULL) {
-	            $label = Widget::Label(NULL, NULL, 'first last');
-	
-	            $span = new XMLElement('span', '<em>' . __('from') . '</em>', array('class' => 'start'));
-	            $span->appendChild(
-	                Widget::Input($fieldname . '[start][]', '', 'text')
-	            );
-	            $span->appendChild(
-	                new XMLElement('a', 'delete', array('class' => 'delete'))
-	            );
-	            $label->appendChild($span);
-	
-	            $span = new XMLElement('span', '<em>' . __('to') . '</em>', array('class' => 'end'));
-	            $span->appendChild(
-	                Widget::Input($fieldname . '[end][]', '', 'text')
-	            );
-	            $label->appendChild($span);
-	
-	            $label->appendChild($settings);
-	            $wrapper->appendChild($label);
-	        } else {
-	            if(!is_array($data['start'])) $data['start'] = array($data['start']);
-	            if(!is_array($data['end'])) $data['end'] = array($data['end']);
-	
-				$count = count($data['start']);
-	            for($i = 1; $i <= $count; $i++) {
-	                $label = Widget::Label();
-	
-	                if($i == 1 && $i != $count) {
-	                    $label->setAttribute('class', 'first');
-	                } else if($i == 1 && $i == $count) {
-	                    $label->setAttribute('class', 'first last');
-	                } else if($i != 1 && $i == $count) {
-	                    $label->setAttribute('class', 'last');
-	                }
-	
-	                $span = new XMLElement('span', '<em>' . __('from') . '</em>', array('class' => 'start'));
-	                $span->appendChild(
-	                    Widget::Input($fieldname . '[start][]', $data['start'][$i - 1], 'text')
-	                );
-	                $span->appendChild(
-	                    new XMLElement('a', 'delete', array('class' => 'delete'))
-	                );
-	                $label->appendChild($span);
-	
-	                $span = new XMLElement('span', '<em>' . __('to') . '</em>', array('class' => 'end'));
-	                $span->appendChild(
-	                    Widget::Input($fieldname . '[end][]', ($data['end'][$i - 1] == '0000-00-00 00:00:00') ? '' : $data['end'][$i - 1], 'text')
-	                );
-	                $label->appendChild($span);
-	
-	                if($i == 1) $label->appendChild($settings);
-	                $wrapper->appendChild($label);
-	            }
-	        }
-	
-	        // add new
-	        if($this->get('allow_multiple_dates') == 'yes') {
-	            $wrapper->appendChild(
-					new XMLElement('a', __('Add new date'), array('class' => 'new'))
-				);
-	        }
+	        // Field label
+            $fieldname = 'fields['  .$this->get('element_name') . ']';
+            $label = Widget::Label($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
+            $wrapper->appendChild($label);
+            
+            // Create stage
+            $stage = new XMLElement('div', NULL, array('class' => 'stage constructable destructable'));
+            $template = '<li class="range"><span class="start"><em>' . __('from') . '</em><input type="text" /></span><span class="end"><em>' . __('to') . '</em><input type="text" /></span></li><li class="date"><span class="start"><em>' . __('from') . '</em><input type="text" /></span><span class="end"><em>' . __('to') . '</em><input type="text" /></span></li>';
+            $selected = new XMLElement('ul', $template, array('class' => 'selection'));
+            $stage->appendChild($selected);
+            
+            // Add dates
+            if(is_array($data)) {
+                if(!is_array($data['start'])) $data['start'] = array($data['start']);
+                if(!is_array($data['end'])) $data['end'] = array($data['end']);
+    
+    			$count = count($data['start']);
+                for($i = 0; $i < $count; $i++) {
+					$stage->appendChild($data['start'][$count], $data['end'][$count]);
+                }
+            }
+			
+			// Append stage		
+			$wrapper->appendChild($stage);
+	    }
+	    
+	    /**
+	     * Create date element.
+	     *
+	     * @param string $start
+	     *  start date
+	     * @param string $end
+	     *  end date
+	     * @return XMLElement
+	     *  date element
+	     */
+	    private function __createDate($start, $end) {
+	    
+	    	// Get type
+	    	if(empty($end)) {
+	    		$end = '0000-00-00 00:00';
+	    		$type = 'date';
+	    	}
+	    	else {
+	    		$type = 'range';
+	    	}
+	    	
+	    	// Create element
+	    	return new XMLElement(
+	    		'li', 
+	    		'<span class="start"><em>' . __('from') . '</em><input type="text" value="' . $start . '" /></span><span class="end"><em>' . __('to') . '</em><input type="text" value="' . $end . '" /></span>', 
+	    		array('class' => $type)
+	    	);
 	    }
 	
 		/**
