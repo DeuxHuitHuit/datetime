@@ -9,10 +9,7 @@
 	display: block;
 	position: relative;
 	padding-left: 40px;
-}
-
-.field-datetime div.stage span + span {
-	margin-top: -3px;
+	margin: 4px 14px;
 }
 
 .field-datetime div.stage li.date span.end {
