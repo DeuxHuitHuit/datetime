@@ -242,22 +242,30 @@
             
             // Create stage
             $stage = new XMLElement('div', NULL, array('class' => 'stage constructable destructable'));
-            $template = '<li class="range"><span class="start"><em>' . __('from') . '</em><input type="text" /></span><span class="end"><em>' . __('to') . '</em><input type="text" /></span></li><li class="date"><span class="start"><em>' . __('from') . '</em><input type="text" /></span><span class="end"><em>' . __('to') . '</em><input type="text" /></span></li>';
-            $selected = new XMLElement('ul', $template, array('class' => 'selection'));
-            $stage->appendChild($selected);
+            $selection = new XMLElement('ul', NULL, array('class' => 'selection'));
             
-            // Add dates
+            // Add existing dates
             if(is_array($data)) {
                 if(!is_array($data['start'])) $data['start'] = array($data['start']);
                 if(!is_array($data['end'])) $data['end'] = array($data['end']);
     
     			$count = count($data['start']);
                 for($i = 0; $i < $count; $i++) {
-					$stage->appendChild($data['start'][$count], $data['end'][$count]);
+					$selection->appendChild($this->__createDate($data['start'][$count], $data['end'][$count]));
                 }
             }
+            
+            // Current date and time
+			else {
+				$selection->appendChild($this->__createDate());
+				$selection->appendChild($this->__createDate('1980-07-17 17:58', 'today'));
+			}
+			
+			// Add template
+			$selection->appendChild($this->__createDate(NULL, NULL, 'template empty create'));
 			
 			// Append stage		
+            $stage->appendChild($selection);
 			$wrapper->appendChild($stage);
 	    }
 	    
@@ -271,21 +279,30 @@
 	     * @return XMLElement
 	     *  date element
 	     */
-	    private function __createDate($start, $end) {
+	    private function __createDate($start, $end, $class=NULL, $prepopulate=false) {
 	    
-	    	// Get type
+	    	// Get label and type
 	    	if(empty($end)) {
-	    		$end = '0000-00-00 00:00';
+	    		if(empty($start) && $prepopulate) {
+	    			$start = date('Y-m-d h:s');
+	    		}
+	    		$label = __('date');
 	    		$type = 'date';
 	    	}
 	    	else {
+	    		$label = __('from');
 	    		$type = 'range';
+	    	}
+	    	
+	    	// Additional classes
+	    	if(!empty($class)) {
+	    		$type .= ' ' . $class;
 	    	}
 	    	
 	    	// Create element
 	    	return new XMLElement(
 	    		'li', 
-	    		'<span class="start"><em>' . __('from') . '</em><input type="text" value="' . $start . '" /></span><span class="end"><em>' . __('to') . '</em><input type="text" value="' . $end . '" /></span>', 
+	    		'<span class="start"><em>' . $label . '</em><input type="text" value="' . $start . '" /></span><span class="end"><em>' . __('to') . '</em><input type="text" value="' . $end . '" /></span>', 
 	    		array('class' => $type)
 	    	);
 	    }
