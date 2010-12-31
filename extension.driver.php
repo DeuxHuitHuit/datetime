@@ -45,7 +45,7 @@
 					`field_id` int(11) unsigned NOT NULL,
 					`format` text,
 					`prepopulate` enum('yes','no') NOT NULL default 'yes',
-					`allow_multiple_dates` enum('yes','no') NOT NULL default 'yes',
+					`allow_multiple` tinyint(1) DEFAULT '0',
         	  		PRIMARY KEY  (`id`),
 			  		KEY `field_id` (`field_id`)
 				)"
@@ -70,23 +70,49 @@
 		 * @return boolean
 		 */
 		public function update($previousVersion) {
+			$status = array();
 			
-			// Go through all the existing datetime tables converting start and end to datetime
-			if(version_compare($previousVersion, '1.3', '<')){
+			// Prior version 1.3
+			if(version_compare($previousVersion, '1.3', '<')) {
 				$fields = Administration::instance()->Database->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
 
 				foreach($fields as $field) {
-					Administration::instance()->Database->query(
-						sprintf("
-							ALTER TABLE `tbl_entries_data_%d`
-							MODIFY `end` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-							MODIFY `start` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
-						", $field)
+					$status[] = Administration::instance()->Database->query(
+						"ALTER TABLE `tbl_entries_data_$field`
+						 MODIFY `end` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+						 MODIFY `start` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'"
 					);
 				}
 			}
+			
+			// Prior varersion 2.0
+			if(version_compare($previousVersion, '2.0', '<')) {
+			
+				// Change fields
+				$status[] = Administration::instance()->Database->query(
+					"ALTER TABLE `tbl_fields_datetime`
+					 CHANGE `allow_multiple_dates` `allow_multiple` tinyint(1) DEFAULT '0',
+					 MODIFY `prepopulate` tinyint(1) DEFAULT '0'"
+				);
+				
+				// Correctly store old 'no' values 
+				$status[] = Administration::instance()->Database->query(
+					"UPDATE tbl_fields_datetime
+					 SET `allow_multiple` = 0 WHERE `allow_multiple` > 1"
+				);
+				$status[] = Administration::instance()->Database->query(
+					"UPDATE tbl_fields_datetime
+					 SET `prepopulate` = 0 WHERE `prepopulate` > 1"
+				);
+			}
 
-			return true;
+			// Report status
+			if(in_array(false, $status, true)) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 
 		/**
