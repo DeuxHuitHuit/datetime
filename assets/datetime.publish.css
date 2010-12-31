@@ -8,8 +8,8 @@
 .field-datetime div.stage span {
 	display: block;
 	position: relative;
-	padding-left: 40px;
-	margin: 4px 14px;
+	margin: 4px 0;
+	padding: 0 14px 0 54px;
 }
 
 .field-datetime div.stage li.date span.end {
@@ -19,11 +19,38 @@
 .field-datetime div.stage em {
 	position: absolute;
 	top: 4px;
-	left: 0;
+	left: 14px;
 }
 
 .field-datetime div.stage input {
 	font-size: 109.09%;
 	padding: 2px;
 	width: 100%;
+}
+
+/* Missing Stage */
+
+div.field div.invalid div.stage {
+	background-color: #D42;
+	margin: -1.75em 0 0;
+	padding: 0.5em;
+	border: 1px solid #B21;
+	border-bottom: none;
+}
+
+div.field div.invalid div.stage ul {
+	background: #ea653b;
+	border: 1px solid #dd3d0e;
+	margin: 0;
+	list-style: none;
+	padding: 0.5em;
+}
+
+div.field div.invalid div.stage strong {
+	font-size: 1.3em;
+	font-weight: normal;
+}
+
+div.field div.invalid div.stage code {
+	font-size: 1em;
 }

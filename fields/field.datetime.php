@@ -7,7 +7,9 @@
 	 * This field provides an interface to manage single or multiple dates as well as date ranges.
 	 */
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
-	
+
+	require_once(EXTENSIONS . '/subsectionmanager/lib/stage/class.stage.php');
+
 	Class fieldDatetime extends Field {
 	
 	    const SIMPLE = 0;
@@ -16,17 +18,16 @@
 	    const ERROR = 4;
 	    private $key;
 	
-	    private static $english = array(
+/*	    private static $english = array(
 	            'yesterday', 'today', 'tomorrow', 'now',
 	            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
 	            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
 	            'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
 	            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
 	            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-	    );
+	    );*/
 	
 	    private $locale;
-	
 
 		/**
 		 * Construct a new instance of this field.
@@ -37,14 +38,14 @@
 		 */
 	    function __construct(&$parent) {
 	        // Replace relative and locale date and time strings
-	        foreach(self::$english as $string) {
+/*	        foreach(self::$english as $string) {
 	            $locale[] = __($string);
 	        }
-	        $this->locale = $locale;
+	        $this->locale = $locale;*/
 	
 	        parent::__construct($parent);
 	        $this->_name = __('Date/Time');
-	        $this->_required = false;
+	        $this->_required = true;
 	    }
 	
 		/**
@@ -114,35 +115,43 @@
 		 */
 	    function displaySettingsPanel(&$wrapper, $errors=NULL) {
 	
-	        // initialize field settings based on class defaults (name, placement)
+			// Initialize field settings based on class defaults (name, placement)
 	        parent::displaySettingsPanel($wrapper, $errors);
-	        $this->appendShowColumnCheckbox($wrapper);
-	
-	        // format
-	        $label = new XMLElement('label', __('Date format') . '<i>' . __('Use comma to separate date and time') . '</i>');
-	        $label->appendChild(
-	            Widget::Input('fields['.$this->get('sortorder').'][format]', $this->get('format') ? $this->get('format') : 'd MMMM yyyy, HH:mm')
-	        );
-	        $wrapper->appendChild($label);
-	
-	        // prepopulate
-	        $label = Widget::Label();
-	        $input = Widget::Input('fields['.$this->get('sortorder').'][prepopulate]', 'yes', 'checkbox');
-	        if($this->get('prepopulate') != 'no') {
-	            $input->setAttribute('checked', 'checked');
-	        }
-	        $label->setValue(__('%s Pre-populate this field with today\'s date', array($input->generate())));
-	        $wrapper->appendChild($label);
-	
-	        // allow multiple
-	        $label = Widget::Label();
-	        $input = Widget::Input('fields['.$this->get('sortorder').'][allow_multiple_dates]', 'yes', 'checkbox');
-	        if($this->get('allow_multiple_dates') != 'no') {
-	            $input->setAttribute('checked', 'checked');
-	        }
-	        $label->setValue(__('%s Allow multiple dates', array($input->generate())));
-	        $wrapper->appendChild($label);
-	
+
+		/*-----------------------------------------------------------------------*/
+
+			// Behaviour
+			$fieldset = Stage::displaySettings(
+				$this->get('id'), 
+				$this->get('sortorder'), 
+				__('Behaviour'),
+				array('constructable', 'destructable', 'draggable')
+			);
+
+			// Handle missing settings
+			if(!$this->get('id') && $errors == NULL) {
+				$this->set('allow_multiple', 1);
+				$this->set('show_preview', 1);
+			}
+			
+			// Setting: allow multiple
+			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][allow_multiple]" value="1" type="checkbox"' . ($this->get('allow_multiple') == 0 ? '' : ' checked="checked"') . '/> ' . __('Allow multiple dates') . ' <i>' . __('This will switch between single and multiple date lists') . '</i>');
+			$fieldset->appendChild($setting);
+			
+			// Setting: prepopulate
+			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][prepopulate]" value="yes" type="checkbox"' . ($this->get('prepopulate') == 0 ? '' : ' checked="checked"') . '/> ' . __('Pre-populate this field with today\'s date') . ' <i>' . __('This will automatically add the current date to new entries') . '</i>');
+			$fieldset->appendChild($setting);
+			
+			// Append behaviour settings
+			$wrapper->appendChild($fieldset);
+
+		/*-----------------------------------------------------------------------*/
+
+			// General
+			$fieldset = new XMLElement('fieldset', NULL, array('class' => 'settings group'));
+			$this->appendShowColumnCheckbox($fieldset);
+			$this->appendRequiredCheckbox($fieldset);
+			$wrapper->appendChild($fieldset);
 	    }
 	
 		/**
@@ -171,27 +180,27 @@
 		 */
 	    function commit() {
 	
-	        // prepare commit
+	        // Prepare commit
 	        if(!parent::commit()) return false;
 	        $id = $this->get('id');
 	        if($id === false) return false;
 	
-	        // set up fields
+	        // Set up fields
 	        $fields = array();
 	        $fields['field_id'] = $id;
-	        $fields['format'] = $this->get('format');
-	        if(empty($fields['format'])) $fields['format'] = 'd MMMM yyyy, HH:mm';
-	        $fields['prepopulate'] = ($this->get('prepopulate') ? $this->get('prepopulate') : 'no');
-	        $fields['allow_multiple_dates'] = ($this->get('allow_multiple_dates') ? $this->get('allow_multiple_dates') : 'no');
+			$fields['prepopulate'] = ($this->get('prepopulate') ? 1 : 0);
+			$fields['allow_multiple'] = ($this->get('allow_multiple') ? 1 : 0);
 	
-	        // delete old field settings
+			// Save new stage settings for this field
+			Stage::saveSettings($this->get('id'), $this->get('stage'), 'datetime');
+
+	        // Delete old field settings
 	        Administration::instance()->Database->query(
-	            "DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1"
+	            "DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id' LIMIT 1"
 	        );
 	
-	        // save new field setting
+	        // Save new field setting
 	        return Administration::instance()->Database->insert($fields, 'tbl_fields_' . $this->handle());
-	
 	    }
 	
 		/**
@@ -239,34 +248,55 @@
             $fieldname = 'fields['  .$this->get('element_name') . ']';
             $label = Widget::Label($this->get('label') . '<i>' . __('Press <code>alt</code> to add a range') . '</i>');
             $wrapper->appendChild($label);
-            
-            // Create stage
-            $stage = new XMLElement('div', NULL, array('class' => 'stage constructable destructable'));
-            $selection = new XMLElement('ul', NULL, array('class' => 'selection'));
-            
-            // Add existing dates
+
+			// Check if all needed components are available
+/*			if(!file_exists(EXTENSIONS . '/datetime/lib/stage/stage.publish.js')) {
+				$missing = __('Submodule Stage is missing');
+				$action = __('Please add the missing submodule to %s.', array('<code>' . URL . '/extensions/datetime/lib/</code>'));
+				$documentation = __('For further assistence have a look at the documentation available on %s.', array('<a href="http://github.com/nilshoerrmann/stage/">GitHub</a>'));
+				$error = new XMLElement('div', '<ul><li><strong>' . $missing . '</strong></li><li>' . $action . '</li></ul>', array('class' => 'stage'));
+
+				// Display error
+				$wrapper->appendChild(Widget::wrapFormElementWithError($error, $documentation));
+				return false;
+			}*/
+			
+			// Custom settings
+			$settings = 'single';
+            if($this->get('allow_multiple') == 1) {
+            	$settings = 'multiple';
+            }
+            if($this->get('prepopulate') == 1) {
+            	$settings .= ' prepopulate';
+            }
+                         
+            // Existing dates
+            $content = array();
             if(is_array($data)) {
                 if(!is_array($data['start'])) $data['start'] = array($data['start']);
                 if(!is_array($data['end'])) $data['end'] = array($data['end']);
     
     			$count = count($data['start']);
                 for($i = 0; $i < $count; $i++) {
-					$selection->appendChild($this->__createDate($data['start'][$count], $data['end'][$count]));
+					$content[] = $this->__createDate($data['start'][$count], $data['end'][$count]);
                 }
             }
             
             // Current date and time
 			else {
-				$selection->appendChild($this->__createDate());
-				$selection->appendChild($this->__createDate('1980-07-17 17:58', 'today'));
+				$content[] = $this->__createDate();
 			}
 			
 			// Add template
-			$selection->appendChild($this->__createDate(NULL, NULL, 'template empty create'));
-			
-			// Append stage		
-            $stage->appendChild($selection);
-			$wrapper->appendChild($stage);
+			$content[] = $this->__createDate(NULL, NULL, 'template empty create');
+        
+            // Create stage
+            $stage = Stage::create('datetime', $this->get('id'), $settings, $content);
+            
+			// Append Stage
+            if($stage) {
+				$wrapper->appendChild($stage);
+			}
 	    }
 	    
 	    /**
@@ -400,32 +430,8 @@
 	            }
 	        }
 	
-	        return $this->localizeDateString($value);
+	        return Lang::localizeDate($value);
 	
-	    }
-	
-	    /**
-	     * Localizes an english date string safely. Opposite of translateLocalizedDateString() method, see it's comment
-	     * for more details.
-	     */
-	    private function localizeDateString ($date) {
-	        foreach (self::$english as $termIndex => $term) {
-	            $date = preg_replace("/\b{$term}\b/i", $this->locale[$termIndex], $date);
-	        }
-	        return $date;
-	    }
-	
-	    /**
-	     * Translates every localized date term in a date string to a normalized english term for use with
-	     * the PHP strtotime function. Uses preg_replace with word boundaries to make sure we don't translate parts
-	     * of date terms, otherwise "tomorrow" could be translated again to "Tomorrow" for languages where "to" is
-	     * the abbreviated version of "thursday".
-	     */
-	    private function translateLocalizedDateString ($date) {
-	        foreach ($this->locale as $termIndex => $term) {
-	            $date = preg_replace("/\b{$term}\b/i", self::$english[$termIndex], $date);
-	        }
-	        return $date;
 	    }
 	
 		/**
