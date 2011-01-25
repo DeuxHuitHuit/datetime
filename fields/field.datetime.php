@@ -376,7 +376,7 @@ Class fieldDatetime extends Field {
     }
 
     /**
-     * Build data source retrival sql.
+     * Build data source retrieval sql.
      *
      * @param array $data
      * @param string $joins
@@ -396,7 +396,7 @@ Class fieldDatetime extends Field {
                     ON (e.id = t{$field_id}_{$this->_key}.entry_id)
             ";
             $where .= "
-                AND t{$field_id}_{$this->_key}.start REGEXP `{$pattern}` OR t{$field_id}_{$this->_key}.end REGEXP `{$pattern}`
+                AND t{$field_id}_{$this->_key}.start REGEXP '{$pattern}' OR t{$field_id}_{$this->_key}.end REGEXP '{$pattern}'
             ";
             return true;
         }
@@ -450,7 +450,6 @@ Class fieldDatetime extends Field {
         $joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
         $where .= " AND (".implode($connector, $tmp).") ";
         $this->key++;
-
     }
 
     /**
@@ -480,7 +479,6 @@ Class fieldDatetime extends Field {
         $joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id".$this->key."` ON `e`.`id` = `t$field_id".$this->key."`.entry_id ";
         $where .= " AND (".implode($connector, $tmp).") ";
         $this->key++;
-
     }
 
     /**
