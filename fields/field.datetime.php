@@ -16,18 +16,6 @@
 	    const REGEXP = 1;
 	    const RANGE = 3;
 	    const ERROR = 4;
-	    private $key;
-	
-/*	    private static $english = array(
-	            'yesterday', 'today', 'tomorrow', 'now',
-	            'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
-	            'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
-	            'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa',
-	            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
-	            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-	    );*/
-	
-	    private $locale;
 
 		/**
 		 * Construct a new instance of this field.
@@ -36,13 +24,7 @@
 		 *  The class that created this Field object, usually the FieldManager,
 		 *  passed by reference.
 		 */
-	    function __construct(&$parent) {
-	        // Replace relative and locale date and time strings
-/*	        foreach(self::$english as $string) {
-	            $locale[] = __($string);
-	        }
-	        $this->locale = $locale;*/
-	
+	    function __construct(&$parent) {	
 	        parent::__construct($parent);
 	        $this->_name = __('Date/Time');
 	        $this->_required = true;
@@ -195,12 +177,12 @@
 			Stage::saveSettings($this->get('id'), $this->get('stage'), 'datetime');
 
 	        // Delete old field settings
-	        Administration::instance()->Database->query(
+	        Symphony::Database()->query(
 	            "DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id' LIMIT 1"
 	        );
 	
 	        // Save new field setting
-	        return Administration::instance()->Database->insert($fields, 'tbl_fields_' . $this->handle());
+	        return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
 	    }
 	
 		/**
@@ -235,11 +217,10 @@
 	
 			// Append assets
 			if(Administration::instance() instanceof Symphony && !is_null(Administration::instance()->Page)) {
-	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/draggable/draggable.publish.js?v=' . $version, 101, false);
-	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js?v=' . $version, 102, false);
-	//			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css?v=' . $version, 'screen', 103, false);
-	//			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js?v=' . $version, 104, false);
-	//			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css?v=' . $version, 'screen', 105, false);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js?v=' . $version, 102, false);
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css?v=' . $version, 'screen', 103, false);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js?v=' . $version, 104, false);
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css?v=' . $version, 'screen', 105, false);
 				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js?v=' . $version, 106, false);
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css?v=' . $version, 'screen', 107, false);
 			}
@@ -377,7 +358,7 @@
 		 */
 	    function createTable() {
 	
-	        return Administration::instance()->Database->query(
+	        return Symphony::Database()->query(
 	            "CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 	            `id` int(11) unsigned NOT NULL auto_increment,
 	            `entry_id` int(11) unsigned NOT NULL,
