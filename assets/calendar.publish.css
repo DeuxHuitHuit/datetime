@@ -1,0 +1,96 @@
+/**
+ * Calendar for Symphony CMS
+ *
+ * @author: Nils Hörrmann, post@nilshoerrmann.de
+ * @source: http://github.com/nilshoerrmann/datetime
+ */
+ 
+.field-datetime .calendar {
+	background: #353533;
+	border-top: none;
+	min-width: 23em;
+	margin: 0 -1px;
+	padding: 16px 17px 16px 17px;
+	z-index: 2000;
+	position: relative;
+	display: none;
+}
+
+.field-datetime .calendar select {
+	float: left;
+	margin: 0 12px 10px 0;
+	width: 114px;
+}
+
+.field-datetime .calendar table {
+	border-collapse: collapse;
+	clear: both;
+	width: 251px;
+}
+
+.field-datetime .calendar thead td, .field-datetime .calendar thead td:nth-last-child(odd) {
+	background: #353533;
+	border: none;
+	height: auto;
+	padding-bottom: 2px;
+}
+
+.field-datetime .calendar thead td:hover {
+	background: none;
+	border: none;
+	color: #fff;
+	cursor: auto;
+}
+
+.field-datetime .calendar td {
+	background: #383836;
+	border: 1px inset #484846;
+	color: #fff;
+	cursor: pointer;
+	height: 2.75em;
+	text-align: center;
+	vertical-align: middle;
+	padding: 0;
+	width: 35px;
+}
+
+.field-datetime .calendar td.last,.field-datetime .calendar td.next {
+	color: #686865;
+}
+
+.field-datetime .calendar td:nth-last-child(odd) {
+	background: #323230;
+}
+
+.field-datetime .calendar td.today {
+	background: #56554d;
+	border: 1px solid #898880;
+}
+
+.field-datetime .calendar td.selected {
+	background: #81b934;
+	border: 1px solid #fff;
+	color: #fff;
+}
+
+.field-datetime .calendar td.last.selected, .field-datetime .calendar td.next.selected {
+	background: #83a751;
+	border: 1px ridge #c2c2c2;
+}
+
+.field-datetime .calendar td.selected.today {
+	background: #a5bf80;
+	border: 1px solid #fff;
+}
+
+.field-datetime .calendar td:hover {
+	background: #ffb !important;
+	border: 1px solid #fff;
+	color: #9d854c;
+}
+
+.field-datetime .calendar thead td:hover {
+	background: none !important;
+	border: inherit;
+	color: #fff;
+}
