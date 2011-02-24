@@ -13,14 +13,7 @@
 		Symphony.Language.add({
 			'today': false,
 			'yesterday': false,
-			'tomorrow': false,
-			'Sun': false,
-			'Mon': false,
-			'Tue': false,
-			'Wed': false,
-			'Thu': false,
-			'Fri': false,
-			'Sat': false
+			'tomorrow': false
 		});
 
 		// Initialize Stage
@@ -28,52 +21,7 @@
 			var manager = $(this),
 				stage = manager.find('div.stage'),
 				selection = stage.find('ul.selection');
-				
-			// Add calendar
-			selection.find('div.calendar').each(function() {
-				var calendar = $(this),
-					table = $('<table></table>').appendTo(calendar);
-			
-				// Create day headlines
-				$('<thead><tr>' +
-					'<td>' + Symphony.Language.get('Sun') + '</td>' +
-					'<td>' + Symphony.Language.get('Mon') + '</td>' +
-					'<td>' + Symphony.Language.get('Tue') + '</td>' +
-					'<td>' + Symphony.Language.get('Wed') + '</td>' +
-					'<td>' + Symphony.Language.get('Thu') + '</td>' +
-					'<td>' + Symphony.Language.get('Fri') + '</td>' +
-					'<td>' + Symphony.Language.get('Sat') + '</td>' +
-				  '</tr></thead>'
-				).prependTo(table);
-				
-				// Create days
-				$('<tbody>' +
-					'<tr>' + 
-					  '<td /><td /><td /><td /><td /><td /><td />' +
-					'</tr>' +
-					'<tr>' + 
-					  '<td /><td /><td /><td /><td /><td /><td />' +
-					'</tr>' +
-					'<tr>' + 
-					  '<td /><td /><td /><td /><td /><td /><td />' +
-					'</tr>' +
-					'<tr>' + 
-					  '<td /><td /><td /><td /><td /><td /><td />' +
-					'</tr>' +
-					'<tr>' + 
-					  '<td /><td /><td /><td /><td /><td /><td />' +
-					'</tr>' +
-					'<tr>' + 
-					  '<td /><td /><td /><td /><td /><td /><td />' +
-					'</tr>' +
-				  '</tbody>'
-				).appendTo(table);		
-			
-			});
-				
-			// Hide all calendars
-			//selection.find('div.calendar').hide();
-					
+							
 		/*-----------------------------------------------------------------------*/
 
 			// Formating

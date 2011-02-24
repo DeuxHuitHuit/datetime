@@ -57,7 +57,29 @@
 						<input type="text" name="' . $fieldname . '[end][]" value="' . $end . '" class="end ' . $end_class . '" /><em class="end label"></em>
 					</span>
 				</span>
-				<div class="calendar"></div>', 
+				<div class="calendar"
+					<table>
+						<thead>
+							<tr>
+								<td>' . __('Sun') . '</td>
+								<td>' . __('Mon') . '</td>
+								<td>' . __('Tue') . '</td>
+								<td>' . __('Wed') . '</td>
+								<td>' . __('Thu') . '</td>
+								<td>' . __('Fri') . '</td>
+								<td>' . __('Sat') . '</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td /><td /><td /><td /><td /><td /><td /></tr>
+							<tr><td /><td /><td /><td /><td /><td /><td /></tr>
+							<tr><td /><td /><td /><td /><td /><td /><td /></tr>
+							<tr><td /><td /><td /><td /><td /><td /><td /></tr>
+							<tr><td /><td /><td /><td /><td /><td /><td /></tr>
+							<tr><td /><td /><td /><td /><td /><td /><td /></tr>
+						</tbody>
+					</table>
+				</div>', 
 				array('class' => implode($classes, ' '))
 			);
 		}
