@@ -27,54 +27,64 @@
 		}
 
 		public function install() {
-			return Symphony::Database()->query(
+			$status = array();
+		
+			// Create database field table
+			$status[] = Symphony::Database()->query(
 				"CREATE TABLE `tbl_fields_datetime` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`field_id` int(11) unsigned NOT NULL,
-					`allow_multiple` tinyint(1) DEFAULT '0',
 					`prepopulate` tinyint(1) DEFAULT '1',
 					`time` tinyint(1) DEFAULT '1',
         	  		PRIMARY KEY  (`id`),
 			  		KEY `field_id` (`field_id`)
 				)"
 			);
+			
+			// Create stage
+			$status[] = Stage::install();
+			
+			// Report status
+			if(in_array(false, $status, true)) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 		
 		public function update($previousVersion) {
 			$status = array();
 			
-			// Prior version 1.3
-			if(version_compare($previousVersion, '1.3', '<')) {
-				$fields = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
-
-				foreach($fields as $field) {
-					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_entries_data_$field`
-						 MODIFY `end` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-						 MODIFY `start` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'"
-					);
-				}
-			}
-			
 			// Prior version 2.0
 			if(version_compare($previousVersion, '2.0', '<')) {
 			
+				// Update existing entries
+				$fields = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
+				foreach($fields as $field) {
+					$status[] = Symphony::Database()->query(
+						"ALTER TABLE `tbl_entries_data_$field`
+						 MODIFY `start` varchar(255) NOT NULL,
+						 MODIFY `end` varchar(255)'"
+					);
+				}
+				
 				// Change fields
 				$status[] = Symphony::Database()->query(
 					"ALTER TABLE `tbl_fields_datetime`
-					 CHANGE `allow_multiple_dates` `allow_multiple` tinyint(1) DEFAULT '0',
-					 MODIFY `prepopulate` tinyint(1) DEFAULT '0'"
+					 DROP `allow_multiple_dates`,
+					 MODIFY `prepopulate` tinyint(1) DEFAULT '1',
+					 ADD `time` tinyint(1) DEFAULT '1'"
 				);
 				
 				// Correctly store old 'no' values 
 				$status[] = Symphony::Database()->query(
 					"UPDATE tbl_fields_datetime
-					 SET `allow_multiple` = 0 WHERE `allow_multiple` > 1"
-				);
-				$status[] = Symphony::Database()->query(
-					"UPDATE tbl_fields_datetime
 					 SET `prepopulate` = 0 WHERE `prepopulate` > 1"
 				);
+			
+				// Create stage
+				$status[] = Stage::install();
 			}
 
 			// Report status
@@ -87,6 +97,12 @@
 		}
 
 		public function uninstall() {
+		
+			// Drop related entries from stage tables
+			Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
+			Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
+			
+			// Drop date and time table
 			Symphony::Database()->query("DROP TABLE `tbl_fields_datetime`");
 		}
 
