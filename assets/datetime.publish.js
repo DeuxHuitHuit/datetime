@@ -265,7 +265,10 @@
 					
 					// Set dates
 					validate(start, from, false, function() {
-						validate(end, to, true);				
+						validate(end, to, true);
+						end.slideDown('fast', function() {
+							item.addClass('range');				
+						});
 					});
 				}
 				
