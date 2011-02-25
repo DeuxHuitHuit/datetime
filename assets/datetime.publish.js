@@ -104,7 +104,7 @@
 					timestamp = parseInt(cell.attr('data-timestamp'));
 					
 				// Set date
-				choose(item, timestamp);
+				choose(item, timestamp, event.shiftKey);
 			});
 					
 		/*-----------------------------------------------------------------------*/
@@ -274,7 +274,7 @@
 			};
 			
 			// Choose date
-			var choose = function(item, selected) {
+			var choose = function(item, selected, key) {
 				var start = item.find('input.start'),
 					end = item.find('input.end'),
 					selected = parseInt(selected),
@@ -283,7 +283,7 @@
 					now = new Date();
 				
 				// Range
-				if(event.shiftKey) {
+				if(key) {
 
 					// Check date order
 					if(selected < from) {
