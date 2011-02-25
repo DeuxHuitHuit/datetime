@@ -309,7 +309,9 @@
 						$result['end'][] = $parsed['date'];
 					}
 					else {
-						$result['end'][] = NULL;
+					
+						// This is hacky: store empty end dates
+						$result['end'][] = 'none';
 					}
 				}
 			}
@@ -332,7 +334,7 @@
 				`id` int(11) unsigned NOT NULL auto_increment,
 				`entry_id` int(11) unsigned NOT NULL,
 				`start` varchar(255) NOT NULL,
-				`end` varchar(255),
+				`end` varchar(255) NULL,
 				PRIMARY KEY (`id`),
 				KEY `entry_id` (`entry_id`)
 				);"

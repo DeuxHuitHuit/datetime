@@ -20,6 +20,11 @@
 		 */
 		public static function createDate($element, $start=NULL, $end=NULL, $class=NULL, $prepopulate=1, $time=1) {
 			$classes = array();
+					
+			// This is hacky: remove empty end dates
+			if($end == 'none') {
+				$end = NULL;
+			}
 		
 			// Range
 			if(isset($end)) {
@@ -96,7 +101,7 @@
 			}
 			
 			// Generate field
-			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="label"></em>';
+			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="' . $type . ' label"></em>';
 		}
 	
 		/**
