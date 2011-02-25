@@ -21,98 +21,267 @@
 			var manager = $(this),
 				stage = manager.find('div.stage'),
 				selection = stage.find('ul.selection');
+				
+			// Store current dates
+			selection.find('input').each(function() {
+				var input = $(this);
+				input.data('validated', input.val());
+			});
 							
 		/*-----------------------------------------------------------------------*/
 
 			// Formating
-			selection.delegate('input', 'blur.datetime', function() {
+			selection.delegate('input', 'blur.datetime', function(event) {
 				var input = $(this),
 					dates = input.parent(),
+					item = input.parents('li'),
 					date = input.val(),
-					current = input.data('current');
-					
+					validated = input.data('validated');
+
 				// Remove focus
 				dates.removeClass('focus');
 				
-				// Get date
-				if(date != '' && date != current) {
-					$.ajax({
-						type: 'GET',
-						dataType: 'json',
-						url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
-						data: { 
-							date: date
-						},
-						success: function(parsed) {
+				// Validate
+				if(date != '' && date != validated) {
+					validate(input, date, false, function() {
 						
-							// Valid date
-							if(parsed.status == 'valid') {
-								input.val(parsed.date).removeClass('invalid');
-								dates.removeClass('invalid');
-								input.attr('data-timestamp', parsed.timestamp * 1000);
-								contextualise(input);
-							}
-							
-							// Invalid date
-							else {
-								input.attr('data-timestamp', null).addClass('invalid');
-								dates.addClass('invalid');
-								decontextualise(input);
-							}
-
-							// Store date
-							input.data('current', parsed.date);
-						}
-					});
+						// Remove calendar selection for invalid dates
+						if(dates.is('.invalid')) {
+							visualise(dates, null);
+						};
+					});					
 				}
+				
+				// Empty date
 				else if(date == '') {
 					input.removeClass('invalid');
-				}
+				}				
 			});
-			
-			// Contextualise given dates
-			selection.find('input').trigger('blur');
 		
 			// Editing
 			selection.delegate('input', 'focus.datetime', function() {
 				var input = $(this),
-					dates = input.parent(),
-					item = input.parents('li'),
-					start = parseInt(item.find('input:eq(0)').attr('data-timestamp')),
-					end = parseInt(item.find('input:eq(1)').attr('data-timestamp')),
-					date = null;
-					
-				// Set focus
-				dates.addClass('focus');
-				
-				// Get date
-				if(input.is('.end')) {
-					date = end;
-				}
-				else {
-					date = start;
-				}
-				
-				// Check invalid dates
-				if(isNaN(date)) {
-					date = '';
-				}
-
-				// Display calendar
-				item.trigger('visualise.datetime', [date, start, end]);
-			});
-			
-			// Calendar
-			selection.delegate('li', 'visualise.datetime', function(event, date, start, end) {
-				visualise(event.target, date, start, end);
+					dates = input.parent().addClass('focus'),
+					date = input.attr('data-timestamp');
+								
+				// Visualise
+				visualise(dates, date);
 			});
 			
 			// Closing
 			$('body').bind('click.datetime', function() {
 				selection.find('div.calendar').slideUp('fast');
 			});
+			
+			// Choosing
+			selection.delegate('td', 'click.datetime', function(event) {
+				var cell = $(event.target),
+					item = cell.parents('li'),
+					timestamp = parseInt(cell.attr('data-timestamp'));
+					
+				// Set date
+				choose(item, timestamp);
+			});
 					
 		/*-----------------------------------------------------------------------*/
+			
+			// Validate date
+			var validate = function(input, date, update, callback) {
+				var dates = input.parent();
+			
+				// Call validator
+				$.ajax({
+					type: 'GET',
+					dataType: 'json',
+					url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
+					data: { 
+						date: date
+					},
+					success: function(parsed) {
+					
+						// Valid date
+						if(parsed.status == 'valid') {
+							input.attr('data-timestamp', parsed.timestamp).val(parsed.date).removeClass('invalid');
+							dates.removeClass('invalid');
+							contextualise(input);
+						}
+						
+						// Invalid date
+						else {
+							input.attr('data-timestamp', '').addClass('invalid');
+							dates.addClass('invalid');
+							decontextualise(input);
+						}
+
+						// Store date
+						input.data('validated', parsed.date);
+						
+						// Visualise
+						if(update == true) {
+							visualise(dates, parsed.timestamp);
+						}
+						
+						// Callback
+						if(callback) {
+							callback();
+						}
+					}
+				});
+			};
+			
+			// Visualise dates
+			var visualise = function(dates, date) {
+				var item = dates.parents('li'),
+					calendar = item.find('div.calendar'),
+					then = new Date(parseInt(date)),
+					now = new Date(),
+					start = reduce(dates.find('input.start').attr('data-timestamp')),
+					end = reduce(dates.find('input.end').attr('data-timestamp')),
+					length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+					current, today,
+					day, month, year;
+					
+				// Clear on error
+				if(!date) {
+					date = now.getTime();
+					then = now;
+					start = null;
+					end = null;
+				}
+				
+				// Current date
+				current = {
+					time: parseInt(date),
+					year: then.getFullYear(),
+					month: then.getMonth()
+				};
+				
+				// Today
+				now.setHours(12);
+				now.setMinutes(0);
+				today = {
+					time: now.getTime(),
+					year: now.getFullYear(),
+					month: now.getMonth(),
+					day: now.getDate()
+				};
+
+				// Leap years
+				if(((current.year % 4 === 0) && (current.year % 100 !== 0)) || (current.year % 400 === 0)) {
+					length[1] = 29;
+				}
+				else {
+					length[1] = 28;
+				}
+
+				// Get weekday of first day in month
+				first = new Date(current.year, current.month, 1);
+				distance = first.getDay();
+				
+				// Get starting year and month
+				if(current.month == 0) {
+					month = 11;
+					year = current.year - 1
+				}
+				else {
+					month = current.month - 1;
+					year = current.year;
+				}
+				
+				// Get starting day
+				day = length[month] - distance + 1;		
+			
+				// Set calendar days
+				calendar.find('tbody td').removeClass().each(function() {
+					var cell = $(this),
+						date = new Date(year, month, day, 12, 0);
+						time = date.getTime();
+						days = reduce(time);
+					
+					// Set day
+					cell.text(day).attr('data-timestamp', time);
+						
+					// Last month
+					if(month == current.month - 1 || (current.month == 0 && month == 11)) {
+						cell.addClass('last');
+					}
+					
+					// Today
+					if(year == today.year && month == today.month && day == today.day) {
+						cell.addClass('today');
+					}
+					
+					// Selected:
+					// Or clause needed for single dates
+					if((start <= days && days <= end) || start == days || end == days) {
+						cell.addClass('selected');
+					}
+									
+					// Next month
+					if(month == current.month + 1 || (current.month == 11 && month == 0)) {
+						cell.addClass('next');
+					}
+						
+					// Check and set month context	
+					day++;
+					if(day > length[month]) {
+						day = 1;
+						
+						if(month == 11) {
+							month = 0;
+							year++;
+						}
+						else {
+							month++;
+						}
+					}
+				});				
+											
+				// Show calendar
+				calendar.slideDown('fast');
+			};
+			
+			// Choose date
+			var choose = function(item, selected) {
+				var start = item.find('input.start'),
+					end = item.find('input.end'),
+					selected = parseInt(selected),
+					from = parseInt(start.attr('data-timestamp'));
+					to = parseInt(end.attr('data-timestamp')),
+					now = new Date();
+				
+				// Range
+				if(event.shiftKey) {
+
+					// Check date order
+					if(selected < from) {
+						to = from;
+						from = setDate(selected, now.getTime());
+					}
+					else {
+						to = setDate(selected, now.getTime());
+						from = from;
+					}
+					
+					// Set dates
+					validate(start, from, false, function() {
+						validate(end, to, true);				
+					});
+				}
+				
+				// Single date
+				else {
+				
+					// Remove end date
+					end.val('').attr('data-timestamp', null).slideUp('fast', function() {
+						item.removeClass('range');
+					});
+
+					// Set new date
+					timestamp = setDate(selected, from, true);
+					validate(start, timestamp, true);				
+				}
+			};
 		
 			// Add context
 			var contextualise = function(input) {
@@ -152,108 +321,25 @@
 				input.next('em.label').fadeOut('fast');
 			};
 			
-			// Visualise dates
-			var visualise = function(item, date, start, end) {
-				var item = $(item),
-					calendar = item.find('div.calendar'),
-					length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-					now = new Date(),
-					date = new Date(date),
-					today_year, today_month, today,
-					current_year, current_month, distance, 
-					year, month, day;
-					
-				// Reduce times
-				start = reduce(start);
-				end = reduce(end); 
-					
-				// Today
-				today_year = now.getFullYear();
-				today_month = now.getMonth();
-				today = now.getDate();
-				
-				// Current date
-				current_year = date.getFullYear();
-				current_month = date.getMonth();
-
-				// Leap years
-				if(((current_year % 4 === 0) && (current_year % 100 !== 0)) || (current_year % 400 === 0)) {
-					length[1] = 29;
-				}
-				else {
-					length[1] = 28;
-				}
-				
-				// Get weekday of first day in month
-				first = new Date(current_year, current_month, 1);
-				distance = first.getDay();
-				
-				// Get starting year and month
-				if(current_month == 0) {
-					month = 11;
-					year = current_year - 1
-				}
-				else {
-					month = current_month - 1;
-					year = current_year;
-				}
-				
-				// Get starting day
-				day = length[month] - distance + 1;
-
-				// Set calendar days
-				calendar.find('tbody td').removeClass().each(function() {
-					var cell = $(this),
-						current = new Date(year, month, day, 12, 0);
-						time = reduce(current.getTime());
-					
-					// Set day
-					cell.text(day);
-						
-					// Last month
-					if(month == current_month - 1 || (current_month == 0 && month == 11)) {
-						cell.addClass('last');
-					}
-					
-					// Today
-					if(year == today_year && month == today_month && day == today) {
-						cell.addClass('today');
-					}
-					
-					// Selected
-					if((start <= time && time <= end) || start == time) {
-						cell.addClass('selected');
-					}
-									
-					// Next month
-					if(month == current_month + 1 || (current_month == 11 && month == 0)) {
-						cell.addClass('next');
-					}
-						
-					// Check and set month context	
-					day++;
-					if(day > length[month]) {
-						day = 1;
-						
-						if(month == 11) {
-							month = 0;
-							year++;
-						}
-						else {
-							month++;
-						}
-					}
-				});				
-											
-				// Show calendar
-				calendar.slideDown('fast');
-			};
-			
 			// Reduce
-			var reduce = function(time) {
+			var reduce = function(timestamp) {
 				
 				// Add an hour (3600000) to identify midnight (0:00) correctly			
-				return Math.floor((parseInt(time) + 3600000) / (24 * 60 * 60 * 1000));
+				return Math.floor((parseInt(timestamp) + 3600000) / (24 * 60 * 60 * 1000));
+			};
+			
+			var setDate = function(selected, old) {
+				var selected = new Date(parseInt(selected)),
+					old = new Date(parseInt(old)),
+					hours = old.getHours(),
+					minutes = old.getMinutes();
+					
+				// Set date, keep time
+				selected.setHours(hours);
+				selected.setMinutes(minutes);
+				
+				// Return timestamp
+				return selected.getTime();				
 			};
 
 		});

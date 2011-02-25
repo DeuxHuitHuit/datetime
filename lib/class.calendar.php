@@ -21,25 +21,8 @@
 		public static function createDate($element, $start=NULL, $end=NULL, $class=NULL, $prepopulate=1, $time=1) {
 			$classes = array();
 		
-			// Field name
-			$fieldname = 'fields[' . $element . ']';
-		
-			// Parse start date
-			if(isset($start) || $prepopulate == 1) {
-				$parsed = self::formatDate($start, $time);		
-				$start = $parsed['date'];
-				if($parsed['status'] == 'invalid') {
-					$start_class = $parsed['status'];
-				}			
-			}
-							
-			// Unset empty dates
+			// Range
 			if(isset($end)) {
-				$parsed = self::formatDate($end, $time);		
-				$end = $parsed['date'];		
-				if($parsed['status'] == 'invalid') {
-					$end_class = $parsed['status'];
-				}
 				$classes[] = 'range';
 			}
 			
@@ -52,10 +35,10 @@
 			return new XMLElement(
 				'li', 
 				'<span>
-					<span class="dates">
-						<input type="text" name="' . $fieldname . '[start][]" value="' . $start . '" class="' . $start_class . '" /><em class="label"></em>
-						<input type="text" name="' . $fieldname . '[end][]" value="' . $end . '" class="end ' . $end_class . '" /><em class="end label"></em>
-					</span>
+					<span class="dates">' . 
+						self::__createDateField($element, 'start', $start, $time, $prepopulate) . 
+						self::__createDateField($element, 'end', $end, $time) . 
+					'</span>
 				</span>
 				<div class="calendar"
 					<table>
@@ -83,6 +66,38 @@
 				array('class' => implode($classes, ' '))
 			);
 		}
+		
+		/**
+		 * Create a date input field containing the given date
+		 *
+		 * @param string $element
+		 *  the Symphony field name
+		 * @param string $type
+		 *  either 'start' or 'end'
+		 * @param string $date
+		 *  a date
+		 * @param int $time
+		 *  display the time, if set to 1; either 1 or 0
+		 * @param int $prepopulate
+		 *  prepopulate with current date, if set to 1; either 1 or 0
+		 * @return string
+		 *  returns an input field as string
+		 */		
+		private static function __createDateField($element, $type, $date, $time, $prepopulate=0) {
+		
+			// Parse date
+			if(isset($date) || $prepopulate) {
+				$parsed = self::formatDate($date, $time);
+				
+				// Generate field
+				if($parsed['status'] == 'invalid') {
+					$class = 'invalid';
+				}
+			}
+			
+			// Generate field
+			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="label"></em>';
+		}
 	
 		/**
 		 * Format date
@@ -108,20 +123,31 @@
 				}
 			}
 			
-			// Get current date
+			// Get current time
 			if(empty($date)) {
-				$time_string = true;
-				$parsed = LANG::localizeDate(date($scheme));
+				$timestamp = time();
 			}
 			
-			// Parse given date
+			// Get given time
 			else {
-				$time_string = strtotime(LANG::standardizeDate($date));
-				$parsed = LANG::localizeDate(date($scheme, $time_string));
+				if(is_numeric($date)) {
+					
+					// Switch between milliseconds and seconds
+					if($date > 9999999999) {
+						$date = $date / 1000;
+					}										
+					$timestamp = $date;
+				}
+				else {
+					$timestamp = strtotime(LANG::standardizeDate($date));
+				}
 			}
+
+			// Parse date
+			$parsed = LANG::localizeDate(date($scheme, $timestamp));
 				
 			// Invalid date
-			if($time_string === false) {
+			if($timestamp === false) {
 				$result = array(
 					'status' => 'invalid',
 					'date' => $date,
@@ -134,7 +160,7 @@
 				$result = array(
 					'status' => 'valid',
 					'date' => $parsed,
-					'timestamp' => $time_string
+					'timestamp' => number_format($timestamp * 1000, 0, '', '')
 				);
 			}
 				
