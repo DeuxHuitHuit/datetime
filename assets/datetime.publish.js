@@ -39,7 +39,8 @@
 					dates = input.parent(),
 					item = input.parents('li'),
 					date = input.val(),
-					validated = input.data('validated');
+					validated = input.data('validated'),
+					end;
 
 				// Remove focus
 				dates.removeClass('focus');
@@ -67,6 +68,16 @@
 						input.slideUp('fast', function() {
 							item.removeClass('range');
 						});
+					}
+					
+					// Handle empty start dates
+					else {
+						end = dates.find('input.end');
+						if(end.val() != '') {
+							input.val(end.val());
+							end.val('').trigger('blur.datetime');
+							input.trigger('blur.datetime');
+						}					
 					}
 				}				
 			});
