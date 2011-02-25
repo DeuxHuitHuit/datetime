@@ -45,7 +45,7 @@
 						self::__createDateField($element, 'end', $end, $time) . 
 					'</span>
 				</span>
-				<div class="calendar"
+				<div class="calendar">
 					<table>
 						<thead>
 							<tr>
