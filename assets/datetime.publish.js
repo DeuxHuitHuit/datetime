@@ -170,7 +170,7 @@
 				// Today
 				today_year = now.getFullYear();
 				today_month = now.getMonth();
-				today = now.getDay();
+				today = now.getDate();
 				
 				// Current date
 				current_year = date.getFullYear();
@@ -204,14 +204,11 @@
 				// Set calendar days
 				calendar.find('tbody td').removeClass().each(function() {
 					var cell = $(this),
-						current = new Date(year, month, day);
+						current = new Date(year, month, day, 12, 0);
 						time = reduce(current.getTime());
 					
 					// Set day
-					cell.text(day).attr({
-						'data-year': year,
-						'data-month': month
-					});
+					cell.text(day);
 						
 					// Last month
 					if(month == current_month - 1 || (current_month == 0 && month == 11)) {
@@ -219,7 +216,7 @@
 					}
 					
 					// Today
-					if(current_year == today_year && month == today_month && day == today) {
+					if(year == today_year && month == today_month && day == today) {
 						cell.addClass('today');
 					}
 					
@@ -255,8 +252,8 @@
 			// Reduce
 			var reduce = function(time) {
 				
-				// Use 25 instead of 24 to handle midnight correctly
-				return Math.floor(time / (25 * 60 * 60 * 1000));
+				// Add an hour (3600000) to identify midnight (0:00) correctly			
+				return Math.floor((parseInt(time) + 3600000) / (24 * 60 * 60 * 1000));
 			};
 
 		});
