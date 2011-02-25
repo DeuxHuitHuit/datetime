@@ -164,6 +164,14 @@
 					length = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 					current, today,
 					day, month, year;
+
+				// Handle invalid fields
+				if(isNaN(end)) {
+					end = null;
+				}
+				if(isNaN(start)) {
+					start = end;
+				}
 					
 				// Clear on error
 				if(!date) {
