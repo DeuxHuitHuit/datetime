@@ -27,6 +27,9 @@
 				var input = $(this);
 				input.data('validated', input.val());
 			});
+			
+			// Set errors
+			selection.find('input.invalid').parents('span.dates').addClass('invalid');
 							
 		/*-----------------------------------------------------------------------*/
 
@@ -55,6 +58,16 @@
 				// Empty date
 				else if(date == '') {
 					input.removeClass('invalid');
+					if(dates.find('input.invalid').size() == 0) {
+						dates.removeClass('invalid');
+					}
+					
+					// Remove empty end dates
+					if(input.is('.end')) {
+						input.slideUp('fast', function() {
+							item.removeClass('range');
+						});
+					}
 				}				
 			});
 		
@@ -344,7 +357,13 @@
 				// Return timestamp
 				return selected.getTime();				
 			};
+							
+		/*-----------------------------------------------------------------------*/
 
+			selection.find('input').each(function() {
+				contextualise($(this));
+			});
+			
 		});
 
 	});

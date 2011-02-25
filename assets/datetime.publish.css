@@ -81,6 +81,7 @@
 	position: absolute;
 	top: 4px;
 	right: 10px;
+	margin-top: 0;
 }
 
 .field-datetime div.stage span.dates em.end.label {
