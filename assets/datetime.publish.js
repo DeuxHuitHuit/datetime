@@ -48,11 +48,17 @@
 				// Validate
 				if(date != '' && date != validated) {
 					validate(input, date, false, function() {
+						var next = input.siblings('input');
 						
 						// Remove calendar selection for invalid dates
-						if(dates.is('.invalid')) {
+						if(dates.is('.invalid') && !next.is(':focus')) {
 							visualise(dates, null);
-						};
+						}
+						
+						// Rebuild calendar
+						else if(dates.is('.invalid') && next.is(':focus')) {
+							visualise(dates, next.attr('data-timestamp'));
+						}
 					});					
 				}
 				
@@ -283,16 +289,28 @@
 					now = new Date();
 				
 				// Range
-				if(key) {
+				if(key && (!isNaN(from) || !isNaN(to))) {
 
-					// Check date order
-					if(selected < from) {
-						to = from;
-						from = setDate(selected, now.getTime());
+					// Check date order with invalid from date
+					if(isNaN(from)) {
+						if(selected < to) {
+							from = setDate(selected, now.getTime());
+						}
+						else {
+							from = to
+							to = setDate(selected, now.getTime());
+						}
 					}
+					
+					// Check date order with valid from date
 					else {
-						to = setDate(selected, now.getTime());
-						from = from;
+						if(selected < from) {
+							to = from;
+							from = setDate(selected, now.getTime());
+						}
+						else {
+							to = setDate(selected, now.getTime());
+						}
 					}
 					
 					// Set dates
