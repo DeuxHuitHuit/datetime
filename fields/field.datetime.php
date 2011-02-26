@@ -361,16 +361,17 @@
 			foreach($data['start'] as $id => $date) {
 				if(empty($date)) continue;			
 				$start = Calendar::formatDate($data['start'][$id], $this->get('time'));
+				$separator = ' &#8211; ';
 
 				// Date range
-				if(!empty($data['end'][$id])) {
+				if(!empty($data['end'][$id]) && $data['end'][$id] != 'none') {
 					$start_day = Calendar::formatDate($data['start'][$id], false, 'D-M-Y');
 					$end_day = Calendar::formatDate($data['end'][$id], false, 'D-M-Y');
 					$end = Calendar::formatDate($data['end'][$id], $this->get('time'));
 	
 					// Different start and end days
-					if($start_day != $end_day) {
-						$value[] = $start['date'] . ' &#8211; ' . $end['date'];
+					if($start_day['date'] != $end_day['date']) {
+						$value[] = $start['date'] . $separator . $end['date'];
 					}
 					
 					// Same day
@@ -378,8 +379,14 @@
 					
 						// Show time
 						if($this->get('time') == 1) {
+						
+							// Adjust separator
+							if(Symphony::Configuration()->get('time_format', 'region') == 'H:i') {
+								$separator = '&#8211;';
+							}
+							
 							$end_time = LANG::localizeDate(date(Symphony::Configuration()->get('time_format', 'region'), strtotime($data['end']	[$id])));
-							$value[] = $start['date'] . ' &#8211; ' . $end_time;
+							$value[] = $start['date'] . $separator . $end_time;
 						}
 						
 						// Hide time
@@ -740,7 +747,7 @@
 				);
 	
 				// Date range
-				if(!empty($data['end'][$id])) {
+				if(!empty($data['end'][$id]) && $data['end'][$id] != 'none') {
 					$timestamp = strtotime($data['end'][$id]);
 					$parsed = Calendar::formatDate($data['end'][$id], false, 'Y-m-d');
 					$date->appendChild(
