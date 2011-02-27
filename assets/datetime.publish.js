@@ -13,14 +13,46 @@
 		Symphony.Language.add({
 			'today': false,
 			'yesterday': false,
-			'tomorrow': false
+			'tomorrow': false,
+			'January': false,
+			'February': false,
+			'March': false,
+			'April': false,
+			'May': false,
+			'June': false,
+			'July': false,
+			'August': false,
+			'September': false,
+			'October': false,
+			'November': false,
+			'December': false
 		});
+		
+		// Store months
+		var months = [
+			Symphony.Language.get('January'),
+			Symphony.Language.get('February'),
+			Symphony.Language.get('March'),
+			Symphony.Language.get('April'),
+			Symphony.Language.get('May'),
+			Symphony.Language.get('June'),
+			Symphony.Language.get('July'),
+			Symphony.Language.get('August'),
+			Symphony.Language.get('September'),
+			Symphony.Language.get('October'),
+			Symphony.Language.get('November'),
+			Symphony.Language.get('December')
+		];
 
 		// Initialize Stage
 		$('div.field-datetime').each(function() {
 			var manager = $(this),
+				help = manager.find('label i'),
 				stage = manager.find('div.stage'),
 				selection = stage.find('ul.selection');
+				
+			// Hide help
+			help.hide();
 				
 			// Store current dates
 			selection.find('input').each(function() {
@@ -93,6 +125,9 @@
 				var input = $(this),
 					dates = input.parent().addClass('focus'),
 					date = input.attr('data-timestamp');
+					
+				// Show help
+				help.fadeIn('fast');
 								
 				// Visualise
 				visualise(dates, date);
@@ -100,6 +135,11 @@
 			
 			// Closing
 			$('body').bind('click.datetime', function() {
+				
+				// Hide help
+				help.fadeOut('fast');
+				
+				// Hide calendar
 				selection.find('div.calendar').slideUp('fast');
 			});
 			
@@ -112,7 +152,7 @@
 				// Set date
 				choose(item, timestamp, event.shiftKey);
 			});
-					
+								
 		/*-----------------------------------------------------------------------*/
 			
 			// Validate date
@@ -227,7 +267,11 @@
 				}
 				
 				// Get starting day
-				day = length[month] - distance + 1;		
+				day = length[month] - distance + 1;
+				
+				// Set year and month
+				calendar.find('span.month').text(months[current.month]);	
+				calendar.find('span.year').text(current.year);	
 			
 				// Set calendar days
 				calendar.find('tbody td').removeClass().each(function() {
