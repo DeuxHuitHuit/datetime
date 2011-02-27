@@ -46,27 +46,99 @@
 					'</span>
 				</span>
 				<div class="calendar">
-					<table>
-						<thead>
-							<tr>
-								<td>' . __('Sun') . '</td>
-								<td>' . __('Mon') . '</td>
-								<td>' . __('Tue') . '</td>
-								<td>' . __('Wed') . '</td>
-								<td>' . __('Thu') . '</td>
-								<td>' . __('Fri') . '</td>
-								<td>' . __('Sat') . '</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-							<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-						</tbody>
-					</table>
+					<div class="date">
+						<strong>
+							<span class="month"></span>
+							<span class="year"></span>
+						</strong>
+						<span class="nav">
+							<a class="previous">&#171;</a>
+							<a class="next">&#187;</a>
+						</span>
+						<table>
+							<thead>
+								<tr>
+									<td>' . __('Sun') . '</td>
+									<td>' . __('Mon') . '</td>
+									<td>' . __('Tue') . '</td>
+									<td>' . __('Wed') . '</td>
+									<td>' . __('Thu') . '</td>
+									<td>' . __('Fri') . '</td>
+									<td>' . __('Sat') . '</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="timer start">
+						<code>0:00</code>
+						<div class="timeline">
+							<span>0:00</span>
+							<span>1:00</span>
+							<span>2:00</span>
+							<span>3:00</span>
+							<span>4:00</span>
+							<span>5:00</span>
+							<span>6:00</span>
+							<span>7:00</span>
+							<span>8:00</span>
+							<span>10:00</span>
+							<span>11:00</span>
+							<span>12:00</span>
+							<span>13:00</span>
+							<span>14:00</span>
+							<span>15:00</span>
+							<span>16:00</span>
+							<span>17:00</span>
+							<span>18:00</span>
+							<span>19:00</span>
+							<span>20:00</span>
+							<span>21:00</span>
+							<span>22:00</span>
+							<span>23:00</span>
+							<div class="range">
+								<span></span>
+							</div>
+						</div>
+					</div>
+					<div class="timer end">
+						<code>0:00</code>
+						<div class="timeline">
+							<span>0:00</span>
+							<span>1:00</span>
+							<span>2:00</span>
+							<span>3:00</span>
+							<span>4:00</span>
+							<span>5:00</span>
+							<span>6:00</span>
+							<span>7:00</span>
+							<span>8:00</span>
+							<span>10:00</span>
+							<span>11:00</span>
+							<span>12:00</span>
+							<span>13:00</span>
+							<span>14:00</span>
+							<span>15:00</span>
+							<span>16:00</span>
+							<span>17:00</span>
+							<span>18:00</span>
+							<span>19:00</span>
+							<span>20:00</span>
+							<span>21:00</span>
+							<span>22:00</span>
+							<span>23:00</span>
+							<div class="range">
+								<span></span>
+							</div>
+						</div>
+					</div>
 				</div>', 
 				array('class' => implode($classes, ' '))
 			);
