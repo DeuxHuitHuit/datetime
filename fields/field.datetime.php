@@ -228,7 +228,7 @@
 	
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
-			$label = Widget::Label($this->get('label'));
+			$label = new XMLElement('label', $this->get('label') . '<i>' . __('Hold <code>shift</code> and click to add a date range') . '</i>');
 			$wrapper->appendChild($label);
 			
 			// Get settings
