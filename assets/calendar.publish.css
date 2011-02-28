@@ -10,7 +10,7 @@
 	border-top: none;
 	min-width: 23em;
 	margin: 0 -1px;
-	padding: 16px 40px 22px 16px;
+	padding: 16px 40px 42px 16px;
 	z-index: 2000;
 	position: relative;
 	display: none;
@@ -63,14 +63,10 @@ fieldset.primary .field-datetime div.calendar div.date {
 }*/
 
 .field-datetime div.calendar div.date span.nav {
-	border: 1px solid #535351;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
 	
 	display: block;
 	position: absolute;
-	top: 2px;
+	top: 0;
 	right: 0;
 	height: 21px;
 	width: 43px;
@@ -78,13 +74,18 @@ fieldset.primary .field-datetime div.calendar div.date {
 }
 
 .field-datetime div.calendar div.date span.nav a {
+	border: 1px solid #535351;
+	border-radius: 10px 0 0 10px;
+	-webkit-border-radius: 10px 0 0 10px;
+	-moz-border-radius: 10px 0 0 10px;
+
+
 	position: absolute;
 	left: 0;
 	top: 0;
 	display: block;
 	width: 20px;
-	height: 19px;
-	border: none;
+	height: 17px;
 	padding: 0;
 	margin: 0;
 	text-indent: -1000em;
@@ -97,19 +98,24 @@ fieldset.primary .field-datetime div.calendar div.date {
 	width: 10px;*/
 }
 
-.field-datetime div.calendar div.date span.nav a:hover {
-/*	background-color: #383836;*/
-}
-
 .field-datetime div.calendar div.date span.nav a.next {
 	background: url(images/next.png) 3px center no-repeat;
-	border-left: 1px solid #535351;
-	left: 20px;
+	border-left: none;
+	left: 22px;
+	border-radius: 0 10px 10px 0;
+	-webkit-border-radius: 0 10px 10px 0;
+	-moz-border-radius: 0 10px 10px 0;
 /*	left: auto;
 	right: 0;
 	text-align: right;*/
 }
 
+
+.field-datetime div.calendar div.date span.nav a:hover {
+	background-color: #1f1f1e;
+}
+
+/*
 .field-datetime div.calendar p {
 	color: #616057;
 	margin: 20px 0 10px;
@@ -123,13 +129,13 @@ fieldset.primary .field-datetime div.calendar div.date {
 	padding: 1px 3px;
 	color: #e4e4e4;
 	font-size: 1em;
-}
+}*/
 
-.field-datetime div.calendar p.active code {
+/*.field-datetime div.calendar p.active code {
 	-webkit-box-shadow: 0 0 5px #f0f0f0;
 	-moz-box-shadow: 0 0 5px #f0f0f0;
 	box-shadow: 0 0 5px #f0f0f0;
-}
+}*/
 
 .field-datetime div.calendar table {
 	background: #323230;
@@ -254,62 +260,87 @@ fieldset.primary .field-datetime div.calendar div.date {
 	color: #fff;
 }
 
-.field-datetime div.calendar div.timer {
-	margin: 17px 0 0;
-	padding: 17px 0 0;
+.field-datetime div.calendar div.cutter {
 	overflow: hidden;
+}
+
+.field-datetime div.calendar div.timeline {
 	position: relative;
-}
-
-.field-datetime div.calendar div.timer code {
-	position: absolute;
-	left: 20%;
-	top: 0;
-}
-
-.field-datetime div.calendar div.timer div.timeline {
+	margin: 42px 0 3px;
+	padding: 0;
+	width: 100%;
 	border-bottom: 1px solid #424140;
-	height: 6px;
-	margin: 2px 0 3px;
-	position: relative;
 }
 
-.field-datetime div.calendar div.timer div.timeline span {
+.field-datetime div.calendar div.timeline span {
 	float: left;
-	display: block;
 	color: transparent;
 	border: none;
 	border-left: 1px solid #42413f;
 	height: 7px;
-	background: none;
+	background: none !important;
 	margin: 0;
 	padding: 0;
 	width: 4.347%;
 	position: relative;
-	top: 3px;
+	top: -3px;
+	cursor: pointer !important;
 }
 
-.field-datetime div.calendar div.timer div.timeline div.range {
+.field-datetime div.calendar div.timeline div.range {
 	background: rgba(58, 100, 183, 0.5);
 	border-radius: 3px;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	height: 5px;
+	height: 7px;
 	display: block;
-	width: 100%;
+	width: 100px;
 	position: absolute;
-	top: 3px;
-	left: 20%;
-	padding: 1px;
+	top: -3px;
+	left: 100px;
+	cursor: pointer !important;
 }
 
-.field-datetime div.calendar div.timer div.timeline div.range span {
-	border: none;
-	height: 5px;
-	width: 5px;
-	background: #c0c0c0;
+.field-datetime div.calendar div.timeline.end div.range {
+	left: -3px;	
+}
+
+.field-datetime div.calendar div.timeline code {
+	position: absolute;
+	left: 0;
+	top: -23px;
+	background: #56554D;
 	border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
+	padding: 1px 3px;
+	color: #e4e4e4;
+	font-size: 1em;
+}
+
+.field-datetime div.calendar div.timeline.end code {
+	left: auto;
+	right: 0;
+}
+
+.field-datetime div.calendar div.timeline div.range span {
+	border: none;
+	height: 5px;
+	width: 5px;
+	background: #c0c0c0 !important;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	position: absolute;
 	top: 0;
+	left: 0;
+	margin: 1px;
+	cursor: w-resize !important;
+}
+
+.field-datetime div.calendar div.timeline div.range span.end {
+	left: auto;
+	right: 0;
+	cursor: e-resize !important;
+	background: cyan !important;
 }

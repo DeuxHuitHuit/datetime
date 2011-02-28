@@ -152,6 +152,132 @@
 				// Set date
 				choose(item, timestamp, event.shiftKey);
 			});
+			
+			// Switching
+			selection.delegate('span.nav a', 'click.datetime', function() {
+				var button = $(this),
+					item = button.parents('li'),
+					dates = item.find('span.dates'),
+					year = item.find('span.year').text(),
+					month = item.find('span.month').attr('data-month'),
+					date;
+					
+					console.log(year, month);
+				
+				// Previous month
+				if(button.is('.previous')) {
+					month--;
+					if(month == -1) {
+						year--;
+						month = 11;
+					}
+				}
+				
+				// Next month
+				else {
+					month++;
+					if(month == 12) {
+						year++;
+						month = 0;
+					}
+				}
+
+				// Visualise
+				date = new Date(year, month, 1);
+				visualise(dates, date.getTime());
+			});
+			
+			// Timing
+			selection.delegate('div.range span', 'mousedown.datetime', function(event) {
+				var handle = $(this),
+					range = handle.parent(),
+					left = range.position().left,
+					width = parseInt(range.width());
+						
+				// Store range boundries: 
+				// 4px equals the relative position of the current time in relation to the boundries (center of the handles)
+				handle.addClass('moving').data('boundries', {
+					left: left,
+					right: left + width,
+					start: left + 4,
+					end: left + width -4
+				});
+			});
+			$('body').bind('mousemove.datetime', function(event) {
+				var handle = $('span.moving');
+				
+				// Adjust time
+				if(handle.size() == 1) {
+					var range = handle.parent(),
+						left = range.position().left,
+						width = parseInt(range.width()),
+						x = range.offset().left,
+						boundries = handle.data('boundries'),
+						length = parseInt(range.parent().width()),
+						position;
+						
+					// Left handle
+					if(handle.is('.start')) {
+						position = left - (x - event.pageX);
+						
+						// Moving left
+						if(left < boundries.right) {
+							if(position >= -4 && position < boundries.right - 8) {
+								range.css({
+									left: position,
+									width: boundries.right - position
+								});
+							}
+							
+							// Switching point
+							else if(position >= boundries.right - 8) {
+								range.css({
+									left: boundries.right - 7,
+									width: 7
+								});
+							}							
+							
+							// The final frontier
+							else {
+								range.css({
+									left: -4,
+									width: boundries.right + 4
+								});
+							}
+						}					
+					}
+					
+					// Right handle
+					else {
+						position = left + width - (x + width - event.pageX);
+						
+						// Moving right
+						if(position > left && position <= length + 4) {
+							range.css({
+								width: width - (x + width - event.pageX)
+							});
+						}
+						
+						// Switching point
+						else if(position <= left + 8) {
+							range.css({
+								left: left,
+								width: 7
+							});
+						}
+						
+						// The final frontier
+						else {
+							range.css({
+								width: length - left + 4
+							});
+						}		
+					}
+				}
+			});
+			$('body').bind('mouseup.datetime', function() {
+				$('span.moving').removeClass('moving');
+			});
 								
 		/*-----------------------------------------------------------------------*/
 			
@@ -270,7 +396,7 @@
 				day = length[month] - distance + 1;
 				
 				// Set year and month
-				calendar.find('span.month').text(months[current.month]);	
+				calendar.find('span.month').text(months[current.month]).attr('data-month', current.month);	
 				calendar.find('span.year').text(current.year);	
 			
 				// Set calendar days

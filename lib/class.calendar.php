@@ -77,9 +77,8 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="timer start">
-						<code>0:00</code>
-						<div class="timeline">
+					<div class="cutter">
+						<div class="timeline start">
 							<span>0:00</span>
 							<span>1:00</span>
 							<span>2:00</span>
@@ -104,13 +103,12 @@
 							<span>22:00</span>
 							<span>23:00</span>
 							<div class="range">
-								<span></span>
+								<code>0:00</code>
+								<span class="start"></span>
+								<span class="end"></span>
 							</div>
 						</div>
-					</div>
-					<div class="timer end">
-						<code>0:00</code>
-						<div class="timeline">
+						<div class="timeline end">
 							<span>0:00</span>
 							<span>1:00</span>
 							<span>2:00</span>
@@ -135,7 +133,8 @@
 							<span>22:00</span>
 							<span>23:00</span>
 							<div class="range">
-								<span></span>
+								<code>0:00</code>
+								<span class="end"></span>
 							</div>
 						</div>
 					</div>
