@@ -161,8 +161,6 @@
 					year = item.find('span.year').text(),
 					month = item.find('span.month').attr('data-month'),
 					date;
-					
-					console.log(year, month);
 				
 				// Previous month
 				if(button.is('.previous')) {
@@ -194,13 +192,10 @@
 					left = range.position().left,
 					width = parseInt(range.width());
 						
-				// Store range boundries: 
-				// 4px equals the relative position of the current time in relation to the boundries (center of the handles)
+				// Store range boundries
 				handle.addClass('moving').data('boundries', {
 					left: left,
-					right: left + width,
-					start: left + 4,
-					end: left + width -4
+					right: left + width
 				});
 			});
 			$('body').bind('mousemove.datetime', function(event) {
@@ -208,71 +203,7 @@
 				
 				// Adjust time
 				if(handle.size() == 1) {
-					var range = handle.parent(),
-						left = range.position().left,
-						width = parseInt(range.width()),
-						x = range.offset().left,
-						boundries = handle.data('boundries'),
-						length = parseInt(range.parent().width()),
-						position;
-						
-					// Left handle
-					if(handle.is('.start')) {
-						position = left - (x - event.pageX);
-						
-						// Moving left
-						if(left < boundries.right) {
-							if(position >= -4 && position < boundries.right - 8) {
-								range.css({
-									left: position,
-									width: boundries.right - position
-								});
-							}
-							
-							// Switching point
-							else if(position >= boundries.right - 8) {
-								range.css({
-									left: boundries.right - 7,
-									width: 7
-								});
-							}							
-							
-							// The final frontier
-							else {
-								range.css({
-									left: -4,
-									width: boundries.right + 4
-								});
-							}
-						}					
-					}
-					
-					// Right handle
-					else {
-						position = left + width - (x + width - event.pageX);
-						
-						// Moving right
-						if(position > left && position <= length + 4) {
-							range.css({
-								width: width - (x + width - event.pageX)
-							});
-						}
-						
-						// Switching point
-						else if(position <= left + 8) {
-							range.css({
-								left: left,
-								width: 7
-							});
-						}
-						
-						// The final frontier
-						else {
-							range.css({
-								width: length - left + 4
-							});
-						}		
-					}
+					timing(handle, event);
 				}
 			});
 			$('body').bind('mouseup.datetime', function() {
@@ -544,6 +475,116 @@
 				input.next('em.label').fadeOut('fast');
 			};
 			
+			// Time
+			var timing = function(handle, event) {
+				var range = handle.parent(),
+					timeline = range.parent(),
+					timeline_next = timeline.next('div.timeline'),
+					range_next = timeline_next.find('div.range'),
+					time = range.find('code'),
+					left = range.position().left,
+					width = parseInt(range.width()),
+					x = range.offset().left,
+					boundries = handle.data('boundries'),
+					length = parseInt(range.parent().width()),
+					position, time_position,
+					shift;
+					
+				// Left handle
+				if(handle.is('.start') && timeline.is('.start')) {
+					position = left - (x - event.pageX);
+			
+					// Moving left
+					if(position >= -4 && position < boundries.right - 7) {
+						left = position;
+						width = boundries.right - position;
+					}
+					
+					// Switching point
+					else if(position >= boundries.right - 7) {
+						left = boundries.right - 5;
+						width = 5;
+						
+						// Switch handles
+						handle.removeClass('moving');
+						handle.next('span').addClass('moving').data('boundries', {
+							left: left,
+							right: left + width
+						});							
+					}							
+					
+					// The final frontier
+					else {
+						left = -4;
+						width = boundries.right + 4;
+					}					
+				}
+				
+				// Right handle
+				else {
+					difference = x + width - event.pageX;
+					position = left + width - difference;
+					if(timeline.is('.start')) {
+						shift = 7;
+					}
+					else {
+						shift = 0
+					}
+					
+					// Moving right
+					if(position > left + 7 && position <= length + 4) {
+						width = position - left;
+						
+						// Hide next day's timeline
+						timeline_next.slideUp('fast');						
+					}
+					
+					// Switching point
+					else if(position <= left + shift) {
+						width = 5;
+
+						// Switch handles
+						if(timeline.is('.start')) {
+							handle.removeClass('moving');
+							handle.prev('span').addClass('moving').data('boundries', {
+								left: left,
+								right: left + width
+							});							
+						}
+					}
+					
+					// The final frontier
+					else {
+						width = length - left + shift + 1;
+						
+						// Show next day's timeline
+						range_next.hide().width(length / 24 * 8).find('code').text('8:00');
+						timeline_next.slideDown('fast', function() {
+							range_next.fadeIn();
+						});
+					}		
+				}
+	
+				// Adjust range
+				range.css({
+					left: left,
+					width: width
+				});
+				
+				// Set time
+				time.text(calculateTime(timeline));
+				
+				// Timer position
+				if(timeline.is('.start')) {
+					time_position = Math.min(length - left - parseInt(time.width()) - 7, 0);
+					time.css('left', time_position);
+				}
+				else {
+					time_position = Math.min(width - parseInt(time.width() + 7), 0);
+					time.css('right', time_position);
+				}
+			}
+			
 			// Reduce
 			var reduce = function(timestamp) {
 				
@@ -564,6 +605,54 @@
 				// Return timestamp
 				return selected.getTime();				
 			};
+			
+			// Calculate time range
+			var calculateTime = function(timeline) {
+				var range = timeline.find('div.range'),
+					left = parseInt(range.css('left')) + 4,
+					right = parseInt(range.width()) + left - 5,
+					length = parseInt(timeline.width()),
+					from, to;
+					
+				// Get start time
+				if(timeline.is('.start')) {
+					from = getTime(length, left);
+				}
+				
+				// Get end time
+				to = getTime(length, right);
+				
+				// Return time
+				if(from == undefined) {
+					return to;
+				}
+				else if(to == undefined) {
+					return from
+				}
+				else if(from != to) {
+					return from + '–' + to;
+				}
+				else {
+					return from;
+				}
+			};
+			
+			// Get Time
+			var getTime = function(length, left) {
+				var start = (24 / length * left).toFixed(2).toString().split('.'),
+					hours = Math.min(Math.max(Math.floor(start[0]), 0), 24),
+					minutes = Math.floor((start[1] / 100) * 12) * 5;
+					
+				// Leading zero
+				if(minutes < 10) {
+					minutes = '0' + minutes.toString();
+				}
+				
+				// Return time
+				if(hours != 24) {
+					return hours + ':' + minutes;
+				}
+			}
 							
 		/*-----------------------------------------------------------------------*/
 

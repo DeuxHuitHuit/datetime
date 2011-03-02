@@ -79,61 +79,63 @@
 					</div>
 					<div class="cutter">
 						<div class="timeline start">
-							<span>0:00</span>
-							<span>1:00</span>
-							<span>2:00</span>
-							<span>3:00</span>
-							<span>4:00</span>
-							<span>5:00</span>
-							<span>6:00</span>
-							<span>7:00</span>
-							<span>8:00</span>
-							<span>10:00</span>
-							<span>11:00</span>
-							<span>12:00</span>
-							<span>13:00</span>
-							<span>14:00</span>
-							<span>15:00</span>
-							<span>16:00</span>
-							<span>17:00</span>
-							<span>18:00</span>
-							<span>19:00</span>
-							<span>20:00</span>
-							<span>21:00</span>
-							<span>22:00</span>
-							<span>23:00</span>
+							<span class="hour1"></span>
+							<span class="hour2"></span>
+							<span class="hour3"></span>
+							<span class="hour4"></span>
+							<span class="hour5"></span>
+							<span class="hour6"></span>
+							<span class="hour7"></span>
+							<span class="hour8"></span>
+							<span class="hour9"></span>
+							<span class="hour10"></span>
+							<span class="hour11"></span>
+							<span class="hour12"></span>
+							<span class="hour13"></span>
+							<span class="hour14"></span>
+							<span class="hour15"></span>
+							<span class="hour16"></span>
+							<span class="hour17"></span>
+							<span class="hour18"></span>
+							<span class="hour19"></span>
+							<span class="hour20"></span>
+							<span class="hour21"></span>
+							<span class="hour22"></span>
+							<span class="hour23"></span>
 							<div class="range">
 								<code>0:00</code>
 								<span class="start"></span>
+								<span class="active"></span>
 								<span class="end"></span>
 							</div>
 						</div>
 						<div class="timeline end">
-							<span>0:00</span>
-							<span>1:00</span>
-							<span>2:00</span>
-							<span>3:00</span>
-							<span>4:00</span>
-							<span>5:00</span>
-							<span>6:00</span>
-							<span>7:00</span>
-							<span>8:00</span>
-							<span>10:00</span>
-							<span>11:00</span>
-							<span>12:00</span>
-							<span>13:00</span>
-							<span>14:00</span>
-							<span>15:00</span>
-							<span>16:00</span>
-							<span>17:00</span>
-							<span>18:00</span>
-							<span>19:00</span>
-							<span>20:00</span>
-							<span>21:00</span>
-							<span>22:00</span>
-							<span>23:00</span>
+							<span class="hour1"></span>
+							<span class="hour2"></span>
+							<span class="hour3"></span>
+							<span class="hour4"></span>
+							<span class="hour5"></span>
+							<span class="hour6"></span>
+							<span class="hour7"></span>
+							<span class="hour8"></span>
+							<span class="hour9"></span>
+							<span class="hour10"></span>
+							<span class="hour11"></span>
+							<span class="hour12"></span>
+							<span class="hour13"></span>
+							<span class="hour14"></span>
+							<span class="hour15"></span>
+							<span class="hour16"></span>
+							<span class="hour17"></span>
+							<span class="hour18"></span>
+							<span class="hour19"></span>
+							<span class="hour20"></span>
+							<span class="hour21"></span>
+							<span class="hour22"></span>
+							<span class="hour23"></span>
 							<div class="range">
 								<code>0:00</code>
+								<span class="active"></span>
 								<span class="end"></span>
 							</div>
 						</div>
