@@ -45,101 +45,12 @@
 						self::__createDateField($element, 'end', $end, $time) . 
 					'</span>
 				</span>
-				<div class="calendar">
-					<div class="date">
-						<strong>
-							<span class="month"></span>
-							<span class="year"></span>
-						</strong>
-						<span class="nav">
-							<a class="previous">&#171;</a>
-							<a class="next">&#187;</a>
-						</span>
-						<table>
-							<thead>
-								<tr>
-									<td>' . __('Sun') . '</td>
-									<td>' . __('Mon') . '</td>
-									<td>' . __('Tue') . '</td>
-									<td>' . __('Wed') . '</td>
-									<td>' . __('Thu') . '</td>
-									<td>' . __('Fri') . '</td>
-									<td>' . __('Sat') . '</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-								<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="cutter">
-						<div class="timeline start">
-							<span class="hour1"></span>
-							<span class="hour2"></span>
-							<span class="hour3"></span>
-							<span class="hour4"></span>
-							<span class="hour5"></span>
-							<span class="hour6"></span>
-							<span class="hour7"></span>
-							<span class="hour8"></span>
-							<span class="hour9"></span>
-							<span class="hour10"></span>
-							<span class="hour11"></span>
-							<span class="hour12"></span>
-							<span class="hour13"></span>
-							<span class="hour14"></span>
-							<span class="hour15"></span>
-							<span class="hour16"></span>
-							<span class="hour17"></span>
-							<span class="hour18"></span>
-							<span class="hour19"></span>
-							<span class="hour20"></span>
-							<span class="hour21"></span>
-							<span class="hour22"></span>
-							<span class="hour23"></span>
-							<div class="range">
-								<code>0:00</code>
-								<span class="start"></span>
-								<span class="active"></span>
-								<span class="end"></span>
-							</div>
-						</div>
-						<div class="timeline end">
-							<span class="hour1"></span>
-							<span class="hour2"></span>
-							<span class="hour3"></span>
-							<span class="hour4"></span>
-							<span class="hour5"></span>
-							<span class="hour6"></span>
-							<span class="hour7"></span>
-							<span class="hour8"></span>
-							<span class="hour9"></span>
-							<span class="hour10"></span>
-							<span class="hour11"></span>
-							<span class="hour12"></span>
-							<span class="hour13"></span>
-							<span class="hour14"></span>
-							<span class="hour15"></span>
-							<span class="hour16"></span>
-							<span class="hour17"></span>
-							<span class="hour18"></span>
-							<span class="hour19"></span>
-							<span class="hour20"></span>
-							<span class="hour21"></span>
-							<span class="hour22"></span>
-							<span class="hour23"></span>
-							<div class="range">
-								<code>0:00</code>
-								<span class="active"></span>
-								<span class="end"></span>
-							</div>
-						</div>
-					</div>
+				<div class="calendar">' .
+					self::__createCalendar() .			
+					'<div class="cutter">' .
+						self::__createTimeline('start') . 
+						self::__createTimeline('end') . 
+					'</div>
 				</div>', 
 				array('class' => implode($classes, ' '))
 			);
@@ -175,6 +86,74 @@
 			
 			// Generate field
 			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="' . $type . ' label"></em>';
+		}
+		
+		private static function __createCalendar() {
+			return '<div class="date">
+				<strong>
+					<span class="month"></span>
+					<span class="year"></span>
+				</strong>
+				<span class="nav">
+					<a class="previous">&#171;</a>
+					<a class="next">&#187;</a>
+				</span>
+				<table>
+					<thead>
+						<tr>
+							<td>' . __('Sun') . '</td>
+							<td>' . __('Mon') . '</td>
+							<td>' . __('Tue') . '</td>
+							<td>' . __('Wed') . '</td>
+							<td>' . __('Thu') . '</td>
+							<td>' . __('Fri') . '</td>
+							<td>' . __('Sat') . '</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+					</tbody>
+				</table>
+			</div>';
+		}
+		
+		private static function __createTimeline($type) {
+			return '<div class="timeline ' . $type . '">
+				<span class="hour1"></span>
+				<span class="hour2"></span>
+				<span class="hour3"></span>
+				<span class="hour4"></span>
+				<span class="hour5"></span>
+				<span class="hour6"></span>
+				<span class="hour7"></span>
+				<span class="hour8"></span>
+				<span class="hour9"></span>
+				<span class="hour10"></span>
+				<span class="hour11"></span>
+				<span class="hour12"></span>
+				<span class="hour13"></span>
+				<span class="hour14"></span>
+				<span class="hour15"></span>
+				<span class="hour16"></span>
+				<span class="hour17"></span>
+				<span class="hour18"></span>
+				<span class="hour19"></span>
+				<span class="hour20"></span>
+				<span class="hour21"></span>
+				<span class="hour22"></span>
+				<span class="hour23"></span>
+				<div class="range">
+					<code>0:00</code>
+					<span class="start"></span>
+					<span class="active"></span>
+					<span class="end"></span>
+				</div>
+			</div>';
 		}
 	
 		/**
