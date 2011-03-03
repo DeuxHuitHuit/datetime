@@ -322,10 +322,10 @@ fieldset.primary .field-datetime div.calendar {
 	-moz-border-radius: 3px;
 	height: 5px;
 	display: block;
-	width: 100px;
+	width: 5px;
 	position: absolute;
 	top: -3px;
-	left: 100px;
+	left: -4px;
 	cursor: pointer !important;
 }
 

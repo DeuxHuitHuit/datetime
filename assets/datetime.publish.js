@@ -84,12 +84,14 @@
 						
 						// Remove calendar selection for invalid dates
 						if(dates.is('.invalid') && !next.is(':focus')) {
-							visualise(dates, null);
+							visualiseDate(dates, null);
+							visualiseTime(dates, true);		
 						}
 						
 						// Rebuild calendar
 						else if(dates.is('.invalid') && next.is(':focus')) {
-							visualise(dates, next.attr('data-timestamp'));
+							visualiseDate(dates, next.attr('data-timestamp'));
+							visualiseTime(dates);		
 						}
 					});					
 				}
@@ -130,7 +132,8 @@
 				help.fadeIn('fast');
 								
 				// Visualise
-				visualise(dates, date);
+				visualiseDate(dates, date);
+				visualiseTime(dates);		
 			});
 			
 			// Closing
@@ -182,7 +185,7 @@
 
 				// Visualise
 				date = new Date(year, month, 1);
-				visualise(dates, date.getTime());
+				visualiseDate(dates, date.getTime());
 			});
 			
 			// Timing
@@ -311,7 +314,8 @@
 						
 						// Visualise
 						if(update == true) {
-							visualise(dates, parsed.timestamp);
+							visualiseDate(dates, parsed.timestamp);
+							visualiseTime(dates);		
 						}
 						
 						// Callback
@@ -323,7 +327,7 @@
 			};
 			
 			// Visualise dates
-			var visualise = function(dates, date) {
+			var visualiseDate = function(dates, date) {
 				var item = dates.parents('li'),
 					calendar = item.find('div.calendar'),
 					then = new Date(parseInt(date)),
@@ -399,8 +403,8 @@
 				// Set calendar days
 				calendar.find('tbody td').removeClass().each(function() {
 					var cell = $(this),
-						date = new Date(year, month, day, 12, 0);
-						time = date.getTime();
+						date = new Date(year, month, day, 12, 0),
+						time = date.getTime(),
 						days = reduce(time);
 					
 					// Set day
@@ -440,10 +444,150 @@
 							month++;
 						}
 					}
-				});				
+				});		
 											
 				// Show calendar
 				calendar.slideDown('fast');
+			};
+			
+			// Visualise time
+			var visualiseTime = function(dates, clear) {
+				var start = parseInt(dates.find('input.start').attr('data-timestamp')),
+					end = parseInt(dates.find('input.end').attr('data-timestamp')),
+					from = formatTime(start),
+					to = formatTime(end),
+					calendar = dates.parents('li').find('div.calendar'),
+					label_from = calendar.find('div.timeline.start code');
+					label_to = calendar.find('div.timeline.end code');
+				
+				// Clear time
+				if(clear == true) {
+					label_from.text('12:00');
+					hideTimeline(calendar);
+				}
+				
+				// Visualise given times
+				else {
+
+					// Single date
+					if(isNaN(end)) {
+						label_from.text(from.time);
+						displayRange(calendar, from);
+						hideTimeline(calendar);
+					}
+					
+					// Range on single day
+					else if(reduce(start) == reduce(end)) {
+						label_from.text(from.time + '–' + to.time);
+						displayRange(calendar, from, to);
+						hideTimeline(calendar);
+					}
+					
+					// Range over multiple days
+					else {
+						label_from.text(from.time);
+						label_to.text(to.time);
+						showTimeline(calendar);
+						displayRange(calendar, from, to, true);
+					}				
+				}
+			};
+			
+			var showTimeline = function(calendar) {
+				var timeline = calendar.find('div.timeline.end'),
+					range = timeline.find('div.range');
+					
+				// Slide down timeline
+				if(timeline.is(':hidden')) {
+					timeline.slideDown('fast', function() {
+						range.fadeIn();
+					});
+				}
+			};
+			
+			var hideTimeline = function(calendar) {
+				var timeline = calendar.find('div.timeline.end'),
+					
+				// Slide down timeline
+				if(timeline.is(':visible')) {
+					timeline.slideUp('fast');
+				}
+			};
+			
+			var displayRange = function(calendar, from, to, multiple) {
+				var timelines = calendar.find('div.timeline'),
+					length = timelines.width(),
+					unit = 100 / 2400,
+					start, end;
+				
+				// Set dimensions
+				timelines.each(function() {
+					var timeline = $(this),
+						range = timeline.find('div.range'),
+						time = range.find('code'),
+						left = -4;
+						width = 5;
+						
+					// Start timeline				
+					if(timeline.is('.start')) {
+					
+						// Convert from time to decimals:
+						start = (from.hours * 100) + (100 / 60 * from.minutes);
+
+						// Add 3 pixels offset to match the center of the marking circle
+						left = (parseInt(unit * start) / 100 * length) - 3;
+						
+						// Convert to time to decimals
+						if(to) {
+							end = (to.hours * 100) + (100 / 60 * to.minutes) - start;
+	
+							// Range over multiple days
+							if(multiple == true) {
+								width = 2450 - start;
+							}
+							
+							// Single day range
+							else {
+							
+								// Add 4 pixels offset to match the center of the marking circle
+								width = parseInt(unit * end) / 100 * length + 4;
+							}
+						}
+					}
+					
+					// End timeline
+					else {
+						if(to) {
+							end = (to.hours * 100) + (100 / 60 * to.minutes) - left;
+							width = parseInt(unit * end) / 100 * length + 4;
+						}
+					}					
+					
+					// Set styles
+					range.css({
+						left: left,
+						width: width
+					});
+						
+					// Timer position
+					setTimerPosition(timeline, time);
+				});
+			};
+
+			// Timer position	
+			var setTimerPosition = function(timeline, time) {
+				var range = timeline.find('div.range'),
+					length = timeline.width(),
+					left = range.position().left,
+					width = range.width();
+			
+				// Set position
+				if(timeline.is('.start')) {
+					time.css('left', Math.min(length - left - parseInt(time.width()) - 7, 0));
+				}
+				else {
+					time.css('right', Math.min(width - parseInt(time.width() + 7), 0));
+				}			
 			};
 			
 			// Choose date
@@ -702,22 +846,28 @@
 				return selected.getTime();				
 			};
 			
-			// Calculate time range
-			var calculateTime = function(timeline) {
-				var range = timeline.find('div.range'),
-					left = parseInt(range.css('left')) + 4,
-					right = parseInt(range.width()) + left - 5,
-					length = parseInt(timeline.width()),
-					from, to;
+			// Format time
+			var formatTime = function(time) {
+				var date = new Date(time),
+					hours = date.getHours(),
+					minutes = date.getMinutes(),
+					devider = ':';
 					
-				// Get start time
-				if(timeline.is('.start')) {
-					from = getTime(length, left);
+				// Handle one-digit times	
+				if(minutes < 10) {
+					devider = ':0';
 				}
 				
-				// Get end time
-				to = getTime(length, right);
-				
+				// Return formatted time
+				return {
+					time: hours.toString() + devider + minutes.toString(),
+					hours: hours,
+					minutes: minutes					
+				};
+			};
+			
+			var formatRange = function(from, to) {
+			
 				// Only end time defined
 				if(from == undefined) {
 					return to;
@@ -734,6 +884,26 @@
 				else {
 					return from;
 				}
+			};
+			
+			// Calculate time range
+			var calculateTime = function(timeline) {
+				var range = timeline.find('div.range'),
+					left = parseInt(range.css('left')) + 4,
+					right = parseInt(range.width()) + left - 5,
+					length = parseInt(timeline.width()),
+					from, to;
+					
+				// Get start time
+				if(timeline.is('.start')) {
+					from = getTime(length, left);
+				}
+				
+				// Get end time
+				to = getTime(length, right);
+				
+				// Format range
+				return formatRange(from, to);
 			};
 			
 			// Get Time
