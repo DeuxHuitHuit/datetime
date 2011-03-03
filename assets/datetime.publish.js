@@ -192,8 +192,8 @@
 					left = range.position().left,
 					width = parseInt(range.width());
 						
-				// Store range boundries
-				handle.addClass('moving').data('boundries', {
+				// Store range boundaries
+				handle.addClass('moving').data('boundaries', {
 					left: left,
 					right: left + width
 				});
@@ -481,42 +481,55 @@
 					timeline = range.parent(),
 					timeline_next = timeline.next('div.timeline'),
 					range_next = timeline_next.find('div.range'),
+					timeline_prev = timeline.prev('div.timeline'),
+					range_prev = timeline_prev.find('div.range'),
 					time = range.find('code'),
 					left = range.position().left,
 					width = parseInt(range.width()),
 					x = range.offset().left,
-					boundries = handle.data('boundries'),
+					boundaries = handle.data('boundaries'),
 					length = parseInt(range.parent().width()),
 					position, time_position,
 					shift;
+					
+				// Hide second timeline
+				if(timeline.is('.start') && left + width <= length) {
+					timeline_next.slideUp('fast');						
+				}
 					
 				// Left handle
 				if(handle.is('.start') && timeline.is('.start')) {
 					position = left - (x - event.pageX);
 			
 					// Moving left
-					if(position >= -4 && position < boundries.right - 7) {
+					if(position >= -4 && position < boundaries.right - 7 && position < length - 3) {
 						left = position;
-						width = boundries.right - position;
+						width = boundaries.right - position;
 					}
 					
 					// Switching point
-					else if(position >= boundries.right - 7) {
-						left = boundries.right - 5;
+					else if(position >= boundaries.right - 7 && !(boundaries.right > length)) {
+						left = boundaries.right - 5;
 						width = 5;
 						
 						// Switch handles
 						handle.removeClass('moving');
-						handle.next('span').addClass('moving').data('boundries', {
+						handle.next('span').addClass('moving').data('boundaries', {
 							left: left,
 							right: left + width
 						});							
-					}							
+					}
 					
-					// The final frontier
+					// The final frontier, part 1					
+					else if(position >= length - 3) {
+						left = length - 3;
+						width = 20;
+					}
+					
+					// The final frontier, part 2
 					else {
 						left = -4;
-						width = boundries.right + 4;
+						width = boundaries.right + 4;
 					}					
 				}
 				
@@ -532,11 +545,8 @@
 					}
 					
 					// Moving right
-					if(position > left + 7 && position <= length + 4) {
+					if(position > left + 7 && position < length + 4) {
 						width = position - left;
-						
-						// Hide next day's timeline
-						timeline_next.slideUp('fast');						
 					}
 					
 					// Switching point
@@ -546,22 +556,42 @@
 						// Switch handles
 						if(timeline.is('.start')) {
 							handle.removeClass('moving');
-							handle.prev('span').addClass('moving').data('boundries', {
+							handle.prev('span').addClass('moving').data('boundaries', {
 								left: left,
 								right: left + width
 							});							
 						}
 					}
 					
-					// The final frontier
+					// The final frontier, part 1
+					else if(position <= 4 && position > 0 && timeline.is('.end')) {
+						left = -3;
+						width = 5;
+					}
+					
+					// The final frontier, part 2
+					else if(position <= 0 && timeline.is('.end')) {
+						
+						// Hide next day's timeline
+						handle.removeClass('moving');
+						timeline.slideUp('fast');
+						
+						// Set first timeline's end time to 23:55
+						range_prev.width(length - parseInt(range_prev.css('left')));
+						range_prev.find('code').text(calculateTime(timeline_prev));
+					}
+					
+					// The final frontier, part 3
 					else {
 						width = length - left + shift + 1;
-						
+
 						// Show next day's timeline
-						range_next.hide().width(length / 24 * 8).find('code').text('8:00');
-						timeline_next.slideDown('fast', function() {
-							range_next.fadeIn();
-						});
+						if(timeline_next.is(':hidden') && !timeline_next.is(':animated')) {
+							range_next.hide().width(length / 24 * 8).find('code').text('8:00');
+							timeline_next.slideDown('fast', function() {
+								range_next.fadeIn();
+							});
+						}
 					}		
 				}
 	
@@ -622,16 +652,19 @@
 				// Get end time
 				to = getTime(length, right);
 				
-				// Return time
+				// Only end time defined
 				if(from == undefined) {
 					return to;
 				}
+				// Only start time defined
 				else if(to == undefined) {
 					return from
 				}
+				// From and to defined
 				else if(from != to) {
 					return from + '–' + to;
 				}
+				// From and to are identical
 				else {
 					return from;
 				}
