@@ -21,16 +21,24 @@
 	min-width: 250px;
 	padding: 0;
 	position: relative;
-/*	border: 1px solid #484846;*/
 }
-
 
 fieldset.primary .field-datetime div.calendar div.date {
-	width: 30%;	
+	width: 30%;
+	float: left;
 }
 
+fieldset.primary .field-datetime div.calendar div.cutter {
+	display: block;
+	width: auto;
+}
+
+fieldset.primary .field-datetime div.calendar {
+	overflow: auto;
+}
+
+
 .field-datetime div.calendar div.date strong {
-/*	text-align: center;*/
 	padding: 0 0 7px;
 	width: 100%;
 	display: block;
@@ -41,26 +49,13 @@ fieldset.primary .field-datetime div.calendar div.date {
 
 .field-datetime div.calendar div.date span {
 	display: inline;
-/*	width: 50px;*/
 	width: auto;
-/*	color: #616057;*/
 	color: #e4e4e4;
 	padding: 0;
 	background: none !important;
-/*	color: #484846;*/
 	cursor: pointer !important;
-/*	height: 30px;*/
 	font-size: 109.09%;
 }
-
-/*.field-datetime div.calendar div.date span:hover {
-	background: #56554D;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	padding: 1px 3px;
-	color: #e4e4e4;
-}*/
 
 .field-datetime div.calendar div.date span.nav {
 	
@@ -78,8 +73,6 @@ fieldset.primary .field-datetime div.calendar div.date {
 	border-radius: 10px 0 0 10px;
 	-webkit-border-radius: 10px 0 0 10px;
 	-moz-border-radius: 10px 0 0 10px;
-
-
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -91,11 +84,6 @@ fieldset.primary .field-datetime div.calendar div.date {
 	text-indent: -1000em;
 	overflow: hidden;
 	background: url(images/previous.png) 6px center no-repeat;
-/*	position: absolute;
-	top: 0;
-	left: 0;
-	display: none;
-	width: 10px;*/
 }
 
 .field-datetime div.calendar div.date span.nav a.next {
@@ -105,9 +93,6 @@ fieldset.primary .field-datetime div.calendar div.date {
 	border-radius: 0 10px 10px 0;
 	-webkit-border-radius: 0 10px 10px 0;
 	-moz-border-radius: 0 10px 10px 0;
-/*	left: auto;
-	right: 0;
-	text-align: right;*/
 }
 
 
@@ -115,53 +100,21 @@ fieldset.primary .field-datetime div.calendar div.date {
 	background-color: #1f1f1e;
 }
 
-/*
-.field-datetime div.calendar p {
-	color: #616057;
-	margin: 20px 0 10px;
-}
-
-.field-datetime div.calendar code {
-	background: #56554D;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	padding: 1px 3px;
-	color: #e4e4e4;
-	font-size: 1em;
-}*/
-
-/*.field-datetime div.calendar p.active code {
-	-webkit-box-shadow: 0 0 5px #f0f0f0;
-	-moz-box-shadow: 0 0 5px #f0f0f0;
-	box-shadow: 0 0 5px #f0f0f0;
-}*/
-
 .field-datetime div.calendar table {
 	background: #323230;
 	border-collapse: collapse;
 	clear: both;
-/*	border: 2px solid #323230;*/
-/*	border-top: 1px solid #414140;*/
-/*	width: 251px;*/
 }
 
 .field-datetime div.calendar thead tr {
 	background: #353533;
-/*	background: #323230;*/
-/*	border-left: 1px solid #323230;
-	border-right: 1px solid #323230;*/
 	border-top: 1px solid #535351;
-/*	border-top: 1px solid #41403f;*/
 }
 
 .field-datetime div.calendar thead td, .field-datetime div.calendar thead td:nth-last-child(odd) {
-/*	background: #353533;*/
-/*	background: #323230;*/
 	background: #353533;
 	border: none;
 	height: 30px;
-/*	padding-bottom: 2px;*/
 	color: #616057;
 }
 
@@ -173,18 +126,8 @@ fieldset.primary .field-datetime div.calendar div.date {
 }
 
 .field-datetime div.calendar td {
-/*	background: #383836;*/
 	background: #323230;
-/*	border: 1px inset #484846;*/
-/*	border: 1px solid rgba(255, 255, 255, 0.05);*/
-/*	border: 1px solid rgba(200, 200, 200, 0.1);*/
 	border: 1px solid #41403f;
-/*	border: 1px solid #494948;
-	border-top-color: #65645d;
-	border-bottom-color: #65645d;*/
-/*	border: 1px solid #414140;
-	border-left-color: #494948;
-	border-right-color: #494948;*/
 	border-style-bottom: none;
 	color: #fff;
 	cursor: pointer;
@@ -200,26 +143,15 @@ fieldset.primary .field-datetime div.calendar div.date {
 }
 
 .field-datetime div.calendar td:nth-last-child(odd) {
-/*	background: #56554d;*/
 	background: #383836;
-/*	border: 1px solid #434342;
-	border-left-color: #494948;
-	border-right-color: #494948;*/
 }
 
 .field-datetime div.calendar td.today {
-/*	background: #898883;*/
-/*	background: #56554d;*/
 	background: rgba(200, 200, 200, 0.2);
-/*	border: 1px solid #898880;*/
 }
 
 .field-datetime div.calendar td.selected {
 	background: #5273c0;
-/*	background: #81b934;*/
-/*	border: 1px solid #fff;*/
-/*	border: 1px solid #617dc5;*/
-/*	border: 1px solid #6a9bd2;*/
 	color: #fff;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
@@ -229,10 +161,7 @@ fieldset.primary .field-datetime div.calendar div.date {
 }
 
 .field-datetime div.calendar td.last.selected, .field-datetime div.calendar td.next.selected {
-/*	background: #83a751;*/
-/*	border: 1px ridge #c2c2c2;*/
 	background: #475466;
-/*	border: 1px solid #475d7d;*/
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
@@ -241,10 +170,7 @@ fieldset.primary .field-datetime div.calendar div.date {
 }
 
 .field-datetime div.calendar td.selected.today {
-/*	background: #a5bf80;
-	border: 1px solid #fff;*/
 	background: #7499d2;
-/*	border: 1px solid #fff;*/
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
@@ -260,7 +186,7 @@ fieldset.primary .field-datetime div.calendar div.date {
 	color: #fff;
 }
 
-.field-datetime div.calendar div.cutter {
+.field-datetime div.cutter {
 	overflow: hidden;
 	margin: 0 -4px;
 	padding: 0 4px;
@@ -275,6 +201,10 @@ fieldset.primary .field-datetime div.calendar div.date {
 }
 
 .field-datetime div.timeline.end {
+	display: none;
+}
+
+.field-datetime div.timeline.end span.start {
 	display: none;
 }
 
@@ -442,7 +372,6 @@ fieldset.primary .field-datetime div.calendar div.date {
 	left: auto;
 	right: 0;
 	cursor: e-resize !important;
-/*	background: cyan !important;*/
 }
 
 .field-datetime div.range span.active {
