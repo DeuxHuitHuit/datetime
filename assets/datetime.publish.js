@@ -207,7 +207,73 @@
 				}
 			});
 			$('body').bind('mouseup.datetime', function() {
-				$('span.moving').removeClass('moving');
+				var timeline = $('div.timeline.moving').removeClass('moving'),
+					handle = timeline.find('span.moving').removeClass('moving');
+
+				if(timeline.size() > 0) {
+					var item = timeline.parents('li'),
+						start = item.find('input.start'),
+						end = item.find('input.end'),
+						start_timestamp = parseInt(start.attr('data-timestamp')),
+						end_timestamp = parseInt(end.attr('data-timestamp')),
+						time = item.find('div.timeline.start code').text(),
+						to = item.find('div.timeline.end:visible code').text(),
+						from, date,
+						hours, minutes,
+						day;
+				
+					// Fetch times
+					time = time.split('–');
+
+					// Set start time
+					from = time[0];
+					from = from.split(':');
+					date = new Date(parseInt(start.attr('data-timestamp')));
+					date.setHours(parseInt(from[0]));
+					date.setMinutes(parseInt(from[1]));
+					validate(start, date.getTime());
+	
+					// Range on the same day
+					if(time[1]) {
+						to = time[1].split(':');
+						date.setHours(parseInt(to[0]));
+						date.setMinutes(parseInt(to[1]));
+						validate(end, date.getTime());
+					}
+					
+					// Range on different days
+					else if(to) {
+						to = to.split(':');
+						
+						// Get date
+						if(end_timestamp && (reduce(start_timestamp) != reduce(end_timestamp))) {
+							date = new Date(parseInt(end.attr('data-timestamp')));					
+						}
+						else {
+							day = date.getDate() + 1;
+							date.setDate(day);
+						}
+						
+						// Set date
+						date.setHours(parseInt(to[0]));
+						date.setMinutes(parseInt(to[1]));
+						validate(end, date.getTime(), true);
+					}
+
+					// Show range
+					if(time[1] || to || end.is(':hidden')) {
+						end.slideDown('fast', function() {
+							item.addClass('range');				
+						});
+					}
+					
+					// Hide range
+					else {
+						end.val('').attr('data-timestamp', null).slideUp('fast', function() {
+							item.removeClass('range');
+						});
+					}
+				}
 			});
 								
 		/*-----------------------------------------------------------------------*/
@@ -478,7 +544,7 @@
 			// Time
 			var timing = function(handle, event) {
 				var range = handle.parent(),
-					timeline = range.parent(),
+					timeline = range.parent().addClass('moving'),
 					timeline_next = timeline.next('div.timeline'),
 					range_next = timeline_next.find('div.range'),
 					timeline_prev = timeline.prev('div.timeline'),
@@ -573,7 +639,7 @@
 					else if(position <= 0 && timeline.is('.end')) {
 						
 						// Hide next day's timeline
-						handle.removeClass('moving');
+						//handle.removeClass('moving');
 						timeline.slideUp('fast');
 						
 						// Set first timeline's end time to 23:55
