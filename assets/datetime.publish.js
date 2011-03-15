@@ -506,7 +506,7 @@
 			};
 			
 			var hideTimeline = function(calendar) {
-				var timeline = calendar.find('div.timeline.end'),
+				var timeline = calendar.find('div.timeline.end');
 					
 				// Slide down timeline
 				if(timeline.is(':visible')) {
