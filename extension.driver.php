@@ -1,6 +1,8 @@
 <?php
-
-	require_once (EXTENSIONS . '/datetime/lib/stage/class.stage.php');
+	
+	if(!class_exists("Stage")){
+		require_once (EXTENSIONS . '/datetime/lib/stage/class.stage.php');
+	}
 
 	/**
 	 * Date and Time Extension
