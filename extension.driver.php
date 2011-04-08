@@ -1,13 +1,31 @@
 <?php
-	
-	if(!class_exists("Stage")){
-		require_once (EXTENSIONS . '/datetime/lib/stage/class.stage.php');
-	}
 
+	/**
+	 * @package datetime
+	 */
 	/**
 	 * Date and Time Extension
 	 */
 	Class extension_datetime extends Extension {
+
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#__construct
+		 */
+		public function __construct(Array $args){
+			parent::__construct($args);
+			
+			// Include Stage
+			if(!class_exists('Stage')) {
+				try {
+					if((include_once(EXTENSIONS . '/subsectionmanager/lib/stage/class.stage.php')) === FALSE) {
+						throw new Exception();
+					}
+				}
+				catch(Exception $e) {
+				    throw new SymphonyErrorPage(__('Please make sure that the Stage submodule is initialised and available at %s.', array('<code>' . EXTENSIONS . '/subsectionmanager/lib/stage/</code>')) . '<br/><br/>' . __('It\'s available at %s.', array('<a href="https://github.com/nilshoerrmann/stage">github.com/nilshoerrmann/stage</a>')), __('Stage not found'));
+				}
+			}
+		}
 
 		/**
 		 * The about method allows an extension to provide
