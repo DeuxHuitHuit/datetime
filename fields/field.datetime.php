@@ -214,10 +214,9 @@
 			if(!is_array($data)) return NULL;
 		
 			// Clean up dates
-			$result = array('entry_id' => array(), 'start' => array(), 'end' => array());
+			$result = array('start' => array(), 'end' => array());
 			for($i = 0; $i < count($data['start']); $i++) {
 				if(!empty($data['start'][$i])) {
-					$result['entry_id'][] = $entry_id;
 					
 					// Parse start date
 					$parsed = Calendar::formatDate($data['start'][$i], true, 'Y-m-d H:i:s');			
