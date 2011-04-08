@@ -21,11 +21,7 @@
 		const ERROR = 4;
 
 		/**
-		 * Construct a new instance of this field.
-		 *
-		 * @param mixed $parent
-		 *  The class that created this Field object, usually the FieldManager,
-		 *  passed by reference.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
 		 */
 		function __construct(&$parent) {	
 			parent::__construct($parent);
@@ -34,69 +30,42 @@
 		}
 	
 		/**
-		 * Test whether this field can be filtered. Filtering allows the 
-		 * xml output results to be limited according to an input parameter. 
-		 *
-		 * @return boolean
-		 *	true if this can be filtered, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#canFilter
 		 */
 		function canFilter() {
 			return true;
 		}
 	
 		/**
-		 * Test whether this field can be sorted. 
-		 *
-		 * @return boolean
-		 *	true if this field is sortable, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#isSortable
 		 */
 		function isSortable() {
 			return true;
 		}
 	
 		/**
-		 * Test whether this field can be prepopulated with data. 
-		 *
-		 * @return boolean
-		 *	true if this can be pre-populated, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#canPrePopulate
 		 */
 		function canPrePopulate() {
 			return false;
 		}
 	
 		/**
-		 * Test whether this field supports data-source output grouping. 
-		 * Data-source grouping allows clients of this field to group the 
-		 * xml output according to this field.
-		 *
-		 * @return boolean
-		 *	true if this field does support data-source grouping, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#allowDatasourceOutputGrouping
 		 */
 		function allowDatasourceOutputGrouping() {
 			return true;
 		}
 	
 		/**
-		 * Test whether this field supports data-source output grouping. 
-		 * Data-source grouping allows clients of this field to group the 
-		 * xml output according to this field.
-		 *
-		 * @return boolean
-		 *	true if this field does support data-source grouping, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#allowDatasourceParamOutput
 		 */
 		function allowDatasourceParamOutput() {
 			return true;
 		}
 	
 		/**
-		 * Display the default settings panel, calls the buildSummaryBlock
-		 * function after basic field settings are added to the wrapper.
-		 *
-		 * @see buildSummaryBlock()
-		 * @param XMLElement $wrapper
-		 *	the input XMLElement to which the display of this will be appended.
-		 * @param mixed errors (optional)
-		 *	the input error collection. this defaults to null.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displaySettingsPanel
 		 */
 		function displaySettingsPanel(&$wrapper, $errors=NULL) {
 	
@@ -143,28 +112,14 @@
 		}
 	
 		/**
-		 * Check the field's settings to ensure they are valid on the section
-		 * editor
-		 *
-		 * @param array $errors
-		 *	the array to populate with the errors found.
-		 * @param boolean $checkFoeDuplicates (optional)
-		 *	if set to true, duplicate field entries will be flagged as errors.
-		 *	this defaults to true.
-		 * @return number
-		 *	returns the status of the checking. if errors has been populated with
-		 *	any errors self::__ERROR__, self__OK__ otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#checkFields
 		 */
 		function checkFields(&$errors, $checkForDuplicates=true) {
 			parent::checkFields($errors, $checkForDuplicates);
 		}
 	
 		/**
-		 * Commit the settings of this field from the section editor to
-		 * create an instance of this field in a section.
-		 *
-		 * @return boolean
-		 *	true if the commit was successful, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#commit
 		 */
 		function commit() {
 	
@@ -194,28 +149,7 @@
 		}
 	
 		/**
-		 * Display the publish panel for this field. The display panel is the
-		 * interface to create the data in instances of this field once added
-		 * to a section.
-		 *
-		 * @param XMLElement $wrapper
-		 *	the xml element to append the html defined user interface to this
-		 *	field.
-		 * @param array $data (optional)
-		 *	any existing data that has been supplied for this field instance.
-		 *	this is encoded as an array of columns, each column maps to an
-		 *	array of row indexes to the contents of that column. this defaults
-		 *	to null.
-		 * @param mixed $flagWithError (optional)
-		 *	flag with error defaults to null.
-		 * @param string $fieldnamePrefix (optional)
-		 *	the string to be prepended to the display of the name of this field.
-		 *	this defaults to null.
-		 * @param string $fieldnameSuffix (optional)
-		 *	the string to be appended to the display of the name of this field.
-		 *	this defaults to null.
-		 * @param number $entry_id (optional)
-		 *	the entry id of this field. this defaults to null.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displayPublishPanel
 		 */
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 	
@@ -273,21 +207,7 @@
 		}
 		
 		/**
-		 * Process the raw field data.
-		 *
-		 * @param mixed $data
-		 *	post data from the entry form
-		 * @param reference $status
-		 *	the status code resultant from processing the data.
-		 * @param boolean $simulate (optional)
-		 *	true if this will tell the CF's to simulate data creation, false
-		 *	otherwise. this defaults to false. this is important if clients
-		 *	will be deleting or adding data outside of the main entry object
-		 *	commit function.
-		 * @param mixed $entry_id (optional)
-		 *	the current entry. defaults to null.
-		 * @return array[string]mixed
-		 *	the processed field data.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#processRawFieldData
 		 */
 		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL) {
 			$status = self::__OK__;
@@ -325,8 +245,8 @@
 			}
 		}
 	
- 		/**
-		 * Create database field table.
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#createTable
 		 */
 		function createTable() {
 			return Symphony::Database()->query(
@@ -342,15 +262,7 @@
 		}
 	
 		/**
-		 * Format this field value for display in the administration pages summary tables.
-		 *
-		 * @param array $data
-		 *	the data to use to generate the summary string.
-		 * @param XMLElement $link (optional)
-		 *	an xml link structure to append the content of this to provided it is not
-		 *	null. it defaults to null.
-		 * @return string
-		 *	the formatted string summary of the values of this field instance.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#prepareTableValue
 		 */
 		function prepareTableValue($data, XMLElement $link=NULL) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
@@ -406,19 +318,7 @@
 		}
 	
 		/**
-		 * Build the SQL command to append to the default query to enable
-		 * sorting of this field. 
-		 *
-		 * @param string $joins
-		 *	the join element of the query to append the custom join sql to.
-		 * @param string $where
-		 *	the where condition of the query to append to the existing where clause.
-		 * @param string $sort
-		 *	the existing sort component of the sql query to append the custom
-		 *	sort sql code to.
-		 * @param string $order (optional)
-		 *	an optional sorting direction. this defaults to ascending. if this
-		 *	is declared either 'random' or 'rand' then a random sort is applied.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildSortingSQL
 		 */
 		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
 			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `dt` ON (`e`.`id` = `dt`.`entry_id`) ";
@@ -426,21 +326,7 @@
 		}
 	
 		/**
-		 * Construct the SQL statement fragments to use to retrieve the data of this
-		 * field when utilized as a data source.
-		 *
-		 * @param array $data
-		 *	the supplied form data to use to construct the query from??
-		 * @param string $joins
-		 *	the join sql statement fragment to append the additional join sql to.
-		 * @param string $where
-		 *	the where condition sql statement fragment to which the additional
-		 *	where conditions will be appended.
-		 * @param boolean $andOperation (optional)
-		 *	true if the values of the input data should be appended as part of
-		 *	the where condition. this defaults to false.
-		 * @return boolean
-		 *	true if the construction of the sql was successful, false otherwise.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildDSRetrivalSQL
 		 */
 		function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
 			if(self::isFilterRegex($data[0])) {
@@ -647,10 +533,7 @@
 		}
 
 		/**
-		 * Group records by year and month (calendar view).
-		 *
-		 * @param array $records
-		 *	the records to group.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#groupRecords
 		 */
 		public function groupRecords($records) {
 			if(!is_array($records) || empty($records)) return;
@@ -699,23 +582,7 @@
 		}
 	
 		/**
-		 * Append the formatted xml output of this field as utilized as a data source.
-		 *
-		 * @param XMLElement $wrapper
-		 *	the xml element to append the xml representation of this to.
-		 * @param array $data
-		 *	the current set of values for this field. the values are structured as
-		 *	for displayPublishPanel.
-		 * @param boolean $encode (optional)
-		 *	flag as to whether this should be html encoded prior to output. this
-		 *	defaults to false.
-		 * @param string $mode
-		 *	 A field can provide ways to output this field's data. For instance a mode
-		 *  could be 'items' or 'full' and then the function would display the data
-		 *  in a different way depending on what was selected in the datasource
-		 *  included elements.
-		 * @param number $entry_id (optional)
-		 *	the identifier of this field entry instance. defaults to null.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#appendFormattedElement
 		 */
 		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
 			$datetime = new XMLElement($this->get('element_name'));
@@ -776,13 +643,7 @@
 		}
 	
 		/**
-		 * Function to format this field if it chosen in a data-source to be
-		 * output as a parameter in the XML
-		 *
-		 * @param array $data
-		 *	 The data for this field from it's tbl_entry_data_{id} table
-		 * @return string
-		 *	 The formatted value to be used as the parameter
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#getParameterPoolValue
 		 */
 		public function getParameterPoolValue($data) {
 			$start = array();
@@ -793,11 +654,8 @@
 			return implode(',', $start);
 		}
 	
- 		/**
-		 * Return sample markup for the event editor.
-		 *
-		 * @return XMLElement
-		 *	a label widget containing the formatted field element name of this.
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#getExampleFormMarkup
 		 */
 		public function getExampleFormMarkup() {
 			$label = Widget::Label($this->get('label'));

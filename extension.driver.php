@@ -28,11 +28,7 @@
 		}
 
 		/**
-		 * The about method allows an extension to provide
-		 * information about itself as an associative array.
-		 *
-		 * @return array
-		 *  An associative array describing this extension.
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#about
 		 */
 		public function about() {
 			return array(
@@ -48,6 +44,9 @@
 			);
 		}
 
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#install
+		 */
 		public function install() {
 			$status = array();
 
@@ -75,6 +74,9 @@
 			}
 		}
 
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#update
+		 */
 		public function update($previousVersion) {
 			$status = array();
 
@@ -118,6 +120,9 @@
 			}
 		}
 
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#uninstall
+		 */
 		public function uninstall() {
 
 			// Drop related entries from stage tables
