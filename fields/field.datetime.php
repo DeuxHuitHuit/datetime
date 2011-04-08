@@ -739,7 +739,7 @@
 					$start = new XMLElement('start', $parsed['date'], array(
 							'iso' => DateTimeObj::get('c', $timestamp),
 							'time' => DateTimeObj::get('H:i', $timestamp),
-							'weekday' => DateTimeObj::get('w', $timestamp),
+							'weekday' => DateTimeObj::get('N', $timestamp),
 							'offset' => DateTimeObj::get('O', $timestamp),
 							'status' => $parsed['status']
 						)
@@ -754,7 +754,7 @@
 						$end = new XMLElement('end', $parsed['date'], array(
 								'iso' => DateTimeObj::get('c', $timestamp),
 								'time' => DateTimeObj::get('H:i', $timestamp),
-								'weekday' => DateTimeObj::get('w', $timestamp),
+								'weekday' => DateTimeObj::get('N', $timestamp),
 								'offset' => DateTimeObj::get('O', $timestamp),
 								'status' => $parsed['status']
 							)
