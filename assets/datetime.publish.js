@@ -39,7 +39,9 @@
 					item = input.parents('li'),
 					calendar = item.find('div.calendar');
 					dates = input.parent().addClass('focus'),
-					date = input.attr('data-timestamp');
+					date = input.attr('data-timestamp'),
+					start = dates.find('input.start').attr('data-timestamp'),
+					end = dates.find('input.end').attr('data-timestamp');
 					
 				// Show help
 				help.fadeIn('fast');
@@ -49,7 +51,10 @@
 		
 				// Visualise
 				calendar.slideDown('fast');		
-				item.trigger('visualise');
+				item.trigger('visualise', [{
+					start: start,
+					end: end
+				}, date]);
 			});
 			
 			// Setting
