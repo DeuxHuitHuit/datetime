@@ -38,7 +38,7 @@
 			
 			// Get timer
 			if($time == 1) {
-				$cutter = '<div class="cutter">' .
+				$cutter = '<div class="timer">' .
 					self::__createTimeline('start') . 
 					self::__createTimeline('end') . 
 				'</div>';

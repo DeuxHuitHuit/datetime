@@ -28,7 +28,7 @@ fieldset.primary .field-datetime div.calendar div.date {
 	float: left;
 }
 
-fieldset.primary .field-datetime div.calendar div.cutter {
+fieldset.primary .field-datetime div.calendar div.timer {
 	display: block;
 	width: auto;
 }
@@ -186,7 +186,7 @@ fieldset.primary .field-datetime div.calendar {
 	color: #fff;
 }
 
-.field-datetime div.cutter {
+.field-datetime div.timer {
 	overflow: hidden;
 	margin: 0 -4px;
 	padding: 0 4px;
@@ -325,8 +325,15 @@ fieldset.primary .field-datetime div.calendar {
 	width: 5px;
 	position: absolute;
 	top: -3px;
-	left: -4px;
+	left: 0;
 	cursor: pointer !important;
+	margin: 0 0 0 -4px;
+	padding: 0;
+}
+
+.field-datetime li.range div.range {
+	margin: 0 -4px;
+	padding: 0 4px;
 }
 
 .field-datetime div.timeline.end div.range {
@@ -368,7 +375,12 @@ fieldset.primary .field-datetime div.calendar {
 	z-index: 2000;
 }
 
-.field-datetime div.range span.end {
+.field-datetime li div.range span.end {
+	display: none;
+}
+
+.field-datetime li.range div.range span.end {
+	display: block;
 	left: auto;
 	right: 0;
 	cursor: e-resize !important;
