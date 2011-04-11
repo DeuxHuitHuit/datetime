@@ -24,6 +24,15 @@
 			
 		/*---- Events -----------------------------------------------------------*/
 		
+			// Constructing
+			stage.bind('constructstop', function(event, item) {
+				var input = item.find('input.start');
+				
+				// Store and contextualise date
+				input.data('validated', input.val());
+				contextualise(input);
+			});
+		
 			// Visualising
 			selection.delegate('input', 'focus.datetime', function() {
 				var input = $(this),
