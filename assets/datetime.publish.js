@@ -239,10 +239,7 @@
 			
 			// Reduce timestamp to days
 			var reduce = function(timestamp) {
-				
-				// Add an hour = 60 * 60 * 1000 = 3600000 to identify midnight (0:00) correctly,
-				// divide by one day = 24 * 60 * 60 * 1000 = 86400000
-				return Math.floor((parseInt(timestamp) + 3600000) / 86400000);
+				return Math.floor((parseInt(timestamp) + 7200000) / 86400000);
 			};
 			
 		/*---- Initialisation ---------------------------------------------------*/
