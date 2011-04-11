@@ -36,6 +36,14 @@
 				$classes[] = $class;
 			}
 			
+			// Get timer
+			if($time == 1) {
+				$cutter = '<div class="cutter">' .
+					self::__createTimeline('start') . 
+					self::__createTimeline('end') . 
+				'</div>';
+			}
+			
 			// Create element
 			return new XMLElement(
 				'li', 
@@ -47,11 +55,8 @@
 				</span>
 				<div class="calendar">' .
 					self::__createCalendar() .			
-					'<div class="cutter">' .
-						self::__createTimeline('start') . 
-						self::__createTimeline('end') . 
-					'</div>
-				</div>', 
+					$cutter .
+				'</div>', 
 				array('class' => implode($classes, ' '))
 			);
 		}
