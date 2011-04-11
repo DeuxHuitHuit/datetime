@@ -62,6 +62,17 @@
 				var item = $(this),
 					start = item.find('.start'),
 					end = item.find('.end');
+					
+				// Ranges
+				if(range.start && range.end) {
+					end.slideDown('fast');
+					item.addClass('range');
+				}
+				else {
+					end.slideUp('fast', function() {
+						item.removeClass('range');
+					});
+				}
 				
 				// Start date
 				if(range.start != null && range.start != start.attr('data-timestamp')) {
@@ -118,7 +129,6 @@
 						date: date
 					},
 					success: function(parsed) {
-						console.log(parsed);
 					
 						// Valid date
 						if(parsed.status == 'valid') {
@@ -182,8 +192,6 @@
 			
 			// Display validity status
 			var displayStatus = function(dates) {
-			
-				console.log(dates, dates.find('input.invalid').size());
 			
 				// At least one date is invalid
 				if(dates.find('input.invalid').size() > 0) {
