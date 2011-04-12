@@ -148,6 +148,7 @@ div.range {
 	cursor: pointer !important;
 	margin: 0 0 0 -4px;
 	padding: 0;
+	min-width: 5px;
 }
 
 li.range div.range {
