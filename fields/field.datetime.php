@@ -269,7 +269,7 @@
 			// Create start and end dates
 		    return array(
 		        'start' => $data[0],
-		        'end' => (isset($data[1] ? $data[1] : NULL)
+		        'end' => (isset($data[1]) ? $data[1] : NULL)
 		    );
 		}		
 	
