@@ -85,6 +85,28 @@
 					end: to
 				}, focus]);
 			});
+			selection.delegate('li', 'settime.datetime', function(event, hours, minutes) {
+				var item = $(this),
+					start = item.find('.start'),
+					end = item.find('.end'),
+					date = new Date(parseInt(start.attr('data-timestamp'))),
+					from;
+					
+				// Set time
+				date.setHours(hours);
+				date.setMinutes(minutes);
+				
+				// Get time
+				from = date.getTime();
+				validate(start, from, false);
+				empty(end);
+				
+				// Visualise
+				item.trigger('visualise', [{
+					start: from,
+					end: ''
+				}, from]);
+			});
 			
 			// Validating
 			selection.delegate('input', 'blur.datetime', function(event) {
