@@ -10,7 +10,7 @@ div.calendar {
 	border-top: none;
 	min-width: 23em;
 	margin: 0 -1px;
-	padding: 16px 40px 42px 16px;
+	padding: 18px 38px 42px 18px;
 	z-index: 2000;
 	position: relative;
 	display: none;
@@ -22,21 +22,6 @@ div.calendar div.date {
 	padding: 0;
 	position: relative;
 }
-
-fieldset.primary div.calendar div.date {
-	width: 30%;
-	float: left;
-}
-
-fieldset.primary div.calendar div.timer {
-	display: block;
-	width: auto;
-}
-
-fieldset.primary div.calendar {
-	overflow: auto;
-}
-
 
 div.calendar div.date strong {
 	padding: 0 0 7px;
@@ -184,4 +169,23 @@ div.calendar thead td:hover {
 	background: none !important;
 	border: inherit;
 	color: #fff;
+}
+
+@media screen and (min-width: 1000px) {
+
+	fieldset.primary div.calendar {
+		height: 244px;
+	}
+	
+	fieldset.primary div.calendar div.date {
+		width: 300px;
+		position: absolute;
+		top: 16px;
+		left: 16px;
+	}
+	
+	fieldset.primary div.calendar {
+		overflow: auto;
+	}
+
 }

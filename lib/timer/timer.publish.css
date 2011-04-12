@@ -224,3 +224,16 @@ div.range span.active {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 }
+
+@media screen and (min-width: 1000px) {
+
+	fieldset.primary div.timer {
+		display: block;
+		margin: -18px -1px 0 316px;
+	}
+	
+	fieldset.primary div.timeline {
+		padding: 0 5px 0 0;
+	}
+
+}
