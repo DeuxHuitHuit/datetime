@@ -58,10 +58,12 @@
 			});
 			
 			// Setting
-			selection.delegate('li', 'set.datetime', function(event, range, focus) {
+			selection.delegate('li', 'setdate.datetime', function(event, range, focus) {
 				var item = $(this),
 					start = item.find('.start'),
-					end = item.find('.end');
+					end = item.find('.end'),
+					from = start.attr('data-timestamp'),
+					to = end.attr('data-timestamp');
 					
 				// Ranges
 				if(range.start && range.end) {
@@ -76,12 +78,12 @@
 				
 				// Start date
 				if(range.start != null && range.start != start.attr('data-timestamp')) {
-					validate(start, range.start, false);
+					validate(start, mergeTimes(from, range.start), false);
 				}
 				
 				// End date
 				if(range.end != null && range.end != end.attr('data-timestamp')) {
-					validate(end, range.end, false);
+					validate(end, mergeTimes(to, range.end), false);
 				}
 			});
 			
@@ -159,6 +161,18 @@
 					}
 				});
 			};
+			
+			// Merge new date with old times
+			var mergeTimes = function(current, update) {
+				var time = new Date(parseInt(current)),
+					date = new Date(parseInt(update));
+					
+				// Set hours and minutes
+				date.setHours(time.getHours());
+				date.setMinutes(time.getMinutes());
+
+				return date.getTime();
+			}
 			
 			// Empty date
 			var empty = function(input) {
