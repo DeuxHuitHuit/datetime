@@ -62,29 +62,28 @@
 				var item = $(this),
 					start = item.find('.start'),
 					end = item.find('.end'),
-					from = start.attr('data-timestamp'),
-					to = end.attr('data-timestamp');
+					from = mergeTimes(start.attr('data-timestamp'), range.start),
+					to = mergeTimes(end.attr('data-timestamp'), range.end);
 					
-				// Ranges
+				// Date range
 				if(range.start && range.end) {
+					validate(start, from, false);
+					validate(end, to, false);
 					end.slideDown('fast');
 					item.addClass('range');
 				}
+
+				// Single date
 				else {
-					end.slideUp('fast', function() {
-						item.removeClass('range');
-					});
+					validate(start, from, false);
+					empty(end);
 				}
 				
-				// Start date
-				if(range.start != null && range.start != start.attr('data-timestamp')) {
-					validate(start, mergeTimes(from, range.start), false);
-				}
-				
-				// End date
-				if(range.end != null && range.end != end.attr('data-timestamp')) {
-					validate(end, mergeTimes(to, range.end), false);
-				}
+				// Visualise
+				item.trigger('visualise', [{
+					start: from,
+					end: to
+				}, focus]);
 			});
 			
 			// Validating
@@ -123,55 +122,71 @@
 					dates = input.parent();
 			
 				// Call validator
-				$.ajax({
-					type: 'GET',
-					dataType: 'json',
-					url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
-					data: { 
-						date: date
-					},
-					success: function(parsed) {
-					
-						// Valid date
-						if(parsed.status == 'valid') {
-							input.attr('data-timestamp', parsed.timestamp).val(parsed.date).removeClass('invalid');
-						}
+				if(input.attr('data-timestamp') != date) {
+					$.ajax({
+						type: 'GET',
+						dataType: 'json',
+						url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
+						data: { 
+							date: date
+						},
+						success: function(parsed) {
 						
-						// Invalid date
-						else {
-							input.attr('data-timestamp', '').addClass('invalid');
-						}
-
-						// Store date
-						input.data('validated', parsed.date);
-						
-						// Display status
-						displayStatus(dates);
+							// Valid date
+							if(parsed.status == 'valid') {
+								input.attr('data-timestamp', parsed.timestamp).val(parsed.date).removeClass('invalid');
+							}
+							
+							// Invalid date
+							else {
+								input.attr('data-timestamp', '').addClass('invalid');
+							}
 	
-						// Get date context
-						contextualise(input);
-						
-						// Visualise
-						if(visualise === true) {
-							item.trigger('visualise', [{
-								start: dates.find('.start').attr('data-timestamp'),
-								end: dates.find('.end').attr('data-timestamp')
-							}, input.attr('data-timestamp')]);
+							// Store date
+							input.data('validated', parsed.date);
+							
+							// Display status
+							displayStatus(dates);
+		
+							// Get date context
+							contextualise(input);
+							
+							// Visualise
+							if(visualise === true) {
+								item.trigger('visualise', [{
+									start: dates.find('.start').attr('data-timestamp'),
+									end: dates.find('.end').attr('data-timestamp')
+								}, input.attr('data-timestamp')]);
+							}
 						}
-					}
-				});
+					});
+				}
 			};
 			
 			// Merge new date with old times
 			var mergeTimes = function(current, update) {
-				var time = new Date(parseInt(current)),
-					date = new Date(parseInt(update));
-					
-				// Set hours and minutes
-				date.setHours(time.getHours());
-				date.setMinutes(time.getMinutes());
 
-				return date.getTime();
+				// Empty date	
+				if(update == null || update == '') {
+					return '';
+				}
+				
+				// New date
+				else if(current == null || current == '') {
+					return update;
+				}
+				
+				// Existing date
+				else {
+					var time = new Date(parseInt(current)),
+						date = new Date(parseInt(update));
+						
+					// Set hours and minutes
+					date.setHours(time.getHours());
+					date.setMinutes(time.getMinutes());
+	
+					return date.getTime();
+				}
 			}
 			
 			// Empty date
