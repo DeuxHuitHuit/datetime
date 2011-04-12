@@ -254,6 +254,24 @@
 				return $result;
 			}
 		}
+		
+		/**
+		 * This function prepares values for import with XMLImporter
+		 *
+		 * @param string|array $data
+		 *	Data that should be prepared for import
+		 * @return array
+		 *  Return an associative array of start and end dates
+		 */		
+		function prepareImportValue($data) {
+			if(!is_array($data)) array($data);
+			
+			// Create start and end dates
+		    return array(
+		        'start' => $data[0],
+		        'end' => (isset($data[1] ? $data[1] : NULL)
+		    );
+		}		
 	
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#createTable
