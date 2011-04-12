@@ -2,10 +2,10 @@
  * Calendar for Symphony CMS
  *
  * @author: Nils Hörrmann, post@nilshoerrmann.de
- * @source: http://github.com/nilshoerrmann/datetime
+ * @source: http://github.com/nilshoerrmann/calendar
  */
  
-.field-datetime div.calendar {
+div.calendar {
 	background: #353533;
 	border-top: none;
 	min-width: 23em;
@@ -16,29 +16,29 @@
 	display: none;
 }
 
-.field-datetime div.calendar div.date {
+div.calendar div.date {
 	width: 100%;
 	min-width: 250px;
 	padding: 0;
 	position: relative;
 }
 
-fieldset.primary .field-datetime div.calendar div.date {
+fieldset.primary div.calendar div.date {
 	width: 30%;
 	float: left;
 }
 
-fieldset.primary .field-datetime div.calendar div.timer {
+fieldset.primary div.calendar div.timer {
 	display: block;
 	width: auto;
 }
 
-fieldset.primary .field-datetime div.calendar {
+fieldset.primary div.calendar {
 	overflow: auto;
 }
 
 
-.field-datetime div.calendar div.date strong {
+div.calendar div.date strong {
 	padding: 0 0 7px;
 	width: 100%;
 	display: block;
@@ -47,7 +47,7 @@ fieldset.primary .field-datetime div.calendar {
 	position: relative;
 }
 
-.field-datetime div.calendar div.date span {
+div.calendar div.date span {
 	display: inline;
 	width: auto;
 	color: #e4e4e4;
@@ -57,7 +57,7 @@ fieldset.primary .field-datetime div.calendar {
 	font-size: 109.09%;
 }
 
-.field-datetime div.calendar div.date span.nav {
+div.calendar div.date span.nav {
 	
 	display: block;
 	position: absolute;
@@ -68,7 +68,7 @@ fieldset.primary .field-datetime div.calendar {
 	padding: 0;
 }
 
-.field-datetime div.calendar div.date span.nav a {
+div.calendar div.date span.nav a {
 	border: 1px solid #535351;
 	border-radius: 10px 0 0 10px;
 	-webkit-border-radius: 10px 0 0 10px;
@@ -86,7 +86,7 @@ fieldset.primary .field-datetime div.calendar {
 	background: url(images/previous.png) 6px center no-repeat;
 }
 
-.field-datetime div.calendar div.date span.nav a.next {
+div.calendar div.date span.nav a.next {
 	background: url(images/next.png) 3px center no-repeat;
 	border-left: none;
 	left: 22px;
@@ -96,36 +96,36 @@ fieldset.primary .field-datetime div.calendar {
 }
 
 
-.field-datetime div.calendar div.date span.nav a:hover {
+div.calendar div.date span.nav a:hover {
 	background-color: #1f1f1e;
 }
 
-.field-datetime div.calendar table {
+div.calendar table {
 	background: #323230;
 	border-collapse: collapse;
 	clear: both;
 }
 
-.field-datetime div.calendar thead tr {
+div.calendar thead tr {
 	background: #353533;
 	border-top: 1px solid #535351;
 }
 
-.field-datetime div.calendar thead td, .field-datetime div.calendar thead td:nth-last-child(odd) {
+div.calendar thead td, div.calendar thead td:nth-last-child(odd) {
 	background: #353533;
 	border: none;
 	height: 30px;
 	color: #616057;
 }
 
-.field-datetime div.calendar thead td:hover {
+div.calendar thead td:hover {
 	background: none;
 	border: none;
 	color: #fff;
 	cursor: auto;
 }
 
-.field-datetime div.calendar td {
+div.calendar td {
 	background: #323230;
 	border: 1px solid #41403f;
 	border-style-bottom: none;
@@ -138,268 +138,50 @@ fieldset.primary .field-datetime div.calendar {
 	width: 35px;
 }
 
-.field-datetime div.calendar td.last,.field-datetime div.calendar td.next {
+div.calendar td.last,div.calendar td.next {
 	color: #686865;
 }
 
-.field-datetime div.calendar td:nth-last-child(odd) {
+div.calendar td:nth-last-child(odd) {
 	background: #383836;
 }
 
-.field-datetime div.calendar td.today {
+div.calendar td.today {
 	background: rgba(200, 200, 200, 0.2);
 }
 
-.field-datetime div.calendar td.selected {
+div.calendar td.selected {
 	background: #5273c0;
 	color: #fff;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-.field-datetime div.calendar td.selected:nth-last-child(odd) {
+div.calendar td.selected:nth-last-child(odd) {
 	background: #5677c3;
 }
 
-.field-datetime div.calendar td.last.selected, .field-datetime div.calendar td.next.selected {
+div.calendar td.last.selected, div.calendar td.next.selected {
 	background: #475466;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-.field-datetime div.calendar td.last.selected:nth-last-child(odd), .field-datetime div.calendar td.next.selected:nth-last-child(odd) {
+div.calendar td.last.selected:nth-last-child(odd), div.calendar td.next.selected:nth-last-child(odd) {
 	background: #505f73;
 }
 
-.field-datetime div.calendar td.selected.today {
+div.calendar td.selected.today {
 	background: #7499d2;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-.field-datetime div.calendar td:hover {
+div.calendar td:hover {
 	background: #ffb !important;
 	border: 1px solid #fff;
 	color: #9d854c;
 }
 
-.field-datetime div.calendar thead td:hover {
+div.calendar thead td:hover {
 	background: none !important;
 	border: inherit;
 	color: #fff;
-}
-
-.field-datetime div.timer {
-	overflow: hidden;
-	margin: 0 -4px;
-	padding: 0 4px;
-}
-
-.field-datetime div.timeline {
-	position: relative;
-	margin: 42px 0 3px;
-	padding: 0;
-	width: 100%;
-	border-bottom: 1px solid #424140;
-}
-
-.field-datetime div.timeline.end {
-	display: none;
-}
-
-.field-datetime div.timeline.end span.start {
-	display: none;
-}
-
-.field-datetime div.timeline span {
-	color: transparent;
-	border: none;
-	border-left: 1px solid #42413f;
-	height: 7px;
-	width: 5px;
-	background: none !important;
-	margin: 0;
-	padding: 0;
-	position: absolute;
-	top: -3px;
-	cursor: pointer !important;
-}
-
-.field-datetime div.timeline span.hour1 {
-	left: 4.17%;
-}
-
-.field-datetime div.timeline span.hour2 {
-	left: 8.33%;
-}
-
-.field-datetime div.timeline span.hour3 {
-	left: 12.5%;
-}
-
-.field-datetime div.timeline span.hour4 {
-	left: 16.67%;
-}
-
-.field-datetime div.timeline span.hour5 {
-	left: 20.83%;
-}
-
-.field-datetime div.timeline span.hour6 {
-	left: 25%;
-}
-
-.field-datetime div.timeline span.hour7 {
-	left: 29.17%;
-}
-
-.field-datetime div.timeline span.hour8 {
-	left: 33.33%;
-}
-
-.field-datetime div.timeline span.hour9 {
-	left: 37.5%;
-}
-
-.field-datetime div.timeline span.hour10 {
-	left: 41.67%;
-}
-
-.field-datetime div.timeline span.hour11 {
-	left: 45.83%;
-}
-
-.field-datetime div.timeline span.hour12 {
-	left: 50%;
-}
-
-.field-datetime div.timeline span.hour13 {
-	left: 54.17%;
-}
-
-.field-datetime div.timeline span.hour14 {
-	left: 58.33%;
-}
-
-.field-datetime div.timeline span.hour15 {
-	left: 62.5%;
-}
-
-.field-datetime div.timeline span.hour16 {
-	left: 66.67%;
-}
-
-.field-datetime div.timeline span.hour17 {
-	left: 70.83%;
-}
-
-.field-datetime div.timeline span.hour18 {
-	left: 75%;
-}
-
-.field-datetime div.timeline span.hour19 {
-	left: 79.17%;
-}
-
-.field-datetime div.timeline span.hour20 {
-	left: 83.33%;
-}
-
-.field-datetime div.timeline span.hour21 {
-	left: 87.5%;
-}
-
-.field-datetime div.timeline span.hour22 {
-	left: 91.67%;
-}
-
-.field-datetime div.timeline span.hour23 {
-	left: 95.83%;
-}
-
-.field-datetime div.range {
-	background: rgba(58, 100, 183, 0.5);
-	border: 1px solid #31466f;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	height: 5px;
-	display: block;
-	width: 5px;
-	position: absolute;
-	top: -3px;
-	left: 0;
-	cursor: pointer !important;
-	margin: 0 0 0 -4px;
-	padding: 0;
-}
-
-.field-datetime li.range div.range {
-	margin: 0 -4px;
-	padding: 0 4px;
-}
-
-.field-datetime div.timeline.end div.range {
-	left: -3px;	
-}
-
-.field-datetime div.timeline code {
-	position: absolute;
-	left: 0;
-	top: -23px;
-	background: #56554D;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	padding: 1px 3px;
-	color: #e4e4e4;
-	font-size: 1em;
-	white-space: nowrap;
-}
-
-.field-datetime div.timeline.end code {
-	left: auto;
-	right: 0;
-}
-
-.field-datetime div.range span {
-	border: none;
-	height: 5px;
-	width: 5px;
-	background: #c0c0c0 !important;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin: 0;
-	cursor: w-resize !important;
-	z-index: 2000;
-}
-
-.field-datetime li div.range span.end {
-	display: none;
-}
-
-.field-datetime li.range div.range span.end {
-	display: block;
-	left: auto;
-	right: 0;
-	cursor: e-resize !important;
-}
-
-.field-datetime div.range span.active {
-	width: 100%;
-	display: block;
-	border: 1px solid transparent;
-	border-bottom: 1px solid #657596;
-	border-radius: none;
-	background: none !important;
-	position: absolute;
-	top: 1px;
-	left: 0;
-	margin: 0;
-	height: 0;
-	z-index: 1000;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 }
