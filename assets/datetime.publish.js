@@ -60,8 +60,8 @@
 			// Setting
 			selection.delegate('li', 'setdate.datetime', function(event, range, focus) {
 				var item = $(this),
-					start = item.find('.start'),
-					end = item.find('.end'),
+					start = item.find('input.start'),
+					end = item.find('input.end'),
 					from = mergeTimes(start.attr('data-timestamp'), range.start),
 					to = mergeTimes(end.attr('data-timestamp'), range.end);
 					
@@ -70,7 +70,14 @@
 					validate(start, from, false);
 					validate(end, to, false);
 					end.slideDown('fast');
-					item.addClass('range');
+					
+					// Check range mode
+					if(reduce(range.start) != reduce(range.end)) {
+						item.addClass('range');
+					}
+					else {
+						item.removeClass('range');
+					}
 				}
 
 				// Single date
@@ -85,27 +92,48 @@
 					end: to
 				}, focus]);
 			});
-			selection.delegate('li', 'settime.datetime', function(event, hours, minutes) {
+			selection.delegate('li', 'settime.datetime', function(event, first, last, mode, focus) {
 				var item = $(this),
 					start = item.find('.start'),
 					end = item.find('.end'),
-					date = new Date(parseInt(start.attr('data-timestamp'))),
-					from;
+					range = {
+						start: null,
+						end: null
+					},
+					from, to;
 					
-				// Set time
-				date.setHours(hours);
-				date.setMinutes(minutes);
+				// Start time
+				from = new Date(parseInt(start.attr('data-timestamp')));
+				from.setHours(first.hours);
+				from.setMinutes(first.minutes);
+				range.start = from.getTime();
 				
-				// Get time
-				from = date.getTime();
-				validate(start, from, false);
-				empty(end);
+				// End time, date range over multiple days
+				if(mode == 'multiple' && last != null) {
+					to = new Date(parseInt(end.attr('data-timestamp')));
+					to.setHours(last.hours);
+					to.setMinutes(last.minutes);
+					range.end = to.getTime();
+				}
 				
+				// End time, date range on single day
+				else if(mode == 'single' && last != null) {
+					to = from;
+					to.setHours(last.hours);
+					to.setMinutes(last.minutes);
+					range.end = to.getTime();
+				}
+				
+				// Set focus
+				if(focus == 'start') {
+					focus = start.attr('data-timestamp');
+				}
+				else {
+					focus = end.attr('data-timestamp');
+				}
+							
 				// Visualise
-				item.trigger('visualise', [{
-					start: from,
-					end: ''
-				}, from]);
+				item.trigger('setdate', [range, focus]);
 			});
 			
 			// Validating
@@ -200,8 +228,8 @@
 				
 				// Existing date
 				else {
-					var time = new Date(parseInt(current)),
-						date = new Date(parseInt(update));
+					var time = new Date(parseInt(update)),
+						date = new Date(parseInt(current));
 						
 					// Set hours and minutes
 					date.setHours(time.getHours());
@@ -236,7 +264,7 @@
 				displayStatus(dates);
 				
 				// Hide end date
-				end.slideUp('fast', function() {
+				end.attr('data-timestamp', '').slideUp('fast', function() {
 					item.removeClass('range');
 				});
 			};
