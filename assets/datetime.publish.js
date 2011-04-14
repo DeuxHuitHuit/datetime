@@ -58,32 +58,34 @@
 			});
 			
 			// Setting
-			selection.delegate('li', 'setdate.datetime', function(event, range, focus) {
+			selection.delegate('li', 'setdate.datetime', function(event, range, focus, mode) {
 				var item = $(this),
 					start = item.find('input.start'),
 					end = item.find('input.end'),
 					from = mergeTimes(start.attr('data-timestamp'), range.start),
+					to;
+					
+				// Move multiple day range to single day
+				if(mode === 'single') {
+					to = mergeTimes(start.attr('data-timestamp'), range.end);
+				}
+				else {
 					to = mergeTimes(end.attr('data-timestamp'), range.end);
+				}
 					
 				// Date range
 				if(range.start && range.end) {
 					validate(start, from, false);
 					validate(end, to, false);
 					end.slideDown('fast');
-					
-					// Check range mode
-					if(reduce(range.start) != reduce(range.end)) {
-						item.addClass('range');
-					}
-					else {
-						item.removeClass('range');
-					}
+					item.addClass('range');
 				}
 
 				// Single date
 				else {
 					validate(start, from, false);
 					empty(end);
+					item.removeClass('range');
 				}
 				
 				// Visualise
@@ -126,14 +128,14 @@
 				
 				// Set focus
 				if(focus == 'start') {
-					focus = start.attr('data-timestamp');
+					focus = range.start;
 				}
 				else {
-					focus = end.attr('data-timestamp');
+					focus = range.end;
 				}
 							
 				// Visualise
-				item.trigger('setdate', [range, focus]);
+				item.trigger('setdate', [range, focus, mode]);
 			});
 			
 			// Validating
