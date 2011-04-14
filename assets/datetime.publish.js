@@ -50,11 +50,13 @@
 				dates.addClass('focus').siblings('.focus').removeClass('focus');
 		
 				// Visualise
-				calendar.slideDown('fast');		
-				item.trigger('visualise', [{
-					start: start,
-					end: end
-				}, date]);
+				if(!dates.is('.invalid')) {
+					calendar.slideDown('fast');		
+					item.trigger('visualise', [{
+						start: start,
+						end: end
+					}, date]);
+				}
 			});
 			
 			// Setting
@@ -144,15 +146,15 @@
 					date = input.val(),
 					validated = input.data('validated');
 				
-				// Validate
-				if(date != '' && date != validated) {
-					validate(input, date, true);					
+				// Empty date
+				if(date == '') {
+					empty(input);
 				}
 				
-				// Empty date
-				else if(date == '') {
-					empty(input);
-				}				
+				// Validate
+				else {
+					validate(input, date, true);					
+				}			
 			});
 						
 			// Closing
@@ -171,7 +173,8 @@
 			// Validate and set date
 			var validate = function(input, date, visualise) {
 				var item = input.parents('li'),
-					dates = input.parent();
+					dates = input.parent(),
+					calendar = item.find('div.calendar');
 			
 				// Call validator
 				if(input.attr('data-timestamp') != date) {
@@ -187,11 +190,22 @@
 							// Valid date
 							if(parsed.status == 'valid') {
 								input.attr('data-timestamp', parsed.timestamp).val(parsed.date).removeClass('invalid');
+							
+								// Visualise
+								if(visualise === true) {
+									item.trigger('visualise', [{
+										start: dates.find('.start').attr('data-timestamp'),
+										end: dates.find('.end').attr('data-timestamp')
+									}, input.attr('data-timestamp')]);
+								}
 							}
 							
 							// Invalid date
 							else {
 								input.attr('data-timestamp', '').addClass('invalid');
+								
+								// Clear
+								calendar.slideUp('fast');		
 							}
 	
 							// Store date
@@ -202,14 +216,6 @@
 		
 							// Get date context
 							contextualise(input);
-							
-							// Visualise
-							if(visualise === true) {
-								item.trigger('visualise', [{
-									start: dates.find('.start').attr('data-timestamp'),
-									end: dates.find('.end').attr('data-timestamp')
-								}, input.attr('data-timestamp')]);
-							}
 						}
 					});
 				}
