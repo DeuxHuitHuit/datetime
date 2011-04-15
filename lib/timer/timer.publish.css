@@ -133,7 +133,7 @@ div.timeline span.hour23 {
 	left: 95.83%;
 }
 
-div.range {
+div.range, div.selector {
 	background: rgba(58, 100, 183, 0.5);
 	border: 1px solid #31466f;
 	border-radius: 3px;
@@ -149,6 +149,12 @@ div.range {
 	margin: 0 0 0 -4px;
 	padding: 0;
 	min-width: 5px;
+}
+
+div.selector { 
+	background: none;
+	border: 1px solid rgba(200, 200, 200, 0.2);
+	overflow: visible;
 }
 
 li.range div.range {
@@ -174,12 +180,21 @@ div.timeline code {
 	white-space: nowrap;
 }
 
+div.timeline div.selector code {
+	background: #2a2a28;
+	color: rgba(255, 255, 255, 0.7);
+	box-shadow: 0 0 10px #353533;
+	-webkit-box-shadow: 0 0 8px 3px #353533;
+	-moz-box-shadow: 0 0 10px #353533;
+	display: block;
+}
+
 div.timeline.end code {
 	left: auto;
 	right: 0;
 }
 
-div.range span {
+div.range span, div.selector span.current {
 	border: none;
 	height: 5px;
 	width: 5px !important;
@@ -195,8 +210,8 @@ div.range span {
 	padding: 0 !important;
 }
 
-li div.range span.end {
-/*	display: none;*/
+div.selector span.current {
+	background: #2a2a28 !important;
 }
 
 li.range div.range span.end {
