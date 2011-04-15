@@ -64,15 +64,15 @@
 				var item = $(this),
 					start = item.find('input.start'),
 					end = item.find('input.end'),
-					from = mergeTimes(start.attr('data-timestamp'), range.start),
+					from = mergeTimes(start.attr('data-timestamp'), range.start, mode),
 					to;
 					
 				// Move multiple day range to single day
 				if(mode === 'single') {
-					to = mergeTimes(start.attr('data-timestamp'), range.end);
+					to = mergeTimes(start.attr('data-timestamp'), range.end, mode);
 				}
 				else {
-					to = mergeTimes(end.attr('data-timestamp'), range.end);
+					to = mergeTimes(end.attr('data-timestamp'), range.end, mode);
 				}
 					
 				// Date range
@@ -152,8 +152,8 @@
 				}
 				
 				// Validate
-				else {
-					validate(input, date, true);					
+				else if(date != validated) {
+					validate(input, date, true);			
 				}			
 			});
 						
@@ -222,7 +222,7 @@
 			};
 			
 			// Merge new date with old times
-			var mergeTimes = function(current, update) {
+			var mergeTimes = function(current, update, mode) {
 
 				// Empty date	
 				if(update == null || update == '') {
@@ -236,8 +236,19 @@
 				
 				// Existing date
 				else {
-					var time = new Date(parseInt(update)),
+					var time, date
+					
+					// Set date, keep time
+					if(mode == 'date') {
+						time = new Date(parseInt(current)),
+						date = new Date(parseInt(update));
+					}
+					
+					// Set time, keep date
+					else {
+						time = new Date(parseInt(update)),
 						date = new Date(parseInt(current));
+					}
 						
 					// Set hours and minutes
 					date.setHours(time.getHours());
