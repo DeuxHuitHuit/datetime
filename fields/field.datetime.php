@@ -264,13 +264,20 @@
 		 *  Return an associative array of start and end dates
 		 */		
 		function prepareImportValue($data) {
-			if(!is_array($data)) array($data);
+			if(!is_array($data)) $data = array($data);
+
+			// Reformat array
+			if(!array_key_exists('start', $data)) {
+				$datetime = array();
+				$datetime['start'] = array($data[0]);
+				if($data[1]) {
+					$datetime['end'] = array($data[1]);
+				}
+
+				return $datetime;
+			}
 			
-			// Create start and end dates
-		    return array(
-		        'start' => $data[0],
-		        'end' => (isset($data[1]) ? $data[1] : NULL)
-		    );
+			return $data;
 		}		
 	
 		/**
