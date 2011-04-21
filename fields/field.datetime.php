@@ -151,10 +151,18 @@
 		}
 	
 		/**
+		 * If you need to fetch the pure data this field returns, please use getDefaultPublishContent()
+		 *
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displayPublishPanel
 		 */
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
-	
+		
+			// Houston, we have problem: we've been called out of context!
+			if(!class_exists('Administration')) {
+				$this->getDefaultPublishContent(&$wrapper, $data);
+				return;
+			}
+			
 			// Stage
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js', 101, false);
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css', 'screen', 102, false);
@@ -214,6 +222,28 @@
 			// Append Stage
 			if($stage) {
 				$wrapper->appendChild($stage);
+			}
+		}
+		
+		/**
+		 * Get default publish content
+		 */
+		function getDefaultPublishContent(&$wrapper, $data=NULL) {
+		
+			// Set data container
+			$content = new XMLElement('ul');
+			$wrapper->appendChild($content);
+			
+			// Get dates
+			if(is_array($data)) {
+				if(!is_array($data['start'])) $data['start'] = array($data['start']);
+				if(!is_array($data['end'])) $data['end'] = array($data['end']);
+				
+				// Append dates
+				for($i = 0; $i < count($data['start']); $i++) {
+					$date = new XMLElement('li', $this->prepareTableValue($data));
+					$content->appendChild($date);
+				}
 			}
 		}
 		
