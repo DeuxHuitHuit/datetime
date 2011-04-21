@@ -349,8 +349,8 @@
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildSortingSQL
 		 */
 		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
-			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `dt` ON (`e`.`id` = `dt`.`entry_id`) ";
-			$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`dt`.`start` $order");
+			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
+			$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`start` $order");
 		}
 	
 		/**
