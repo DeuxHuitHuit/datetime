@@ -179,9 +179,9 @@
 		
 			// Get scheme
 			if(empty($scheme)) {
-				$scheme = Symphony::Configuration()->get('date_format', 'region');
+				$scheme = __SYM_DATE_FORMAT__;
 				if($time == 1) {
-					$scheme .= Symphony::Configuration()->get('datetime_separator', 'region') . Symphony::Configuration()->get('time_format', 'region');
+					$scheme = __SYM_DATETIME_FORMAT__;
 				}
 			}
 			
@@ -191,22 +191,21 @@
 			}
 			
 			// Get given time
+			elseif(is_numeric($date)) {
+
+				// Switch between milliseconds and seconds
+				if($date > 9999999999) {
+					$date = $date / 1000;
+				}                    
+				$timestamp = $date;
+			}
 			else {
-				if(is_numeric($date)) {
-					
-					// Switch between milliseconds and seconds
-					if($date > 9999999999) {
-						$date = $date / 1000;
-					}										
-					$timestamp = $date;
-				}
-				else {
-					$timestamp = strtotime(LANG::standardizeDate($date));
-				}
+				$timestamp = $date;
 			}
 
-			// Parse date
-			$parsed = LANG::localizeDate(date($scheme, $timestamp));
+			 // Parse date
+			$parsed = DateTimeObj::format($timestamp, $scheme);
+
 				
 			// Invalid date
 			if($timestamp === false) {
