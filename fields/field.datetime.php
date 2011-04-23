@@ -238,15 +238,15 @@
 					$parsed = Calendar::formatDate($data['start'][$i], true, 'Y-m-d H:i:s');			
 					$result['start'][] = $parsed['date'];
 					
-					// Parse end date
-					if(!empty($data['end'][$i])) {
-						$parsed = Calendar::formatDate($data['end'][$i], true, 'Y-m-d H:i:s');			
+					// Empty end date
+					if(empty($data['end'][$i])) {
 						$result['end'][] = $parsed['date'];
 					}
-					else {
 					
-						// This is hacky: store empty end dates
-						$result['end'][] = 'none';
+					// Specific end date
+					else {
+						$parsed = Calendar::formatDate($data['end'][$i], true, 'Y-m-d H:i:s');			
+						$result['end'][] = $parsed['date'];
 					}
 				}
 			}
@@ -316,7 +316,7 @@
 				$separator = ' &#8211; ';
 
 				// Date range
-				if(!empty($data['end'][$id]) && $data['end'][$id] != 'none') {
+				if($data['end'][$id] != $data['start'][$id]) {
 					$start_day = Calendar::formatDate($data['start'][$id], false, 'D-M-Y');
 					$end_day = Calendar::formatDate($data['end'][$id], false, 'D-M-Y');
 					$end = Calendar::formatDate($data['end'][$id], $this->get('time'));
@@ -433,7 +433,7 @@
 					
 					// Filter by full date range	
 					case self::RANGE:
-						$tmp[] = "(`t$field_id`.start BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "' AND `t$field_id`.end BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "')";
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "') AND (`t$field_id`.end BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "'))";
 						break;				
 				}
 			}
@@ -449,6 +449,7 @@
 		}
 		
 		private function __parseString($string) {
+			$string = trim($string);
 		
 			// Earlier than
 			if(strpos($string, 'earlier than') !== false) {
@@ -637,7 +638,7 @@
 				);
 	
 				// Date range
-				if(!empty($data['end'][$id]) && $data['end'][$id] != 'none') {
+				if($data['end'][$id] != $data['start'][$id]) {
 					$timestamp = strtotime($data['end'][$id]);
 					$parsed = Calendar::formatDate($data['end'][$id], false, 'Y-m-d');
 					$date->appendChild(

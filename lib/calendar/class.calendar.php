@@ -22,7 +22,7 @@
 			$classes = array();
 					
 			// This is hacky: remove empty end dates
-			if($end == 'none') {
+			if($end == $start) {
 				$end = NULL;
 			}
 		
