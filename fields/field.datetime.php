@@ -113,13 +113,6 @@
 		}
 	
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#checkFields
-		 */
-		function checkFields(&$errors, $checkForDuplicates=true) {
-			parent::checkFields($errors, $checkForDuplicates);
-		}
-	
-		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#commit
 		 */
 		function commit() {
@@ -274,9 +267,16 @@
 			// Reformat array
 			if(!array_key_exists('start', $data)) {
 				$datetime = array();
+				
+				// Start date
 				$datetime['start'] = array($data[0]);
+				
+				// End date
 				if($data[1]) {
 					$datetime['end'] = array($data[1]);
+				}
+				else {
+					$datetime['end'] = array($data[0]);
 				}
 
 				return $datetime;
@@ -291,12 +291,12 @@
 		function createTable() {
 			return Symphony::Database()->query(
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-				`id` int(11) unsigned NOT NULL auto_increment,
-				`entry_id` int(11) unsigned NOT NULL,
-				`start` varchar(255) NOT NULL,
-				`end` varchar(255) NULL,
-				PRIMARY KEY (`id`),
-				KEY `entry_id` (`entry_id`)
+				 `id` int(11) unsigned NOT NULL auto_increment,
+				 `entry_id` int(11) unsigned NOT NULL,
+				 `start` datetime NOT NULL,
+				 `end` datetime NOT NULL,
+				 PRIMARY KEY (`id`),
+				 KEY `entry_id` (`entry_id`)
 				);"
 			);
 		}
@@ -361,7 +361,7 @@
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildSortingSQL
 		 */
 		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
-			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
+			$joins .= "LEFT OUTER JOIN `tbl_entries_data_" . $this->get('id') . "` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
 			$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`start` $order");
 		}
 	
@@ -386,6 +386,8 @@
 			else {
 				$mode = self::RANGE;
 			}
+
+		/*-----------------------------------------------------------------------*/
 			
 			// Parse dates
 			$dates = array();
@@ -404,6 +406,20 @@
 			return true;
 		}
 		
+		/**
+		 * Build filter sql.
+		 *
+		 * @param array $dates
+		 *	An array of all date ranges that have been set as filters
+		 * @param string $mode
+		 *	The filtering mode allowing filtering by start date, end date or full date range
+		 * @param string $joins
+		 *	Tables joins
+		 * @param string $where
+		 *	Filter statements
+		 * @param boolean $andOperation
+		 *	Connect filters with 'AND' if true, defaults to false
+		 */
 		private function __buildFilterSQL($dates, $mode, &$joins, &$where, $andOperation = false) {
 			$field_id = $this->get('id');
 	
@@ -443,11 +459,26 @@
 			$where .= " AND (" . implode($connector, $tmp) . ") ";
 		} 
 		
+		/**
+		 * Remove filter mode from the first data source filter.
+		 *
+		 * @param array $data
+		 *	Array with all date and time data source filters
+		 */
 		private function __removeModeFromString(&$data) {
 			$string = explode(':', $data[0], 2);
 			$data[0] = $string[1];
 		}
 		
+		/**
+		 * Parse string and create date range to be used for data source filtering.
+		 *
+		 * @param string $string
+		 *	A filter string
+		 * @return array
+		 *  Returns an array containing the filter range as Datetime objects, 
+		 *	if the given string could be parsed
+		 */
 		private function __parseString($string) {
 			$string = trim($string);
 		
@@ -501,6 +532,14 @@
 			}
 		}
 		
+		/**
+		 * Convert string to Datetime object. Log error, if given date is invalid.
+		 *
+		 * @param string $string
+		 *  String to be converted to Datetime object
+		 * @return Datetime
+		 *	Returns a Datetime object on success or `NULL` on failure
+		 */
 		private function __getDate($string) {
 		
 			// Get date and time object
@@ -520,6 +559,14 @@
 			return $date;
 		}
 		
+		/**
+		 * Get earliest date.
+		 *
+		 * @param string $string
+		 *	Complete date string to represent the first possible date
+		 * @return string
+		 *	Returns date string
+		 */
 		private function __getEarliestDate($string) {
 		
 			// Only year given
@@ -530,6 +577,14 @@
 			return $string;
 		}
 		
+		/**
+		 * Get latest date.
+		 *
+		 * @param string $string
+		 *	Complete date string to represent the latest possible date
+		 * @return string
+		 *	Returns date string
+		 */
 		private function __getLatestDate($string) {
 		
 			// Find date components
@@ -570,26 +625,22 @@
 				if(!is_array($data['end'])) $data['end'] = array($data['end']);
 				
 				// Create calendar
-				foreach($data['start'] as $id => $start) {
-					$start = date('Y-m-01', strtotime($start));
-					if($data['end'][$id] == NULL) $data['end'][$id] = $start;
-					$end = date('Y-m-01', strtotime($data['end'][$id]));
-					$starttime = strtotime($start);
-					$endtime = strtotime($end);
+				for($i = 0; $i < count($data); $i++) {
+					$start = new DateTime($data['start'][$i]);
+					$end = new DateTime($data['end'][$i]);
 					
 					// Find matching months
-					while($starttime <= $endtime) {
-						$year = date('Y', $starttime);
-						$month[1] = date('n', $starttime);
-						$month[2] = date('m', $starttime);
+					while($start->format('Y-m-01') <= $end->format('Y-m-01')) {
+						$year = $start->format('Y');
+						$month = $start->format('n');
 						
 						// Add entry
 						$groups['year'][$year]['attr']['value'] = $year;
-						$groups['year'][$year]['groups']['month'][$month[1]]['attr']['value'] = $month[2];
-						$groups['year'][$year]['groups']['month'][$month[1]]['records'][] = $entry;
+						$groups['year'][$year]['groups']['month'][$month]['attr']['value'] = $start->format('m');
+						$groups['year'][$year]['groups']['month'][$month]['records'][] = $entry;
 						
 						// Jump to next month
-						$starttime = strtotime(date('Y-m-01', $starttime) . ' +1 month');
+						$start->modify('+1 month');
 					}
 				}
 			}
