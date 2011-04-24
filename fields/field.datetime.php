@@ -726,7 +726,7 @@
 		public function getParameterPoolValue($data) {
 			$start = array();
 			foreach($data['start'] as $date) {
-				$start[] = DateTimeObj::get('Y-m-d H:i:s', strtotime($date));
+				$start[] = DateTimeObj::format($date, 'Y-m-d H:i:s');
 			}
 	
 			return implode(',', $start);
