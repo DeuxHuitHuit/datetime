@@ -307,23 +307,28 @@
 		function prepareTableValue($data, XMLElement $link=NULL) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
+			
+			// Get schema
+			if($this->get('time') == 1) {
+				$scheme = __SYM_DATETIME_FORMAT__;
+			}
+			else {
+				$scheme = __SYM_DATE_FORMAT__;
+			}
 	
 			// Parse dates
 			$value = array();
-			foreach($data['start'] as $id => $date) {
-				if(empty($date)) continue;			
-				$start = Calendar::formatDate($data['start'][$id], $this->get('time'));
+			for($i = 0; $i < count($data['start']); $i++) {
+				$start = new DateTime($data['start'][$i]);
 				$separator = ' &#8211; ';
 
 				// Date range
-				if($data['end'][$id] != $data['start'][$id]) {
-					$start_day = Calendar::formatDate($data['start'][$id], false, 'D-M-Y');
-					$end_day = Calendar::formatDate($data['end'][$id], false, 'D-M-Y');
-					$end = Calendar::formatDate($data['end'][$id], $this->get('time'));
+				if($data['end'][$i] != $data['start'][$i]) {
+					$end = new DateTime($data['end'][$i]);
 	
 					// Different start and end days
-					if($start_day['date'] != $end_day['date']) {
-						$value[] = $start['date'] . $separator . $end['date'];
+					if($start->format('D-M-Y') != $end->format('D-M-Y')) {
+						$value[] = LANG::localizeDate($start->format($scheme) . $separator . $end->format($scheme));
 					}
 					
 					// Same day
@@ -337,20 +342,21 @@
 								$separator = '&#8211;';
 							}
 							
-							$end_time = LANG::localizeDate(date(Symphony::Configuration()->get('time_format', 'region'), strtotime($data['end']	[$id])));
-							$value[] = $start['date'] . $separator . $end_time;
+							$value[] = LANG::localizeDate(
+								$start->format($scheme) . $separator . $end->format(Symphony::Configuration()->get('time_format', 'region'))
+							);
 						}
 						
 						// Hide time
 						else {
-							$value[] = $start['date'];
+							$value[] = LANG::localizeDate($start->format($scheme));
 						}
 					}
 				}
 				
 				// Single date
 				else {
-					$value[] = $start['date'];
+					$value[] = LANG::localizeDate($start->format($scheme));
 				}
 			}
 	
@@ -625,7 +631,7 @@
 				if(!is_array($data['end'])) $data['end'] = array($data['end']);
 				
 				// Create calendar
-				for($i = 0; $i < count($data); $i++) {
+				for($i = 0; $i < count($data['start']); $i++) {
 					$start = new DateTime($data['start'][$i]);
 					$end = new DateTime($data['end'][$i]);
 					
