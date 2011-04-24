@@ -33,8 +33,8 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.0beta',
-				'release-date' => NULL,
+				'version' => '2.0beta2',
+				'release-date' => '2011-04-24',
 				'author' => array(
 					'name' => 'Nils Hörrmann',
 					'website' => 'http://nilshoerrmann.de',

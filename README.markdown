@@ -2,21 +2,34 @@
 
 A field for Symphony managing single or multiple dates as well as date ranges.
 
-- Version: 2.0dev
-- Date: **unreleased**
-- Requirements: Symphony CMS 2.2 or newer, <http://github.com/symphony/symphony-2/tree/master>
+- Version: 2.0beta2
+- Date: 24th April 2011
+- Requirements: Symphony CMS 2.2.1 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
 - GitHub Repository: <http://github.com/nilshoerrmann/datetime>
 
-This extension is based on and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/). It uses [dateJS](http://www.datejs.com/) for date calculations.
+## Data Source Filtering
 
-## Change log
+Version 2.0 introduces new filter options in the data source editor:
+
+- prefixing a filter with `start: ` will only filter by start dates,
+- prefixing a filter with `end: ` will only filter by end dates,
+- filters without prefixes will take the whole date range into account.
+
+Filters separated by comma will find all dates that match one of the given dates or ranges.  
+Filters separated by `+` will only find dates that match all of the given dates or ranges.
+
+This extensions supports all relative dates known to [PHP's DateTime class](http://www.php.net/manual/en/datetime.formats.php) in data source filters. It also allow the creation of ranges with `to` or `earlier than` and `later than`.
+
+## Release Notes
 
 **Version 2.0**
 
 - Implemented Stage.
 - Implemented new calendar.
+- Symphony 2.2 compatibility.
+- General code clean-up.
 
 **Version 1.5.1**
 
@@ -47,3 +60,7 @@ This extension is based on and inspired by Scott Hughes' [calendar mock-up](http
 **Version 1.0**
 
 - Initial release.
+
+## Acknowledgement
+
+This extension is based on and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/).
