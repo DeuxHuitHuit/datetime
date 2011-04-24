@@ -33,7 +33,7 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.0dev',
+				'version' => '2.0beta',
 				'release-date' => NULL,
 				'author' => array(
 					'name' => 'Nils Hörrmann',
@@ -86,19 +86,43 @@
 				// Update existing entries
 				$fields = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
 				foreach($fields as $field) {
+				
+					// New database schema
 					$status[] = Symphony::Database()->query(
 						"ALTER TABLE `tbl_entries_data_$field`
-						 MODIFY `start` varchar(255) NOT NULL,
-						 MODIFY `end` varchar(255)"
+						 MODIFY `start` datetime NOT NULL,
+						 MODIFY `end` datetime NOT NULL"
+					);
+					
+					// Don't allow empty end dates
+					$status[] = Symphony::Database()->query(
+						"UPDATE `tbl_entries_data_$field`
+						 SET `end` = `start` 
+						 WHERE `end` = 'none' 
+						 OR `end` = '0000-00-00 00:00'"
 					);
 				}
 
-				// Change fields
+				// Get table columns
+				$columns = Symphony::Database()->fetchCol('Field', "SHOW COLUMNS FROM `tbl_fields_datetime`");
+				
+				// Remove allow multiple setting
+				if(in_array('allow_multiple_dates', $columns)) {
+					$status[] = Symphony::Database()->query(
+						"ALTER TABLE `tbl_fields_datetime` DROP `allow_multiple_dates`"
+					);
+				}
+
+				// Add time setting
+				if(!in_array('time', $columns)) {
+					$status[] = Symphony::Database()->query(
+						"ALTER TABLE `tbl_fields_datetime` ADD `time` tinyint(1) DEFAULT '1'"
+					);
+				}
+				
+				// Modify prepopulation setting
 				$status[] = Symphony::Database()->query(
-					"ALTER TABLE `tbl_fields_datetime`
-					 DROP `allow_multiple_dates`,
-					 MODIFY `prepopulate` tinyint(1) DEFAULT '1',
-					 ADD `time` tinyint(1) DEFAULT '1'"
+					"ALTER TABLE `tbl_fields_datetime` MODIFY `prepopulate` tinyint(1) DEFAULT '1'"
 				);
 
 				// Correctly store old 'no' values
