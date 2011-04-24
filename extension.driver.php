@@ -40,7 +40,7 @@
 					'website' => 'http://nilshoerrmann.de',
 					'email' => 'post@nilshoerrmann.de'
 				),
-				'description'   => 'A field for single dates, multiple dates and date ranges'
+				'description'   => 'A field for single and multiple dates and date ranges'
 			);
 		}
 
