@@ -184,14 +184,14 @@
 					$scheme = __SYM_DATETIME_FORMAT__;
 				}
 			}
-			
+
 			// Get current time
 			if(empty($date)) {
 				$timestamp = time();
 			}
 			
 			// Get given time
-			elseif(is_numeric($date)) {
+			elseif(ctype_digit($date)) {
 
 				// Switch between milliseconds and seconds
 				if($date > 9999999999) {
@@ -203,9 +203,8 @@
 				$timestamp = $date;
 			}
 
-			 // Parse date
-			$parsed = DateTimeObj::format($timestamp, $scheme);
-
+			// Parse date
+			$timestamp = DateTimeObj::format($timestamp, 'U');
 				
 			// Invalid date
 			if($timestamp === false) {
@@ -220,7 +219,7 @@
 			else {
 				$result = array(
 					'status' => 'valid',
-					'date' => $parsed,
+					'date' => date($scheme, $timestamp),
 					'timestamp' => number_format($timestamp * 1000, 0, '', '')
 				);
 			}
