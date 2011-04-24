@@ -662,43 +662,46 @@
 		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
 			$datetime = new XMLElement($this->get('element_name'));
 	
-			// Get timeline
+			// Prepare data
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
+
+			// Get timeline
 			$timeline = $data['start'];
 			sort($timeline);
 	
 			// Generate XML
 			foreach($data['start'] as $id => $date) {
-				if(empty($date)) continue;
 				$date = new XMLElement('date');
 				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
 				
 				// Start date
-				$timestamp = strtotime($data['start'][$id]);
-				$parsed = Calendar::formatDate($data['start'][$id], false, 'Y-m-d');
+				$start = new DateTime($data['start'][$id]);
 				$date->appendChild(
-					$start = new XMLElement('start', $parsed['date'], array(
-							'iso' => DateTimeObj::get('c', $timestamp),
-							'time' => DateTimeObj::get('H:i', $timestamp),
-							'weekday' => DateTimeObj::get('N', $timestamp),
-							'offset' => DateTimeObj::get('O', $timestamp),
-							'status' => $parsed['status']
+					$start = new XMLElement(
+						'start', 
+						$start->format('Y-m-d'), 
+						array(
+							'iso' => $start->format('c'),
+							'time' => $start->format('H:i'),
+							'weekday' => $start->format('N'),
+							'offset' => $start->format('O')
 						)
 					)
 				);
 	
 				// Date range
 				if($data['end'][$id] != $data['start'][$id]) {
-					$timestamp = strtotime($data['end'][$id]);
-					$parsed = Calendar::formatDate($data['end'][$id], false, 'Y-m-d');
+					$end = new DateTime($data['end'][$id]);
 					$date->appendChild(
-						$end = new XMLElement('end', $parsed['date'], array(
-								'iso' => DateTimeObj::get('c', $timestamp),
-								'time' => DateTimeObj::get('H:i', $timestamp),
-								'weekday' => DateTimeObj::get('N', $timestamp),
-								'offset' => DateTimeObj::get('O', $timestamp),
-								'status' => $parsed['status']
+						$end = new XMLElement(
+							'end', 
+							$end->format('Y-m-d'), 
+							array(
+								'iso' => $end->format('c'),
+								'time' => $end->format('H:i'),
+								'weekday' => $end->format('N'),
+								'offset' => $end->format('O')
 							)
 						)
 					);
