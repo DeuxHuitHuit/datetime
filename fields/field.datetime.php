@@ -20,6 +20,7 @@
 		const RANGE = 1;
 		const START = 2;
 		const END = 3;
+		const STRICT = 4;
 	
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
@@ -375,25 +376,6 @@
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildDSRetrivalSQL
 		 */
 		function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
-
-			// Filter by start date
-			if(strpos($data[0], 'start:') === 0) {
-				$this->__removeModeFromString(&$data);
-				$mode = self::START;
-			}
-			
-			// Filter by end date
-			elseif(strpos($data[0], 'end:') === 0) {
-				$this->__removeModeFromString(&$data);
-				$mode = self::END;
-			}
-			
-			// Filter by full range
-			else {
-				$mode = self::RANGE;
-			}
-
-		/*-----------------------------------------------------------------------*/
 			
 			// Parse dates
 			$dates = array();
@@ -441,21 +423,25 @@
 			foreach($dates as $range) {
 			
 				// Filter mode
-				switch($mode) {
+				switch($range['mode']) {
 				
 					// Filter by start date
 					case self::START:
-						$tmp[] = "(`t$field_id`.start BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "')";
+						$tmp[] = "(`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "')";
 						break;
 					
 					// Filter by end date
 					case self::END:
-						$tmp[] = "(`t$field_id`.end BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "')";
+						$tmp[] = "(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "')";
 						break;
 					
 					// Filter by full date range	
+					case self::STRICT:
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') AND (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+					
+					// Filter by full date range	
 					case self::RANGE:
-						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "') AND (`t$field_id`.end BETWEEN '" . $range[0]->format('Y-m-d H:i:s') . "' AND '" . $range[1]->format('Y-m-d H:i:s') . "'))";
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
 						break;				
 				}
 			}
@@ -487,54 +473,72 @@
 		 */
 		private function __parseString($string) {
 			$string = trim($string);
+
+			// Filter by start date
+			if(strpos($string, 'start:') === 0) {
+				$this->__removeModeFromString(&$string);
+				$mode = self::START;
+			}
+			
+			// Filter by end date
+			elseif(strpos($string, 'end:') === 0) {
+				$this->__removeModeFromString(&$string);
+				$mode = self::END;
+			}
+			
+			// Filter by full range (strict)
+			elseif(strpos($string, 'strict:') === 0) {
+				$this->__removeModeFromString(&$string);
+				$mode = self::STRICT;
+			}
+			
+			// Filter by full range
+			else {
+				$mode = self::RANGE;
+			}
+
+		/*-----------------------------------------------------------------------*/
 		
 			// Earlier than
 			if(strpos($string, 'earlier than') !== false) {
 				$string = substr($string, 13);
-				$range = array(
-					$this->__getDate('1970-01-01'),
-					$this->__getDate($this->__getEarliestDate($string))
-				);
-			
+				$start = $this->__getDate('1970-01-01');
+				$end = $this->__getDate($this->__getEarliestDate($string));
 			}
 			
 			// Later than
 			elseif(strpos($string, 'later than') !== false) {
 				$string = substr($string, 11);
-				$range = array(
-					$this->__getDate($this->__getLatestDate($string)),
-					$this->__getDate('2038-01-01')
-				);
+				$start = $this->__getDate($this->__getLatestDate($string));
+				$end = $this->__getDate('2038-01-01');
 			}
 			
 			// Today
 			elseif($string == 'today') {
-				$range = array(
-					$this->__getDate('today 00:00'), 
-					$this->__getDate('today 23:59')
-				);
+				$start = $this->__getDate('today 00:00');
+				$end = $this->__getDate('today 23:59');
 			}
 			
 			// In range
 			elseif(strpos($string, ' to ') !== false) {
 				$dates = explode(' to ', $string);
-				$range = array(
-					$this->__getDate($this->__getEarliestDate($dates[0])), 
-					$this->__getDate($this->__getLatestDate($dates[1]))
-				);
+				$start = $this->__getDate($this->__getEarliestDate($dates[0]));
+				$end = $this->__getDate($this->__getLatestDate($dates[1]));
 			}
 			
 			// Single date
 			else {
-				$range = array(
-					$this->__getDate($this->__getEarliestDate($string)),
-					$this->__getDate($this->__getLatestDate($string))
-				);
+				$start = $this->__getDate($this->__getEarliestDate($string));
+				$end = $this->__getDate($this->__getLatestDate($string));
 			}
 			
 			// Return valid date ranges
-			if($range[0] !== NULL && $range[1] !== NULL) {
-				return $range;		
+			if($start !== NULL && $end !== NULL) {
+				return array(
+					'start' => $start,
+					'end' => $end,
+					'mode' => $mode
+				);		
 			}
 		}
 		

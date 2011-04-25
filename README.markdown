@@ -13,9 +13,10 @@ A field for Symphony managing single or multiple dates as well as date ranges.
 
 Version 2.0 introduces new filter options in the data source editor:
 
-- prefixing a filter with `start: ` will only filter by start dates,
-- prefixing a filter with `end: ` will only filter by end dates,
-- filters without prefixes will take the whole date range into account.
+- prefixing a filter with `start: ` will only check start dates,
+- prefixing a filter with `end: ` will only check end dates,
+- prefixing a filter with `strict: ` will check, if start **and** end date inside the given range,
+- filters without prefixes will check, if start **or** end date are inside the given range.
 
 Filters separated by comma will find all dates that match one of the given dates or ranges.  
 Filters separated by `+` will only find dates that match all of the given dates or ranges.
