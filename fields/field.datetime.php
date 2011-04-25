@@ -482,7 +482,7 @@
 			}
 			
 			// Remove unsupported regular expressions prefixes in order to support Publish Filtering
-			elseif(strpos($string, 'regex:') === 0) {
+			elseif(strpos($string, 'regexp:') === 0) {
 				$this->__removeModeFromString(&$string);
 				$mode = self::RANGE;
 			}
