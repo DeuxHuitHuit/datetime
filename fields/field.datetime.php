@@ -452,17 +452,6 @@
 		} 
 		
 		/**
-		 * Remove filter mode from the first data source filter.
-		 *
-		 * @param array $data
-		 *	Array with all date and time data source filters
-		 */
-		private function __removeModeFromString(&$data) {
-			$string = explode(':', $data[0], 2);
-			$data[0] = $string[1];
-		}
-		
-		/**
 		 * Parse string and create date range to be used for data source filtering.
 		 *
 		 * @param string $string
@@ -490,6 +479,12 @@
 			elseif(strpos($string, 'strict:') === 0) {
 				$this->__removeModeFromString(&$string);
 				$mode = self::STRICT;
+			}
+			
+			// Remove unsupported regular expressions prefixes in order to support Publish Filtering
+			elseif(strpos($string, 'regex:') === 0) {
+				$this->__removeModeFromString(&$string);
+				$mode = self::RANGE;
 			}
 			
 			// Filter by full range
@@ -540,6 +535,17 @@
 					'mode' => $mode
 				);		
 			}
+		}
+		
+		/**
+		 * Remove filter mode from the first data source filter.
+		 *
+		 * @param string $string
+		 *	Current data source filter
+		 */
+		private function __removeModeFromString(&$string) {
+			$filter = explode(':', $string, 2);
+			$string = $filter[1];
 		}
 		
 		/**
