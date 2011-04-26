@@ -29,6 +29,7 @@
 			parent::__construct($parent);
 			$this->_name = __('Date/Time');
 			$this->_required = true;
+			$this->set('location', 'sidebar');
 		}
 	
 		/**
