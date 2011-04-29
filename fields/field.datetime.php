@@ -558,7 +558,7 @@
 		 *	Returns a Datetime object on success or `NULL` on failure
 		 */
 		private function __getDate($string) {
-		
+
 			// Get date and time object
 			try {
 				$date = new DateTime(Lang::standardizeDate($string));
@@ -607,9 +607,13 @@
 			// Find date components
 			preg_match('/^(\d{4})[-\/]?(\d{1,2})?[-\/]?(\d{1,2})?\s?(\d{1,2}:\d{2})?$/i', trim($string), $matches);
 		
+			if(empty($matches)) {
+				return $string;
+			}
+
 			// No month, day or time given
-			if(!isset($matches[2])) {
-				return 'last day of december' . $string . ' 23:59';
+			else if(!isset($matches[2])) {
+				return 'last day of december ' . $string . ' 23:59';
 			}
 			
 			// No day or time give
@@ -621,7 +625,7 @@
 			elseif(!isset($matches[4])) {
 				return $string . ' 23:59';
 			}
-						
+			
 			// Time given
 			else {
 				return $string;
