@@ -51,11 +51,11 @@
 		
 				// Visualise
 				if(!dates.is('.invalid')) {
-					calendar.slideDown('fast');		
 					item.trigger('visualise', [{
 						start: start,
 						end: end
 					}, date]);
+					calendar.slideDown('fast');		
 				}
 			});
 			
