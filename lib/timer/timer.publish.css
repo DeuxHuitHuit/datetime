@@ -163,6 +163,8 @@ li.range div.range {
 }
 
 div.timeline.end div.range {
+	margin-right: -1px;
+	padding-right: 1px;
 	left: -3px;	
 }
 
@@ -189,7 +191,7 @@ div.timeline div.selector code {
 	display: block;
 }
 
-div.timeline.end code {
+div.timeline.end code, div.timeline.end div.selector code {
 	left: auto;
 	right: 0;
 }
