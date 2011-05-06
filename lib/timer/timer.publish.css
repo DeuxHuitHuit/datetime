@@ -13,10 +13,10 @@ div.timer {
 
 div.timeline {
 	position: relative;
-	margin: 42px 0 3px;
-	padding: 0;
+	margin: 39px 0 0;
+	padding: 3px 0;
 	width: 100%;
-	border-bottom: 1px solid #424140;
+	background: url(images/timeline.gif) 0 3px repeat-x;
 }
 
 div.timeline.end {
@@ -37,7 +37,7 @@ div.timeline span {
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	top: -3px;
+	top: 0;
 	cursor: pointer !important;
 }
 
@@ -143,7 +143,7 @@ div.range, div.selector {
 	display: block;
 	width: 5px;
 	position: absolute;
-	top: -3px;
+	top: 0;
 	left: 0;
 	cursor: pointer !important;
 	margin: 0 0 0 -4px;
