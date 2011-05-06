@@ -219,7 +219,7 @@
 			else {
 				$result = array(
 					'status' => 'valid',
-					'date' => date($scheme, $timestamp),
+					'date' => DateTimeObj::format($timestamp, $scheme, true),
 					'timestamp' => number_format($timestamp * 1000, 0, '', '')
 				);
 			}
