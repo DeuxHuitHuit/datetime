@@ -90,10 +90,15 @@
 			if(!$this->get('id') && $errors == NULL) {
 				$this->set('prepopulate', 1);
 				$this->set('time', 1);
+				$this->set('range', 1);
 			}
 			
 			// Time
 			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][time]" value="yes" type="checkbox"' . ($this->get('time') == 0 ? '' : ' checked="checked"') . '/> ' . __('Allow time editing') . ' <i>' . __('This will display date and time in the interface') . '</i>');
+			$group[0]->appendChild($setting);
+			
+			// Ranges
+			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][range]" value="yes" type="checkbox"' . ($this->get('range') == 0 ? '' : ' checked="checked"') . '/> ' . __('Allow date ranges') . ' <i>' . __('This will enable range editing') . '</i>');
 			$group[0]->appendChild($setting);
 			
 			// Prepopulate
@@ -128,6 +133,7 @@
 			$fields = array();
 			$fields['field_id'] = $id;
 			$fields['time'] = ($this->get('time') ? 1 : 0);
+			$fields['range'] = ($this->get('range') ? 1 : 0);
 			$fields['prepopulate'] = ($this->get('prepopulate') ? 1 : 0);
 	
 			// Save new stage settings for this field
@@ -171,9 +177,15 @@
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/timer/timer.publish.css', 'screen', 107, false);
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/timer/timer.publish.js', 108, false);
 	
+			// Help
+			$help = '';
+			if($this->get('range') == 1) {
+				$help = '<i>' . __('Range: <code>shift</code> + click') . '</i>';
+			}
+	
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
-			$label = new XMLElement('label', $this->get('label') . '<i>' . __('Range: <code>shift</code> + click') . '</i>');
+			$label = new XMLElement('label', $this->get('label') . $help);
 			$wrapper->appendChild($label);
 			
 			// Get settings
@@ -187,6 +199,9 @@
 			}
 			if($this->get('prepopulate') == 1) {
 				$settings[] = 'prepopulate';
+			}
+			if($this->get('range') == 0) {
+				$settings[] = 'simple';
 			}
 						 
 			// Existing dates

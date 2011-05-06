@@ -57,6 +57,7 @@
 					`field_id` int(11) unsigned NOT NULL,
 					`prepopulate` tinyint(1) DEFAULT '1',
 					`time` tinyint(1) DEFAULT '1',
+					`range` tinyint(1) DEFAULT '1',
         	  		PRIMARY KEY  (`id`),
 			  		KEY `field_id` (`field_id`)
 				)"
@@ -117,6 +118,13 @@
 				if(!in_array('time', $columns)) {
 					$status[] = Symphony::Database()->query(
 						"ALTER TABLE `tbl_fields_datetime` ADD `time` tinyint(1) DEFAULT '1'"
+					);
+				}
+
+				// Add range setting
+				if(!in_array('range', $columns)) {
+					$status[] = Symphony::Database()->query(
+						"ALTER TABLE `tbl_fields_datetime` ADD `range` tinyint(1) DEFAULT '1'"
 					);
 				}
 				
