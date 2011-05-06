@@ -42,8 +42,8 @@
 		'This will automatically add the current date to new entries' => 
 		'Dies fügt neuen Einträgen automatisch das heutige Datum hinzu',
 
-		'Hold <code>shift</code> and click to add a date range' => 
-		'Zum Auswählen einer Zeitspanne <code>Shift</code> drücken und klicken',
+		'Range: <code>shift</code> + click' => 
+		'Zeitraum: <code>shift</code> + Klick',
 
 		'Allow creation of new items' => 
 		'Erstellen von Einträgen zulassen',
