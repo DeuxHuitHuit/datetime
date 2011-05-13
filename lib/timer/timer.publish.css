@@ -1,0 +1,254 @@
+/**
+ * Timer for Symphony CMS
+ *
+ * @author: Nils Hörrmann, post@nilshoerrmann.de
+ * @source: http://github.com/nilshoerrmann/timer
+ */
+ 
+div.timer {
+	overflow: hidden;
+	margin: 0 -4px;
+	padding: 0 4px;
+}
+
+div.timeline {
+	position: relative;
+	margin: 39px 0 0;
+	padding: 3px 0;
+	width: 100%;
+	background: url(images/timeline.gif) 0 3px repeat-x;
+}
+
+div.timeline.end {
+	display: none;
+}
+
+div.timeline.end span.start {
+	display: none;
+}
+
+div.timeline span {
+	color: transparent;
+	border: none;
+	border-left: 1px solid #42413f;
+	height: 7px;
+	width: 5px !important;
+	background: none !important;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	cursor: pointer !important;
+}
+
+div.timeline span.hour1 {
+	left: 4.17%;
+}
+
+div.timeline span.hour2 {
+	left: 8.33%;
+}
+
+div.timeline span.hour3 {
+	left: 12.5%;
+}
+
+div.timeline span.hour4 {
+	left: 16.67%;
+}
+
+div.timeline span.hour5 {
+	left: 20.83%;
+}
+
+div.timeline span.hour6 {
+	left: 25%;
+}
+
+div.timeline span.hour7 {
+	left: 29.17%;
+}
+
+div.timeline span.hour8 {
+	left: 33.33%;
+}
+
+div.timeline span.hour9 {
+	left: 37.5%;
+}
+
+div.timeline span.hour10 {
+	left: 41.67%;
+}
+
+div.timeline span.hour11 {
+	left: 45.83%;
+}
+
+div.timeline span.hour12 {
+	left: 50%;
+}
+
+div.timeline span.hour13 {
+	left: 54.17%;
+}
+
+div.timeline span.hour14 {
+	left: 58.33%;
+}
+
+div.timeline span.hour15 {
+	left: 62.5%;
+}
+
+div.timeline span.hour16 {
+	left: 66.67%;
+}
+
+div.timeline span.hour17 {
+	left: 70.83%;
+}
+
+div.timeline span.hour18 {
+	left: 75%;
+}
+
+div.timeline span.hour19 {
+	left: 79.17%;
+}
+
+div.timeline span.hour20 {
+	left: 83.33%;
+}
+
+div.timeline span.hour21 {
+	left: 87.5%;
+}
+
+div.timeline span.hour22 {
+	left: 91.67%;
+}
+
+div.timeline span.hour23 {
+	left: 95.83%;
+}
+
+div.range, div.selector {
+	background: rgba(58, 100, 183, 0.5);
+	border: 1px solid #31466f;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	height: 5px;
+	display: block;
+	width: 5px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: pointer !important;
+	margin: 0 0 0 -4px;
+	padding: 0;
+	min-width: 5px;
+}
+
+div.selector { 
+	background: none;
+	border: 1px solid rgba(200, 200, 200, 0.2);
+	overflow: visible;
+}
+
+li.range div.range {
+	margin: 0 -4px;
+	padding: 0 4px;
+}
+
+div.timeline.end div.range {
+	margin-right: -1px;
+	padding-right: 1px;
+	left: -3px;	
+}
+
+div.timeline code {
+	position: absolute;
+	left: 0;
+	top: -23px;
+	background: #56554D;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	padding: 1px 3px;
+	color: #e4e4e4;
+	font-size: 1em;
+	white-space: nowrap;
+}
+
+div.timeline div.selector code {
+	background: #2a2a28;
+	color: rgba(255, 255, 255, 0.7);
+	box-shadow: 0 0 10px #353533;
+	-webkit-box-shadow: 0 0 8px 3px #353533;
+	-moz-box-shadow: 0 0 10px #353533;
+	display: block;
+}
+
+div.timeline.end code, div.timeline.end div.selector code {
+	left: auto;
+	right: 0;
+}
+
+div.range span, div.selector span.current {
+	border: none;
+	height: 5px;
+	width: 5px !important;
+	background: #c0c0c0 !important;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	z-index: 2000;
+	padding: 0 !important;
+}
+
+div.selector span.current {
+	background: #2a2a28 !important;
+}
+
+li.range div.range span.end {
+	display: block;
+	left: auto;
+	right: 0;
+}
+
+div.range span.active {
+	width: 100% !important;
+	display: block;
+	border: 1px solid transparent;
+	border-bottom: 1px solid #657596;
+	border-radius: none;
+	background: none !important;
+	position: absolute;
+	top: 1px;
+	left: 0;
+	margin: 0;
+	height: 0;
+	z-index: 1000;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+@media screen and (min-width: 1000px) {
+
+	fieldset.primary div.timer {
+		display: block;
+		margin: -18px -1px 0 316px;
+	}
+	
+	fieldset.primary div.timeline {
+		padding: 0 5px 0 0;
+	}
+
+}

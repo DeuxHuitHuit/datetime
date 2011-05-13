@@ -5,195 +5,56 @@
 		'author' => array(
 			'name' => 'Nils Hörrmann',
 			'email' => 'post@nilshoerrmann.de',
+			'website' => 'http://nilshoerrmann.de'
 		),
-		'release-date' => '2009-09-30',
+		'release-date' => '2011-04-25'
 	);
-	
-	/*
-	 * EXTENSION: Field: Date and Time
-	 * Localisation strings
-	 */
 
+	/**
+	 * Date and Time
+	 */
 	$dictionary = array(
-	
+
 		'Date/Time' => 
 		'Datum/Uhrzeit',
 
-		'Date format' => 
-		'Datumsformat',
+		'Please make sure that the Stage submodule is initialised and available at %s.' => 
+		'Bitte überprüfen Sie, ob das Submodul Stage initialisiert wurde und unter %s zur Verfügung steht.',
 
-		'Use comma to separate date and time' => 
-		'Trennen Sie Datum und Uhrzeit mittels Komma',
+		'It\'s available at %s.' => 
+		'Es wird unter %s zur Verfügung gestellt. ',
 
-		'%s Allow multiple dates' => 
-		'%s Mehrere Datumsangaben zulassen',
+		'Stage not found' => 
+		'Stage konnte nicht gefunden werden',
 
-		'Press <code>alt</code> to add a range' => 
-		'Drücken Sie <code>alt</code>, um eine Zeitspanne anzulegen',
+		'Behaviour' => 
+		'Verhalten',
 
-		'date' => 
-		'Datum',
+		'Allow time editing' => 
+		'Zeitbearbeitung erlauben',
 
-		'from' => 
-		'von',
+		'This will display date and time in the interface' => 
+		'Hierdurch werden sowohl Datum als auch Uhrzeit angezeigt',
 
-		'start' => 
-		'Anfang',
+		'Pre-populate this field with today\'s date' => 
+		'Mit heutigem Datum vorausfüllen',
 
-		'end' => 
-		'Ende',
+		'This will automatically add the current date to new entries' => 
+		'Dies fügt neuen Einträgen automatisch das heutige Datum hinzu',
 
-		'to' => 
-		'bis',
-		
-		'Add new date' =>
-		'Neues Datum hinzufügen',
-		
-		'yesterday' => 
-		'gestern', 
-		
-		'today' => 
-		'heute', 
-		
-		'tomorrow' => 
-		'morgen', 
-		
-		'now' => 
-		'jetzt',
-		
-		'Sunday' => 
-		'Sonntag', 
-		
-		'Monday' => 
-		'Montag', 
-		
-		'Tuesday' => 
-		'Dienstag', 
-		
-		'Wednesday' => 
-		'Mittwoch', 
-		
-		'Thursday' => 
-		'Donnerstag', 
-		
-		'Friday' => 
-		'Freitag', 
-		
-		'Saturday' => 
-		'Samstag',
-		
-		'Sun' => 
-		'So', 
-		
-		'Mon' => 
-		'Mo', 
-		
-		'Tue' => 
-		'Di', 
-		
-		'Wed' => 
-		'Mi', 
-		
-		'Thu' => 
-		'Do', 
-		
-		'Fri' => 
-		'Fr', 
-		
-		'Sat' => 
-		'Sa',
-		
-		'Su' => 
-		'So', 
-		
-		'Mo' => 
-		'Mo', 
-		
-		'Tu' => 
-		'Di', 
-		
-		'We' => 
-		'Mi', 
-		
-		'Th' => 
-		'Do', 
-		
-		'Fr' => 
-		'Fr',
-		
-		'Sa' => 
-		'Sa',
-		
-		'January' => 
-		'Januar', 
-		
-		'February' => 
-		'Februar', 
-		
-		'March' => 
-		'März', 
-		
-		'April' => 
-		'April', 
-		
-		'May' => 
-		'Mai', 
-		
-		'June' => 
-		'Juni', 
-		
-		'July' => 
-		'Juli', 
-		
-		'August' => 
-		'August', 
-		
-		'September' => 
-		'September', 
-		
-		'October' => 
-		'Oktober', 
-		
-		'November' => 
-		'November', 
-		
-		'December' => 
-		'Dezember',
-		
-		'Jan' => 
-		'Jan', 
-		
-		'Feb' => 
-		'Feb', 
-		
-		'Mar' => 
-		'Mrz', 
-		
-		'Apr' => 
-		'Apr', 
-		
-		'May' => 
-		'Mai', 
-		
-		'Jun' => 
-		'Jun', 
-		
-		'Jul' => 
-		'Jul', 
-		
-		'Aug' => 
-		'Aug', 
-		
-		'Sep' => 
-		'Sep', 
-		
-		'Oct' => 
-		'Okt', 
-		
-		'Nov' => 
-		'Nov', 
-		
-		'Dec' => 
-		'Dez'
+		'Range: <code>shift</code> + click' => 
+		'Zeitraum: <code>shift</code> + Klick',
+
+		'Allow creation of new items' => 
+		'Erstellen von Einträgen zulassen',
+
+		'This will add a <code>Create New</code> button to the interface' => 
+		'Dies fügt einen <code>Neu-erstellen</code>-Knopf hinzu',
+
+		'Allow sorting of items' => 
+		'Sortieren von Einträgen erlauben.',
+
+		'This will enable item dragging and reordering' => 
+		'Dies ermöglicht das Verschieben und Neuordnen von Einträgen'
 
 	);

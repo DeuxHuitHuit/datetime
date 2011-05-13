@@ -1,0 +1,191 @@
+/**
+ * Calendar for Symphony CMS
+ *
+ * @author: Nils Hörrmann, post@nilshoerrmann.de
+ * @source: http://github.com/nilshoerrmann/calendar
+ */
+ 
+div.calendar {
+	background: #353533;
+	border-top: none;
+	min-width: 23em;
+	margin: 0 -1px;
+	padding: 18px 38px 42px 18px;
+	z-index: 2000;
+	position: relative;
+	display: none;
+}
+
+div.calendar div.date {
+	width: 100%;
+	min-width: 250px;
+	padding: 0;
+	position: relative;
+}
+
+div.calendar div.date strong {
+	padding: 0 0 7px;
+	width: 100%;
+	display: block;
+	font-size: 109.09%;
+	font-weight: normal;
+	position: relative;
+}
+
+div.calendar div.date span {
+	display: inline;
+	width: auto;
+	color: #e4e4e4;
+	padding: 0;
+	background: none !important;
+	cursor: pointer !important;
+	font-size: 109.09%;
+}
+
+div.calendar div.date span.nav {
+	
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 21px;
+	width: 43px;
+	padding: 0;
+}
+
+div.calendar div.date span.nav a {
+	border: 1px solid #535351;
+	border-radius: 10px 0 0 10px;
+	-webkit-border-radius: 10px 0 0 10px;
+	-moz-border-radius: 10px 0 0 10px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: block;
+	width: 20px;
+	height: 17px;
+	padding: 0;
+	margin: 0;
+	text-indent: -1000em;
+	overflow: hidden;
+	background: url(images/previous.png) 6px center no-repeat;
+}
+
+div.calendar div.date span.nav a.next {
+	background: url(images/next.png) 3px center no-repeat;
+	border-left: none;
+	left: 22px;
+	border-radius: 0 10px 10px 0;
+	-webkit-border-radius: 0 10px 10px 0;
+	-moz-border-radius: 0 10px 10px 0;
+}
+
+
+div.calendar div.date span.nav a:hover {
+	background-color: #1f1f1e;
+}
+
+div.calendar table {
+	background: #323230;
+	border-collapse: collapse;
+	clear: both;
+}
+
+div.calendar thead tr {
+	background: #353533;
+	border-top: 1px solid #535351;
+}
+
+div.calendar thead td, div.calendar thead td:nth-last-child(odd) {
+	background: #353533;
+	border: none;
+	height: 30px;
+	color: #616057;
+}
+
+div.calendar thead td:hover {
+	background: none;
+	border: none;
+	color: #fff;
+	cursor: auto;
+}
+
+div.calendar td {
+	background: #323230;
+	border: 1px solid #41403f;
+	border-style-bottom: none;
+	color: #fff;
+	cursor: pointer;
+	height: 30px;
+	text-align: center;
+	vertical-align: middle;
+	padding: 0;
+	width: 35px;
+}
+
+div.calendar td.last,div.calendar td.next {
+	color: #686865;
+}
+
+div.calendar td:nth-last-child(odd) {
+	background: #383836;
+}
+
+div.calendar td.today {
+	background: rgba(200, 200, 200, 0.2);
+}
+
+div.calendar td.selected {
+	background: #5273c0;
+	color: #fff;
+	border: 1px solid rgba(200, 200, 200, 0.1);
+}
+
+div.calendar td.selected:nth-last-child(odd) {
+	background: #5677c3;
+}
+
+div.calendar td.last.selected, div.calendar td.next.selected {
+	background: #475466;
+	border: 1px solid rgba(200, 200, 200, 0.1);
+}
+
+div.calendar td.last.selected:nth-last-child(odd), div.calendar td.next.selected:nth-last-child(odd) {
+	background: #505f73;
+}
+
+div.calendar td.selected.today {
+	background: #7499d2;
+	border: 1px solid rgba(200, 200, 200, 0.1);
+}
+
+div.calendar td:hover {
+	background: #ffb !important;
+	border: 1px solid #fff;
+	color: #9d854c;
+}
+
+div.calendar thead td:hover {
+	background: none !important;
+	border: inherit;
+	color: #fff;
+}
+
+@media screen and (min-width: 1000px) {
+
+	fieldset.primary div.calendar {
+		height: 244px;
+	}
+	
+	fieldset.primary div.calendar div.date {
+		width: 300px;
+		position: absolute;
+		top: 16px;
+		left: 16px;
+	}
+	
+	fieldset.primary div.calendar {
+		overflow: auto;
+	}
+
+}

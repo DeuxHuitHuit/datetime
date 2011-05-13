@@ -2,22 +2,35 @@
 
 A field for Symphony managing single or multiple dates as well as date ranges.
 
-- Version: 1.5.1
-- Date: 22th November 2010
-- Requirements: Symphony CMS 2.0.6 or newer, <http://github.com/symphony/symphony-2/tree/master>
+- Version: 2.0RC2
+- Date: 6th May 2011
+- Requirements: Symphony CMS 2.2.1 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
 - GitHub Repository: <http://github.com/nilshoerrmann/datetime>
 
-This extension is based on and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/). It uses [dateJS](http://www.datejs.com/) for date calculations.
+## Data Source Filtering
 
-## Please note
+Version 2.0 introduces new filter options in the data source editor:
 
-Using this extension in conjunction with the **Localisation Manager** and setting the language of an author to something else but system standard **may break the Date and Time field**. For some reasons yet to be fully understood the calendar will show all dates as 01 January 1970. _Changing the author’s language back to system standard will fix this issue._
+- prefixing a filter with `start:` will only check start dates,
+- prefixing a filter with `end:` will only check end dates,
+- prefixing a filter with `strict:` will check, if start **and** end date are in the given filter range,
+- filters without prefixes will check, if start **or** end date are in the given filter range.
 
-This extension is currently not fully compatible with Localisation Manager. If you like to add new translations please copy one of the existing translation files.
+Filters separated by comma will find all dates that match one of the given dates or ranges.  
+Filters separated by `+` will only find dates that match all of the given dates or ranges.
 
-## Change log
+This extensions accepts all relative dates known to [PHP's DateTime class](http://www.php.net/manual/en/datetime.formats.php) for filtering. It also allows the creation of filter ranges with `to` or `earlier than` and `later than`.
+
+## Release Notes
+
+**Version 2.0**
+
+- Implemented Stage.
+- Implemented new calendar.
+- Symphony 2.2 compatibility.
+- General code clean-up.
 
 **Version 1.5.1**
 
@@ -48,3 +61,7 @@ This extension is currently not fully compatible with Localisation Manager. If y
 **Version 1.0**
 
 - Initial release.
+
+## Acknowledgement
+
+This extension is based on and inspired by Scott Hughes' [calendar mock-up](http://symphony-cms.com/community/discussions/103/) and Rowan Lewis' [calendar overlay](http://github.com/rowan-lewis/calendaroverlay/).
