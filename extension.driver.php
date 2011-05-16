@@ -13,7 +13,7 @@
 		 */
 		public function __construct(Array $args){
 			parent::__construct($args);
-			
+
 			// Include Stage
 			if(!class_exists('Stage')) {
 				try {
@@ -22,7 +22,7 @@
 					}
 				}
 				catch(Exception $e) {
-				    throw new SymphonyErrorPage(__('Please make sure that the Stage submodule is initialised and available at %s.', array('<code>' . EXTENSIONS . '/subsectionmanager/lib/stage/</code>')) . '<br/><br/>' . __('It\'s available at %s.', array('<a href="https://github.com/nilshoerrmann/stage">github.com/nilshoerrmann/stage</a>')), __('Stage not found'));
+				    throw new SymphonyErrorPage(__('Please make sure that the Stage submodule is initialised and available at %s.', array('<code>' . EXTENSIONS . '/datetime/lib/stage/</code>')) . '<br/><br/>' . __('It\'s available at %s.', array('<a href="https://github.com/nilshoerrmann/stage">github.com/nilshoerrmann/stage</a>')), __('Stage not found'));
 				}
 			}
 		}
@@ -87,26 +87,26 @@
 				// Update existing entries
 				$fields = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
 				foreach($fields as $field) {
-				
+
 					// New database schema
 					$status[] = Symphony::Database()->query(
 						"ALTER TABLE `tbl_entries_data_$field`
 						 MODIFY `start` datetime NOT NULL,
 						 MODIFY `end` datetime NOT NULL"
 					);
-					
+
 					// Don't allow empty end dates
 					$status[] = Symphony::Database()->query(
 						"UPDATE `tbl_entries_data_$field`
-						 SET `end` = `start` 
-						 WHERE `end` = 'none' 
+						 SET `end` = `start`
+						 WHERE `end` = 'none'
 						 OR `end` = '0000-00-00 00:00'"
 					);
 				}
 
 				// Get table columns
 				$columns = Symphony::Database()->fetchCol('Field', "SHOW COLUMNS FROM `tbl_fields_datetime`");
-				
+
 				// Remove allow multiple setting
 				if(in_array('allow_multiple_dates', $columns)) {
 					$status[] = Symphony::Database()->query(
@@ -127,7 +127,7 @@
 						"ALTER TABLE `tbl_fields_datetime` ADD `range` tinyint(1) DEFAULT '1'"
 					);
 				}
-				
+
 				// Modify prepopulation setting
 				$status[] = Symphony::Database()->query(
 					"ALTER TABLE `tbl_fields_datetime` MODIFY `prepopulate` tinyint(1) DEFAULT '1'"
