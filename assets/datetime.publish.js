@@ -183,7 +183,8 @@
 						dataType: 'json',
 						url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
 						data: { 
-							date: date
+							date: date,
+							time: calendar.has('.timeline')
 						},
 						success: function(parsed) {
 						
