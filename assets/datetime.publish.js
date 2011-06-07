@@ -175,7 +175,7 @@
 				var item = input.parents('li'),
 					dates = input.parent(),
 					calendar = item.find('div.calendar');
-			
+				
 				// Call validator
 				if(input.attr('data-timestamp') != date) {
 					$.ajax({
@@ -184,7 +184,7 @@
 						url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
 						data: { 
 							date: date,
-							time: calendar.has('.timeline')
+							time: Math.min(calendar.find('.timeline').size(), 1)
 						},
 						success: function(parsed) {
 						
