@@ -380,10 +380,10 @@
 			// Link?
 			if($link) {
 				$href = $link->getAttribute('href');
-				return '<a href="' . $href . '">' . implode($value, '<br />') . '</a>';
+				return '<a href="' . $href . '">' . implode($value, ', <br />') . '</a>';
 			}
 			else {
-				return implode($value, '<br />');
+				return implode($value, ', <br />');
 			}
 		}
 	
