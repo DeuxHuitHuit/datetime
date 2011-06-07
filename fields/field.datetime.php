@@ -325,6 +325,17 @@
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 			
+			// Handle empty dates
+			if(empty($data['start'][0])) {
+				if($link) {
+					$href = $link->getAttribute('href');
+					return '<a href="' . $href . '">' . __('No Date') . '</a>';
+				}
+				else {
+					return __('No Date');
+				}
+			}
+			
 			// Get schema
 			if($this->get('time') == 1) {
 				$scheme = __SYM_DATETIME_FORMAT__;
