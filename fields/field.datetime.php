@@ -377,7 +377,14 @@
 				}
 			}
 	
-			return implode($value, '<br />');
+			// Link?
+			if($link) {
+				$href = $link->getAttribute('href');
+				return '<a href="' . $href . '">' . implode($value, '<br />') . '</a>';
+			}
+			else {
+				return implode($value, '<br />');
+			}
 		}
 	
 		/**
