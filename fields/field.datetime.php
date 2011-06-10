@@ -500,25 +500,25 @@
 
 			// Filter by start date
 			if(strpos($string, 'start:') === 0) {
-				$this->__removeModeFromString(&$string);
+				$this->__removeModeFromString($string);
 				$mode = self::START;
 			}
 			
 			// Filter by end date
 			elseif(strpos($string, 'end:') === 0) {
-				$this->__removeModeFromString(&$string);
+				$this->__removeModeFromString($string);
 				$mode = self::END;
 			}
 			
 			// Filter by full range (strict)
 			elseif(strpos($string, 'strict:') === 0) {
-				$this->__removeModeFromString(&$string);
+				$this->__removeModeFromString($string);
 				$mode = self::STRICT;
 			}
 			
 			// Remove unsupported regular expressions prefixes in order to support Publish Filtering
 			elseif(strpos($string, 'regexp:') === 0) {
-				$this->__removeModeFromString(&$string);
+				$this->__removeModeFromString($string);
 				$mode = self::RANGE;
 			}
 			
