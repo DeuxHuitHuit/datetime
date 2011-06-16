@@ -2,8 +2,8 @@
 
 A field for Symphony managing single or multiple dates as well as date ranges.
 
-- Version: 2.0RC3
-- Date: 7th June 2011
+- Version: 2.0
+- Date: 16th June 2011
 - Requirements: Symphony CMS 2.2.1 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
@@ -31,6 +31,7 @@ This extensions accepts all relative dates known to [PHP's DateTime class](http:
 - Implemented new calendar.
 - Symphony 2.2 compatibility.
 - General code clean-up.
+- A lot of tiny bug fixes.
 
 **Version 1.5.1**
 
