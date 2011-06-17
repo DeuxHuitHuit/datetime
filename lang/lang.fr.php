@@ -19,17 +19,88 @@
 		'Date/Time' => 
 		'Date/Heure',
 
-		'Date format' => 
-		'Format de la date',
+		'Please make sure that the Stage submodule is initialised and available at %s.' => 
+		'Veuillez vous assurer que le sous-module Stage est initialisé et disponible dans %s',
 
-		'Use comma to separate date and time' => 
-		'Utiliser deux-points (:) pour séparer la date et l\'heure',
+		'It\'s available at %s.' => 
+		'C\'est disponible dans %s',
 
-		'%s Allow multiple dates' => 
-		'%s Permettre la sélection de plusieurs dates',
+		'Stage not found' => 
+		'Stage non trouvé',
 
-		'Press <code>alt</code> to add a range' => 
-		'Appuyer sur <code>alt</code> pour ajouter une durée',
+		'Behaviour' => 
+		'Comportement',
+
+		'Allow time editing' => 
+		'Permettre l\'édition du temps (heures)',
+
+		'This will display date and time in the interface' => 
+		'Affiche la date et l\'heure dans l\'interface',
+
+		'Allow date ranges' => 
+		'Permettre durée',
+
+		'This will enable range editing' => 
+		'Permettra la sélection d\'une durée',
+
+		'Pre-populate this field with today\'s date' => 
+		'Remplir avec la date d\'aujourd\'hui',
+
+		'This will automatically add the current date to new entries' => 
+		'Ajoutera automatiquement la date d\'aujourd\'hui dans les nouvelles entrées',
+
+		'Range: <code>shift</code> + click' => 
+		'Durée: <code>shift</code> + clic',
+
+		'No Date' => 
+		'Aucune date',
+
+		'Allow creation of new items' => 
+		'Permettre la création de nouveaux items',
+
+		'This will add a <code>Create New</code> button to the interface' => 
+		'Ajoutera un bouton <code>Ajouter Nouveau</code> à l\'interface',
+
+		'Allow deselection of items' => 
+		'Permettre la désélection des items',
+
+		'This will add a <code>Remove</code> button to the interface' => 
+		'Ajoutera un boutton <code>Supprimer</code> à l\'interface',
+
+		'Allow selection of items from a list of existing items' => 
+		'Permettre la selection d\'items provenant d\'une liste d\'items existants',
+
+		'This will add a search field to the interface' => 
+		'Ajoutera un champs de recherche dans l\'interface',
+
+		'Allow dropping of items' => 
+		'Permettre de glisser/déplacer les items',
+
+		'This will enable item dropping on textareas' => 
+		'Activera le glisser/déplacer des items sur les champs texte',
+
+		'Allow sorting of items' => 
+		'Permettre le tri des items',
+
+		'This will enable item dragging and reordering' => 
+		'Activera le tri via glisser/déplacer',
+
+		'Browse' => 
+		'Parcourir',
+
+		'No items found.' => 
+		'Aucun item trouvé',
+
+		'no results' => 
+		'pas de résultat',
+
+		'1 result' => 
+		'1 résultat',
+
+		'{$count} results' => 
+		'{$count} resultats',
+
+		// old entries.... they should already be in symphony
 
 		'date' => 
 		'date',
@@ -45,9 +116,6 @@
 
 		'to' => 
 		'à',
-
-		'Add new date' => 
-		'Ajouter une nouvelle date',
 
 		'yesterday' => 
 		'hier',
