@@ -2,8 +2,8 @@
 
 A field for Symphony managing single or multiple dates as well as date ranges.
 
-- Version: 2.0
-- Date: 16th June 2011
+- Version: 2.0.1
+- Date: 17th June 2011
 - Requirements: Symphony CMS 2.2.1 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
@@ -24,6 +24,10 @@ Filters separated by `+` will only find dates that match all of the given dates 
 This extensions accepts all relative dates known to [PHP's DateTime class](http://www.php.net/manual/en/datetime.formats.php) for filtering. It also allows the creation of filter ranges with `to` or `earlier than` and `later than`.
 
 ## Release Notes
+
+**Version 2.0.1**
+
+- Corrected version number.
 
 **Version 2.0**
 
