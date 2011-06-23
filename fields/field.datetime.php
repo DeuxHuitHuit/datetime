@@ -21,6 +21,7 @@
 		const START = 2;
 		const END = 3;
 		const STRICT = 4;
+		const SOFTRANGE = 5;
 	
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
@@ -477,7 +478,15 @@
 					// Filter by full date range	
 					case self::RANGE:
 						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
-						break;				
+						break;		
+
+					// Filter by full date range	
+					case self::SOFTRAGE:
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
+									 (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
+									 (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+									 (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end IS NULL))";
+						break;	
 				}
 			}
 			
@@ -520,6 +529,12 @@
 			elseif(strpos($string, 'regexp:') === 0) {
 				$this->__removeModeFromString($string);
 				$mode = self::RANGE;
+			}
+			
+			// Filter by soft range (end date can be null)
+			elseif(strpos($string, 'soft:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::SOFTRANGE;
 			}
 			
 			// Filter by full range
