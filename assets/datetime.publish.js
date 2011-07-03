@@ -37,7 +37,7 @@
 			selection.delegate('input', 'focus.datetime', function() {
 				var input = $(this),
 					item = input.parents('li'),
-					calendar = item.find('div.calendar');
+					calendar = item.find('div.calendar'),
 					dates = input.parent().addClass('focus'),
 					date = input.attr('data-timestamp'),
 					start = dates.find('input.start').attr('data-timestamp'),
