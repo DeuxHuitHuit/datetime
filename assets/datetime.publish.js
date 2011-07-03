@@ -5,6 +5,25 @@
 		'yesterday': false,
 		'tomorrow': false
 	});
+	
+	Symphony.DateTime = {
+		// Reduce timestamp to days
+		reduce: function(timestamp) {
+			return Math.floor((this.clearTime(timestamp) + 7200000) / 86400000);
+		},
+
+		// Given a timestamp, set the hours and minutes of the resulting
+		// date to 0, for use with selection detection
+		clearTime: function(timestamp) {
+			if(timestamp == '') return timestamp;
+
+			var date = new Date(parseInt(timestamp));
+			date.setHours(0);
+			date.setMinutes(0);
+
+			return date.getTime();
+		}
+	};
 
 	/**
 	 * The Date and Time extension provides an interface to add 
@@ -327,8 +346,8 @@
 					day, today, yesterday, tomorrow, label;
 				
 				// Reduze timestamps to days:
-				day = reduce(time);
-				today = reduce(now.getTime());
+				day = Symphony.DateTime.reduce(time);
+				today = Symphony.DateTime.reduce(now.getTime());
 				
 				// Create label
 				if(day == today) {
@@ -351,23 +370,6 @@
 					input.next('em.label').fadeOut('fast');
 				}
 			};
-			
-			// Reduce timestamp to days
-			var reduce = function(timestamp) {
-				return Math.floor((clearTime(timestamp) + 7200000) / 86400000);
-			};
-
-			// Given a timestamp, set the hours and minutes of the resulting
-			// date to 0, for use with selection detection
-			var clearTime = function(timestamp) {
-				if(timestamp == '') return timestamp;
-
-				var date = new Date(parseInt(timestamp));
-				date.setHours(0);
-				date.setMinutes(0);
-
-				return date.getTime();
-			}
 			
 		/*---- Initialisation ---------------------------------------------------*/
 		
