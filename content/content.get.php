@@ -12,7 +12,7 @@
 		 * Used to fetch subsection items via an AJAX request.
 		 */
 		public function __viewIndex() {
-			echo Calendar::formatDate(General::sanitize($_GET['date']), true, NULL, true);
+			echo Calendar::formatDate(General::sanitize($_GET['date']), General::sanitize($_GET['time']), NULL, true);
 			exit;
 		}
 
