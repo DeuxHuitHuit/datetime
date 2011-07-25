@@ -21,7 +21,7 @@
 		const START = 2;
 		const END = 3;
 		const STRICT = 4;
-		const SOFTRANGE = 5;
+		const EXTRANGE = 5; // same as RANGE, but end dates can be = to start date
 	
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
@@ -484,7 +484,7 @@
 						break;		
 
 					// Filter by full date range	
-					case self::SOFTRANGE:
+					case self::EXTRANGE:
 						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
 									 (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
 									 (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
@@ -534,10 +534,10 @@
 				$mode = self::RANGE;
 			}
 			
-			// Filter by soft range (end date can be null)
-			elseif(strpos($string, 'soft:') === 0) {
+			// Filter by extended range (end date can be null)
+			elseif(strpos($string, 'extended:') === 0) {
 				$this->__removeModeFromString($string);
-				$mode = self::SOFTRANGE;
+				$mode = self::EXTRANGE;
 			}
 			
 			// Filter by full range
