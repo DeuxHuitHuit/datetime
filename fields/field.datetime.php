@@ -21,6 +21,7 @@
 		const START = 2;
 		const END = 3;
 		const STRICT = 4;
+		const EXTRANGE = 5; // same as RANGE, but end dates can be = to start date
 	
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
@@ -471,13 +472,24 @@
 					
 					// Filter by full date range	
 					case self::STRICT:
-						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') AND (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') AND
+								   (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
 						break;
 					
 					// Filter by full date range	
 					case self::RANGE:
-						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
-						break;				
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
+						           (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
+								   (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+						break;		
+
+					// Filter by full date range	
+					case self::EXTRANGE:
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
+									 (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR 
+									 (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+									 (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end = `t$field_id`.start))";
+						break;	
 				}
 			}
 			
@@ -520,6 +532,12 @@
 			elseif(strpos($string, 'regexp:') === 0) {
 				$this->__removeModeFromString($string);
 				$mode = self::RANGE;
+			}
+			
+			// Filter by extended range (end date can be null)
+			elseif(strpos($string, 'extended:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::EXTRANGE;
 			}
 			
 			// Filter by full range
