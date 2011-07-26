@@ -2,8 +2,8 @@
 
 A field for Symphony managing single or multiple dates as well as date ranges.
 
-- Version: 2.0.1
-- Date: 17th June 2011
+- Version: 2.1
+- Date: 26th July 2011
 - Requirements: Symphony CMS 2.2.1 or newer, <http://github.com/symphony/symphony-2/tree/master>
 - Author: Nils Hörrmann, post@nilshoerrmann.de
 - Constributors: [A list of contributors can be found in the commit history](http://github.com/nilshoerrmann/datetime/commits/master)
@@ -18,12 +18,21 @@ Version 2.0 introduces new filter options in the data source editor:
 - prefixing a filter with `strict:` will check, if start **and** end date are in the given filter range,
 - filters without prefixes will check, if start **or** end date are in the given filter range.
 
+As of version 2.1 there is an additional filter mode:
+
+- prefixing a filter with `extended:` will work like the unprefixed filter but will additionally fetch single dates (those without end date) that lie in the past. This is helpful if you like to display banners only between certain dates and if the user didn't enter an end date. Using the `extended` filter, this will be interpreted as "display for ever".
+
 Filters separated by comma will find all dates that match one of the given dates or ranges.  
 Filters separated by `+` will only find dates that match all of the given dates or ranges.
 
 This extensions accepts all relative dates known to [PHP's DateTime class](http://www.php.net/manual/en/datetime.formats.php) for filtering. It also allows the creation of filter ranges with `to` or `earlier than` and `later than`.
 
 ## Release Notes
+
+**Version 2.1**
+
+- Added French translation. (Thanks, Nicolas!)
+- Added nur `extended` filter mode. (Thanks, Nicolas!)
 
 **Version 2.0.1**
 
