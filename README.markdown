@@ -32,7 +32,7 @@ This extensions accepts all relative dates known to [PHP's DateTime class](http:
 **Version 2.1**
 
 - Added French translation. (Thanks, Nicolas!)
-- Added nur `extended` filter mode. (Thanks, Nicolas!)
+- Added new `extended` filter mode. (Thanks, Nicolas!)
 
 **Version 2.0.1**
 
