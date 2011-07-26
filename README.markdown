@@ -33,6 +33,7 @@ This extensions accepts all relative dates known to [PHP's DateTime class](http:
 
 - Added French translation. (Thanks, Nicolas!)
 - Added new `extended` filter mode. (Thanks, Nicolas!)
+- Access end dates via tab key. (Thanks, Brendan!)
 
 **Version 2.0.1**
 
