@@ -7,6 +7,7 @@
 	});
 	
 	Symphony.DateTime = {
+	
 		// Reduce timestamp to days
 		reduce: function(timestamp) {
 			return Math.floor((this.clearTime(timestamp) + 7200000) / 86400000);
@@ -161,14 +162,13 @@
 			
 			// Keypress
 			if(!stage.is('.simple')) {
-				selection.delegate('input', 'keypress.datetime', function(event) {
-					var keyCode = event.keyCode || event.which,
-						input = $(this);
+				selection.delegate('input', 'keydown.datetime', function(event) {
+					var input = $(this);
 
 					// If tab is pressed while the user is in the first
 					// date, allow the focus to shifted to the end date
 					// instead of the calendar.
-					if(keyCode == 9 && input.is('.start')) {
+					if(event.which == 9 && input.is('.start')) {
 						input.nextAll('input.end').show().focus();
 						event.preventDefault();
 					}
