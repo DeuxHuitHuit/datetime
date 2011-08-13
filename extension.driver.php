@@ -60,7 +60,7 @@
 					`range` tinyint(1) DEFAULT '1',
         	  		PRIMARY KEY  (`id`),
 			  		KEY `field_id` (`field_id`)
-				)"
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
 			);
 
 			// Create stage

@@ -315,7 +315,7 @@
 				 `end` datetime NOT NULL,
 				 PRIMARY KEY (`id`),
 				 KEY `entry_id` (`entry_id`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
 			);
 		}
 	
