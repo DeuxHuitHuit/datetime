@@ -69,6 +69,15 @@
 		}
 
 		/**
+		 * Method that flag the DS to add a DISTINCT keyword when retreiving entries
+		 * @see symphony/lib/toolkit/Field::requiresSQLGrouping()
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#requiresSQLGrouping
+		 */
+		public function requiresSQLGrouping(){
+			return true;
+		}
+
+		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displaySettingsPanel
 		 */
 		function displaySettingsPanel(&$wrapper, $errors=NULL) {
