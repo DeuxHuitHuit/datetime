@@ -821,15 +821,18 @@
 	
 			$values = array();
 			for($i = 0; $i < count($data['start']); $i++) {
-				$range = $this->__getEarliestDate($data['start'][$i]);
-				
-				// Different end date
-				if($data['start'][$i] != $data['end'][$i]) {
-					$end = $this->__getLatestDate($data['end'][$i]);
-					$range .= ' to ' . $end;
+				$start = $this->__getEarliestDate($data['start'][$i]);
+				$end = $this->__getLatestDate($data['end'][$i]);
+
+				// Different dates
+				if($start != $end) {
+					$values[] = $start . ' to ' . $end;
 				}
 				
-				$values[] = $range;
+				// Same date
+				else {
+					$values[] = $start;
+				}
 			}
 			
 			return implode(',', $values);
