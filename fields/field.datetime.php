@@ -816,12 +816,23 @@
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#getParameterPoolValue
 		 */
 		public function getParameterPoolValue($data) {
-			$start = array();
-			foreach($data['start'] as $date) {
-				$start[] = DateTimeObj::format($date, 'Y-m-d H:i:s');
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
+	
+			$values = array();
+			for($i = 0; $i < count($data['start']); $i++) {
+				$range = $this->__getEarliestDate($data['start'][$i]);
+				
+				// Different end date
+				if($data['start'][$i] != $data['end'][$i]) {
+					$end = $this->__getLatestDate($data['end'][$i]);
+					$range .= ' to ' . $end;
+				}
+				
+				$values[] = $range;
 			}
-
-			return implode(',', $start);
+			
+			return implode(',', $values);
 		}
 
 		/**
