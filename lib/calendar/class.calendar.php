@@ -204,7 +204,7 @@
 			}
 
 			// Parse date
-			$timestamp = DateTimeObj::format($timestamp, 'U');
+			$timestamp = DateTimeObj::format($timestamp, 'U', false);
 				
 			// Invalid date
 			if($timestamp === false) {
@@ -219,7 +219,7 @@
 			else {
 				$result = array(
 					'status' => 'valid',
-					'date' => DateTimeObj::format($timestamp, $scheme, true),
+					'date' => DateTimeObj::format($timestamp, $scheme, true, date_default_timezone_get()),
 					'timestamp' => number_format($timestamp * 1000, 0, '', '')
 				);
 			}
