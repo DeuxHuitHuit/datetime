@@ -15,6 +15,7 @@
 			array('de', 'de_DE.UTF8', 'de_DE')
 		);
 		
+		
 		/**
 		 * About this data source
 		 */
@@ -46,6 +47,25 @@
 		 */
 		public function grab(&$param_pool=NULL) {
 			$result = new XMLElement('datetime');
+
+			// Date
+			$date = new DateTime('1st January');
+			$storage = array();
+			
+			// Months
+			$storage['months'] = array();
+			for($i = 1; $i <= 12; $i++) {
+				$storage['months'][] = $date->getTimestamp();
+				$date->modify('+1 month');
+			}
+			
+			// Weekdays
+			$storage['weekdays'] = array();
+			$date->modify('last Sunday');
+			for($i = 1; $i <= 7; $i++) {
+				$storage['weekdays'][] = $date->getTimestamp();
+				$date->modify('+1 day');
+			}
 			
 			// Loop through languages
 			foreach($this->dsParamLANG as $code) {
@@ -56,39 +76,36 @@
 
 				// Generate months
 				$months = new XMLElement('months');
-				for($i = 1; $i <= 12; $i++) {
-					$time = mktime(0, 0, 0, $i);
-					$month = new XMLElement(
+				$count = 1;
+				foreach($storage['months'] as $month) {
+					$months->appendChild(new XMLElement(
 						'month', 
-						strftime('%B', $time), 
+						strftime('%B', $month), 
 						array(
-							'id' => $i,
-							'abbr' => strftime('%b', $time)
+							'id' => $count++,
+							'abbr' => strftime('%b', $month)
 						)
-					);
-					$months->appendChild($month);
+					));
 				}
 				$lang->appendChild($months);
-
+				
 				// Generate weekdays
 				$weekdays = new XMLElement('weekdays');
-				for($i = 0; $i <= 6; $i++) {
-					$time = strtotime('+' . $i . ' day', strtotime('last Sunday'));
-					$day = new XMLElement(
+				$count = 1;
+				foreach($storage['weekdays'] as $weekday) {
+					$weekdays->appendChild(new XMLElement(
 						'day', 
-						strftime('%A', $time), 
+						strftime('%A', $weekday), 
 						array(
-							'id' => $i,
-							'abbr' => strftime('%a', $time)
+							'id' => $count++,
+							'abbr' => strftime('%a', $weekday)
 						)
-					);
-					$weekdays->appendChild($day);
+					));
 				}
 				$lang->appendChild($weekdays);
 
 				// Append Result
 				$result->appendChild($lang);
-				
 			}
 
 			return $result;
