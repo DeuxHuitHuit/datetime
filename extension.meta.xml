@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="datetime">
+	<name>Date and Time</name>
+	<description>Date and time management for Symphony</description>
+	<repo type="github">https://github.com/nilshoerrmann/datetime</repo>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/27336/</url>
+	<types>
+		<type>Field Types</type>
+		<type>Interface</type>
+	</types>
+	<authors>
+		<author>
+			<name github="nilshoerrmann" symphony="Nils">Nils Hörrmann</name>
+			<website>http://nilshoerrmann.de</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="2.2" date="2011-12-03" min="2.2.1" />
+		<release version="2.1.1" date="2011-07-27" min="2.2.1" />
+	</releases>
+</extension>
