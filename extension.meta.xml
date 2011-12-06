@@ -15,7 +15,62 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="2.2" date="2011-12-03" min="2.2.1" />
-		<release version="2.1.1" date="2011-07-27" min="2.2.1" />
+		<release version="2.2.1" date="2011-12-06" min="2.2.1">
+			- Updated basic extension information and `extension.meta.xml`
+		</release>
+		<release version="2.2" date="2011-12-03" min="2.2.1">
+			- Added `extension.meta.xml` file
+			- Fix timezone issues
+			- Improved parameter output
+			- Improved Data Source sorting and grouping (Thanks, Brendan and Nicolas!)
+			- General clean-up (Thanks, Brendan)
+		</release>
+		<release version="2.1.1" date="2011-07-27" min="2.2.1" max="2.2.5">
+			- Safari compatibility for keyboard interactions.
+		</release>
+		<release version="2.1" date="2011-07-26" min="2.2.1" max="2.2.5">
+			- Added French translation. (Thanks, Nicolas!)
+			- Added new `extended` filter mode. (Thanks, Nicolas!)
+			- Access end dates via tab key. (Thanks, Brendan!)
+		</release>
+		<release version="2.0.1" date="2011-06-17" min="2.2.1" max="2.2.5">
+			- Corrected version number.
+		</release>
+		<release version="2.0" date="2011-06-16" min="2.2.1" max="2.2.5">
+			- Implemented Stage.
+			- Implemented new calendar.
+			- Symphony 2.2 compatibility.
+			- General code clean-up.
+			- A lot of tiny bug fixes.
+		</release>
+		<release version="1.5.1" date="2010-11-22" min="2.1.2" max="2.2">
+			- Section Schema compatibility. (Thanks, Brendan!)
+		</release>
+		<release version="1.5" date="2010-11-10" min="2.1.2" max="2.1.2">
+			- Added Norwegian translation. (Thanks, Frode!)
+			- Updated data source filtering. (Thanks, John!)
+		</release>
+		<release version="1.4" date="2010-08-27" min="2.1.1" max="2.1.1">
+			- Added Italian translation, improved date localisation. (Thanks, Simone!)
+		</release>
+		<release version="1.3" date="2010-01-15" min="2.0.6" max="2.1">
+			- Added German translation, improved date handling.
+			- Fixed a lot of bugs and overall improvements. (Thanks, Brendan!)
+		</release>
+		<release version="1.2" date="2009-08-26" min="2.0.4" max="2.0.5">
+			- Added support for data source grouping (calendar view).
+		</release>
+		<release version="1.1" date="2009-08-25" min="2.0.4" max="2.0.4">
+			- Added support for data source filtering.
+		</release>
+		<release version="1.0.2" date="2009-08-24" min="2.0.4" max="2.0.4">
+			- Minor bug fixes.
+		</release>
+		<release version="1.0.1" date="2009-08-03" min="2.0.4" max="2.0.4">
+			- Minor bug fixes.
+		</release>
+		<release version="1.0" date="2009-08-21" min="2.0.4" max="2.0.4">
+			- Initial release.
+		</release>
 	</releases>
 </extension>
