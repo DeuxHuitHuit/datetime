@@ -15,15 +15,18 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="2.2.2" date="2011-12-06" min="2.2.1">
+			- Updated readme.
+		</release>
 		<release version="2.2.1" date="2011-12-06" min="2.2.1">
-			- Updated basic extension information and `extension.meta.xml`
+			- Updated basic extension information and `extension.meta.xml`.
 		</release>
 		<release version="2.2" date="2011-12-03" min="2.2.1">
-			- Added `extension.meta.xml` file
-			- Fix timezone issues
-			- Improved parameter output
-			- Improved Data Source sorting and grouping (Thanks, Brendan and Nicolas!)
-			- General clean-up (Thanks, Brendan)
+			- Added `extension.meta.xml` file.
+			- Fix timezone issues.
+			- Improved parameter output.
+			- Improved Data Source sorting and grouping. (Thanks, Brendan and Nicolas!)
+			- General clean-up. (Thanks, Brendan)
 		</release>
 		<release version="2.1.1" date="2011-07-27" min="2.2.1" max="2.2.5">
 			- Safari compatibility for keyboard interactions.
