@@ -33,7 +33,7 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.2.2',
+				'version' => '2.2.3',
 				'release-date' => '2011-12-06',
 				'author' => array(
 					'name' => 'Nils Hörrmann',
