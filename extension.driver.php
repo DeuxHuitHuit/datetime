@@ -33,14 +33,14 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.2.3',
-				'release-date' => '2011-12-06',
+				'version' => '2.2.4',
+				'release-date' => '2011-12-13',
 				'author' => array(
 					'name' => 'Nils Hörrmann',
 					'website' => 'http://nilshoerrmann.de',
 					'email' => 'post@nilshoerrmann.de'
 				),
-				'description'   => 'A field for single and multiple dates and date ranges'
+				'description'   => 'Date and time management for Symphony'
 			);
 		}
 

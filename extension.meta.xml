@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="datetime">
+<extension id="datetime" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
 	<name>Date and Time</name>
 	<description>Date and time management for Symphony</description>
 	<repo type="github">https://github.com/nilshoerrmann/datetime</repo>
@@ -18,6 +18,9 @@
 		<dependency version="1.3">https://github.com/nilshoerrmann/stage</dependency>
 	</dependencies>
 	<releases>
+		<release version="2.2.4" date="2011-12-13" min="2.2.1" max="2.2.5">
+			- Updated `extension.meta.xml.
+		</release>
 		<release version="2.2.3" date="2011-12-06" min="2.2.1" max="2.2.5">
 			- Updated `extension.meta.xml.
 		</release>
