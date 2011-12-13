@@ -18,7 +18,7 @@
 	$dictionary = array(
 	
 		'Date/Time' => 
-		'Data/Ora',
+		false,
 
 		'Date format' => 
 		'Formatul',
