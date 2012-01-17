@@ -33,12 +33,19 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.2.4',
-				'release-date' => '2011-12-13',
+				'version' => '2.3.1',
+				'release-date' => '2012-01-17',
 				'author' => array(
-					'name' => 'Nils Hörrmann',
-					'website' => 'http://nilshoerrmann.de',
-					'email' => 'post@nilshoerrmann.de'
+					array(
+						'name' => 'Büro für Web- und Textgestaltung',
+						'website' => 'http://hananils.de',
+						'email' => 'buero@hananils.de'
+					),
+					array(
+						'name' => 'Nils Hörrmann',
+						'website' => 'http://nilshoerrmann.de',
+						'email' => 'post@nilshoerrmann.de'
+					)
 				),
 				'description'   => 'Date and time management for Symphony'
 			);

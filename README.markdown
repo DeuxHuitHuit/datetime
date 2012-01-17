@@ -9,9 +9,9 @@ Date and Time provides advanced date and time management for Symphony. It offers
 Date and Time contains two components:
 
 - The Date and Time field itself which provides the calendar widget,
-- [Stage](https://github.com/nilshoerrmann/stage/) which offers the basic interface for adding and ordering dates.
+- [Stage](https://github.com/hananils/stage/) which offers the basic interface for adding and ordering dates.
 
-If you are working with Git, please don't forget to pull the Stage submodule as well. If you are not using Git and want to install this extension using FTP, please just download a copy of the `master` branch and add [Stage](https://github.com/nilshoerrmann/stage/) to `lib/stage/` manually. More information about [installing and updating extensions](http://symphony-cms.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://symphony-cms.com/learn/>. 
+If you are working with Git, please don't forget to pull the Stage submodule as well. If you are not using Git and want to install this extension using FTP, please just download a copy of the `master` branch and add [Stage](https://github.com/hananils/stage/) to `lib/stage/` manually. More information about [installing and updating extensions](http://symphony-cms.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://symphony-cms.com/learn/>. 
 
 All interface related components of Date and Time are JavaScript based. If you are upgrading from an earlier version, please make sure to clear your browser cache to avoid interface issues. If another extension or the Symphony core throws a JavaScript error, Date and Time will stop working.
 
