@@ -33,7 +33,7 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.3.1',
+				'version' => '2.3.2',
 				'release-date' => '2012-01-17',
 				'author' => array(
 					array(
@@ -47,7 +47,7 @@
 						'email' => 'post@nilshoerrmann.de'
 					)
 				),
-				'description'   => 'Date and time management for Symphony'
+				'description' => 'Date and time management for Symphony'
 			);
 		}
 

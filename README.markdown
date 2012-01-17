@@ -65,4 +65,4 @@ This extensions accepts all relative dates known to [PHP's DateTime class](http:
             
 ## Acknowledgement
 
-This extension is not a work of a single person, a lot of people tested it and [contributed to it](https://github.com/nilshoerrmann/datetime/contributors). The initial layout of the date widget was inspired by Scott Hughes' [calendar mock-up for Symphony 2.0](http://symphony-cms.com/discuss/thread/103/) and Rowan Lewis' [calendar overlay](https://github.com/rowan-lewis/calendaroverlay/).
+This extension is not a work of a single person, a lot of people tested it and [contributed to it](https://github.com/hananils/datetime/contributors). The initial layout of the date widget was inspired by Scott Hughes' [calendar mock-up for Symphony 2.0](http://symphony-cms.com/discuss/thread/103/) and Rowan Lewis' [calendar overlay](https://github.com/rowan-lewis/calendaroverlay/).
