@@ -1,4 +1,4 @@
-# Date and Time 2.2
+# Date and Time 2
 
 ![Date and Time Field](http://projekte.nilshoerrmann.de/extensions/datetime/datetime.png)
 
