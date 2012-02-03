@@ -87,3 +87,11 @@
 .field-datetime div.stage span.dates em.end.label {
 	top: 28px;
 }
+
+.field-datetime #error div.stage {
+	margin-bottom: 0;
+}
+
+.field-datetime #error div.stage + p {
+	padding-top: 1em;
+}
