@@ -165,32 +165,37 @@
 		 */
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 
-			// Houston, we have problem: we've been called out of context!
-			$callback = Administration::instance()->getPageCallback();
-			if($callback['context']['page'] != 'edit' && $callback['context']['page'] != 'new') {
-				return;
+			if(class_exists('Administration')) {
+				// Houston, we have problem: we've been called out of context!
+				$callback = Administration::instance()->getPageCallback();
+				if($callback['context']['page'] != 'edit' && $callback['context']['page'] != 'new') {
+					return;
+				}
+
+				// Stage
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js', 101, false);
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css', 'screen', 102, false);
+
+				// Datetime
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js', 103, false);
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css', 'screen', 104, false);
+
+				// Calendar
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css', 'screen', 105, false);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js', 106, false);
+
+				// Timer
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/timer/timer.publish.css', 'screen', 107, false);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/timer/timer.publish.js', 108, false);
 			}
-
-			// Stage
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js', 101, false);
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css', 'screen', 102, false);
-
-			// Datetime
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js', 103, false);
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css', 'screen', 104, false);
-
-			// Calendar
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css', 'screen', 105, false);
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js', 106, false);
-
-			// Timer
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/timer/timer.publish.css', 'screen', 107, false);
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/timer/timer.publish.js', 108, false);
 
 			// Help
 			$help = '';
 			if($this->get('range') == 1) {
 				$help = '<i>' . __('Range: <code>shift</code> + click') . '</i>';
+			}
+			else if($this->get('required') == 'no') {
+				$help = '<i>' . __('Optional') . '</i>';
 			}
 
 			// Field label
@@ -238,8 +243,29 @@
 
 			// Append Stage
 			if($stage) {
-				$wrapper->appendChild($stage);
+				if(!is_null($flagWithError)) {
+					$wrapper->appendChild(Widget::wrapFormElementWithError($stage, $flagWithError));
+				}
+				else {
+					$wrapper->appendChild($stage);
+				}
 			}
+		}
+
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#checkPostFieldData
+		 */
+		public function checkPostFieldData($data, &$message, $entry_id=NULL) {
+			if($this->get('required') && empty($data['start'][0])) {
+				$message = __("'%s' is a required field.", array($this->get('label')));
+				return self::__MISSING_FIELDS__;
+			}
+
+			// At the moment the Date validation is done via AJAX, so we can return __OK__.
+			// If a user enters an invalid date and immediately saves (skipping AJAX) then
+			// an odd result is returned. Possible TODO here for validating the dates and
+			// returning `__INVALID_FIELDS__` if they fail.
+			return self::__OK__;
 		}
 
 		/**
@@ -818,7 +844,7 @@
 		public function getParameterPoolValue($data) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
-	
+
 			$values = array();
 			for($i = 0; $i < count($data['start']); $i++) {
 				$start = $this->__getEarliestDate($data['start'][$i]);
@@ -828,13 +854,13 @@
 				if($start != $end) {
 					$values[] = $start . ' to ' . $end;
 				}
-				
+
 				// Same date
 				else {
 					$values[] = $start;
 				}
 			}
-			
+
 			return implode(',', $values);
 		}
 
