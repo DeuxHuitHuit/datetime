@@ -112,7 +112,7 @@
 			$group[0]->appendChild($setting);
 
 			// Prepopulate
-			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][prepopulate]" value="yes" type="checkbox"' . ($this->get('prepopulate') == 0 ? '' : ' checked="checked"') . '/> ' . __('Pre-populate this field with today\'s date') . ' <i>' . __('This will automatically add the current date to new entries') . '</i>');
+			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][prepopulate]" value="yes" type="checkbox"' . ($this->get('prepopulate') == 0 ? '' : ' checked="checked"') . '/> ' . __('Pre-populate field') . ' <i>' . __('This will automatically add the current date to new entries') . '</i>');
 			$group[0]->appendChild($setting);
 
 			// Append behaviour settings
@@ -189,12 +189,16 @@
 
 			// Help
 			$help = '';
-			if($this->get('range') == 1) {
+			if($this->get('range') == 1 && $this->get('required') == 'yes') {
 				$help = '<i>' . __('Range: <code>shift</code> + click') . '</i>';
 			}
-			else if($this->get('required') == 'no') {
+			elseif($this->get('range') == 1 && $this->get('required') == 'no') {
 				$help = '<i>' . __('Optional') . ', ' . __('range: <code>shift</code> + click') . '</i>';
 			}
+			elseif($this->get('range') == 0 && $this->get('required') == 'no') {
+				$help = '<i>' . __('Optional') . '</i>';
+			}
+			
 
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';

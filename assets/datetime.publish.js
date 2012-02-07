@@ -38,13 +38,23 @@
 		// Date and time
 		$('div.field-datetime').each(function() {
 			var manager = $(this),
-				help = manager.find('label i'),
 				stage = manager.find('div.stage'),
 				selection = stage.find('ul.selection');
 			
 		/*---- Events -----------------------------------------------------------*/
 		
 			// Constructing
+			stage.bind('constructanim', function(event, item) {
+				var input = item.find('input.start'),
+					all = item.prevAll(),
+					prev;
+				
+				// Prepopulate with previous date, if possible
+				if(stage.is('.prepopulate') && all.length > 0 && !(selection.is('.destructing') && all.length == 1)) {
+					prev = all.filter(':first').find('input.start');
+					input.val(prev.val()).attr('data-timestamp', prev.attr('data-timestamp'));
+				}
+			});
 			stage.bind('constructstop', function(event, item) {
 				var input = item.find('input.start');
 				
@@ -62,9 +72,6 @@
 					date = input.attr('data-timestamp'),
 					start = dates.find('input.start').attr('data-timestamp'),
 					end = dates.find('input.end').attr('data-timestamp');
-					
-				// Show help
-				help.fadeIn('fast');
 
 				// Set focus
 				dates.addClass('focus').siblings('.focus').removeClass('focus');
@@ -194,9 +201,6 @@
 						
 			// Closing
 			$('body').bind('click.datetime', function() {
-				
-				// Hide help
-				help.fadeOut('fast');
 				
 				// Hide calendar
 				selection.find('div.calendar').slideUp('fast');
@@ -386,9 +390,6 @@
 
 			// Set errors
 			selection.find('input.invalid').parents('span.dates').addClass('invalid');
-
-			// Hide help
-			help.hide();
 			
 		});
 

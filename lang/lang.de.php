@@ -96,7 +96,7 @@
 		'It\'s available at %s.' => 
 		'Es wird unter %s zur Verfügung gestellt.',
 
-		'Pre-populate this field with today\'s date' => 
-		'Mit heutigem Datum vorausfüllen',
+		'Pre-populate field' => 
+		'Feld vorausfüllen',
 
 	);
