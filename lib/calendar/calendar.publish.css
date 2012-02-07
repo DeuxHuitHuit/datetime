@@ -175,6 +175,8 @@ div.calendar thead td:hover {
 
 	fieldset.primary div.calendar {
 		height: 244px;
+		overflow: auto;
+		padding: 18px 38px 18px 18px;
 	}
 	
 	fieldset.primary div.calendar div.date {
@@ -182,10 +184,6 @@ div.calendar thead td:hover {
 		position: absolute;
 		top: 16px;
 		left: 16px;
-	}
-	
-	fieldset.primary div.calendar {
-		overflow: auto;
 	}
 
 }
