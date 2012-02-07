@@ -54,7 +54,7 @@
 			});
 		
 			// Visualising
-			selection.delegate('input', 'focus.datetime', function() {
+			selection.delegate('input', 'focus', function() {
 				var input = $(this),
 					item = input.parents('li'),
 					calendar = item.find('div.calendar'),
