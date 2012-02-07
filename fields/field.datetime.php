@@ -165,29 +165,27 @@
 		 */
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
 
-			if(class_exists('Administration')) {
-				// Houston, we have problem: we've been called out of context!
-				$callback = Administration::instance()->getPageCallback();
-				if($callback['context']['page'] != 'edit' && $callback['context']['page'] != 'new') {
-					return;
-				}
-
-				// Stage
-				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js', 101, false);
-				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css', 'screen', 102, false);
-
-				// Datetime
-				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js', 103, false);
-				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css', 'screen', 104, false);
-
-				// Calendar
-				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css', 'screen', 105, false);
-				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js', 106, false);
-
-				// Timer
-				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/timer/timer.publish.css', 'screen', 107, false);
-				Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/timer/timer.publish.js', 108, false);
+			// Houston, we have problem: we've been called out of context!
+			$callback = Administration::instance()->getPageCallback();
+			if($callback['context']['page'] != 'edit' && $callback['context']['page'] != 'new') {
+				return;
 			}
+
+			// Stage
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js', 101, false);
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css', 'screen', 102, false);
+
+			// Datetime
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js', 103, false);
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css', 'screen', 104, false);
+
+			// Calendar
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css', 'screen', 105, false);
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js', 106, false);
+
+			// Timer
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/timer/timer.publish.css', 'screen', 107, false);
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/timer/timer.publish.js', 108, false);
 
 			// Help
 			$help = '';
@@ -195,7 +193,7 @@
 				$help = '<i>' . __('Range: <code>shift</code> + click') . '</i>';
 			}
 			else if($this->get('required') == 'no') {
-				$help = '<i>' . __('Optional') . '</i>';
+				$help = '<i>' . __('Optional') . ', ' . __('range: <code>shift</code> + click') . '</i>';
 			}
 
 			// Field label
