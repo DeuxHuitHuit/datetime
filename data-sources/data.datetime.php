@@ -7,15 +7,24 @@
 		/**
 		 * International language codes
 		 *
-		 * See http://www.php.net/manual/en/function.setlocale.php for further information.
-		 * The first string in the array will be used as identifier.
+		 * Please define the included languages in your configuration
 		 */
-		public $dsParamLANG = array(
-			array('en', 'en_GB'),
-			array('de', 'de_DE.UTF8', 'de_DE')
-		);
+		public $dsParamLANG = array();
 		
-		
+		/**
+		 * Initialise data source
+		 */
+		public function __construct(&$parent, $env=NULL, $process_params=true){
+			parent::__construct($parent, $env, $process_params);
+			$this->dsParamLANG = array();
+			
+			// Load language codes from configuration
+			$languages = Symphony::Configuration()->get('datetime');
+			foreach($languages as $name => $codes) {
+				$this->dsParamLANG[] = explode(', ', $codes);
+			}
+		}
+				
 		/**
 		 * About this data source
 		 */
@@ -23,26 +32,22 @@
 			return array(
 				'name' => __('Date and Time'),
 				'author' => array(
-					'name' => 'Nils Hörrmann',
-					'website' => 'http://www.nilshoerrmann.de',
-					'email' => 'post@nilshoerrmann.de'),
-				'version' => '1.0',
-				'release-date' => '2010-04-02T17:59:00+00:00'
+					'name' => 'Büro für Web- und Textgestaltung',
+					'website' => 'http://hananils.de'
+				),
+				'version' => '2.0',
+				'release-date' => '2012-02-07'
 			);	
 		}
 		
 		/**
 		 * Disallow data source parsing
-		 *
-		 * Custom data sources should not be parsed by Symphony's data source editor
 		 */
 		public function allowEditorToParse() {
 			return false;
 		}
 		
 		/**
-		 * Grab data
-		 *
 		 * This function generates a list of month and weekday names for each language provided.
 		 */
 		public function grab(&$param_pool=NULL) {

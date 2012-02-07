@@ -33,8 +33,8 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.3.2',
-				'release-date' => '2012-01-17',
+				'version' => '2.4dev',
+				'release-date' => '2012-02-07',
 				'author' => array(
 					array(
 						'name' => 'Büro für Web- und Textgestaltung',
@@ -50,7 +50,7 @@
 				'description' => 'Date and time management for Symphony'
 			);
 		}
-
+		
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#install
 		 */
@@ -72,6 +72,10 @@
 
 			// Create stage
 			$status[] = Stage::install();
+
+			// Add language strings to configuration			
+			Symphony::Configuration()->set('english', 'en, en.UTF8', 'datetime');
+			Administration::instance()->saveConfig();
 
 			// Report status
 			if(in_array(false, $status, true)) {
@@ -150,6 +154,15 @@
 				$status[] = Stage::install();
 			}
 
+			// Prior version 2.4
+			if(version_compare($previousVersion, '2.4', '<')) {
+				
+				// Move language codes to configuration
+				Symphony::Configuration()->set('english', 'en, en.UTF8', 'datetime');
+				Symphony::Configuration()->set('german', 'de, de_DE.UTF8, de_DE', 'datetime');
+				Administration::instance()->saveConfig();
+			}
+
 			// Report status
 			if(in_array(false, $status, true)) {
 				return false;
@@ -170,6 +183,9 @@
 
 			// Drop date and time table
 			Symphony::Database()->query("DROP TABLE `tbl_fields_datetime`");
+			
+			// Remove language strings from configuration
+			Symphony::Configuration()->remove('datetime');
 		}
 
 	}
