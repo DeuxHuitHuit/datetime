@@ -10,7 +10,7 @@ div.calendar {
 	border-top: none;
 	min-width: 23em;
 	margin: 0 -1px;
-	padding: 18px 38px 42px 18px;
+	padding: 17px 38px 42px 18px;
 	z-index: 2000;
 	position: relative;
 	display: none;
@@ -32,18 +32,13 @@ div.calendar div.date strong {
 	position: relative;
 }
 
-div.calendar div.date span {
-	display: inline;
+div.calendar div.date select {
+	display: inline-block;
 	width: auto;
-	color: #e4e4e4;
-	padding: 0;
-	background: none !important;
-	cursor: pointer !important;
-	font-size: 109.09%;
+	font-size: 90%;
 }
 
 div.calendar div.date span.nav {
-	
 	display: block;
 	position: absolute;
 	top: 0;
@@ -51,6 +46,9 @@ div.calendar div.date span.nav {
 	height: 21px;
 	width: 43px;
 	padding: 0;
+	background: none !important;
+	cursor: pointer !important;
+	font-size: 109.09%;
 }
 
 div.calendar div.date span.nav a {
@@ -60,7 +58,7 @@ div.calendar div.date span.nav a {
 	-moz-border-radius: 10px 0 0 10px;
 	position: absolute;
 	left: 0;
-	top: 0;
+	top: 1px;
 	display: block;
 	width: 20px;
 	height: 17px;

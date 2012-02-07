@@ -96,8 +96,21 @@
 		private static function __createCalendar() {
 			return '<div class="date">
 				<strong>
-					<span class="month"></span>
-					<span class="year"></span>
+					<select class="month">
+						<option value="0">' . __('January') . '</option>
+						<option value="1">' . __('February') . '</option>
+						<option value="2">' . __('March') . '</option>
+						<option value="3">' . __('April') . '</option>
+						<option value="4">' . __('May') . '</option>
+						<option value="5">' . __('June') . '</option>
+						<option value="6">' . __('July') . '</option>
+						<option value="7">' . __('August') . '</option>
+						<option value="8">' . __('September') . '</option>
+						<option value="9">' . __('October') . '</option>
+						<option value="10">' . __('November') . '</option>
+						<option value="11">' . __('December') . '</option>
+					</select>
+					<select class="year"></select>
 				</strong>
 				<span class="nav">
 					<a class="previous">&#171;</a>
