@@ -33,7 +33,7 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.4dev',
+				'version' => '2.4beta',
 				'release-date' => '2012-02-07',
 				'author' => array(
 					array(
