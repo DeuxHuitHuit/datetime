@@ -656,7 +656,7 @@
 
 			// Get date and time object
 			try {
-				$date = new DateTime(Lang::standardizeDate($string));
+				$date = new DateTime(fieldDate::cleanFilterString(Lang::standardizeDate($string)));
 			}
 
 			// Catch and log invalid dates
