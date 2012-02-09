@@ -7,6 +7,18 @@
 	 * Date and Time Extension
 	 */
 	Class extension_datetime extends Extension {
+	
+		private $languages = array(
+			'english' => 'en, en_GB.UTF8, en_GB',
+			'finnish' => 'fi, fi_FI.UTF8, fi_FI',
+			'french' => 'fr, fr_FR.UTF8, fr_FR',
+			'german' => 'de, de_DE.UTF8, de_DE',
+			'italian' => 'it, it_IT.UTF8, it_IT',
+			'norwegian' => 'no, no_NO.UTF8, no_NO',
+			'romanian' => 'ro, ro_RO.UTF8, ro_RO',
+			'russian' => 'ru, ru_RU.UTF8, ru_RU',
+			'portuguese' => 'pt, pt_PT.UTF8, pt_PT'
+		);
 
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#__construct
@@ -50,7 +62,77 @@
 				'description' => 'Date and time management for Symphony'
 			);
 		}
+
+		/**
+		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#getSubscribedDelegates
+		 */
+		public function getSubscribedDelegates() {
+			return array(
+				array(
+					'page' => '/system/preferences/',
+					'delegate' => 'AddCustomPreferenceFieldsets',
+					'callback' => '__addPreferences'
+				),
+				array(
+					'page' => '/system/preferences/',
+					'delegate' => 'Save',
+					'callback' => '__savePreferences'
+				),
+			);
+		}
+
+		/**
+		 * Add site preferences
+		 */
+		public function __addPreferences($context) {
+					
+			// Get selected languages
+			$selection = Symphony::Configuration()->get('datetime');
+			if(empty($selection)) $selection = array();
 		
+			// Build default options
+			$options = array();
+			foreach($this->languages as $name => $codes) {
+				$options[$name] = array($name . '::' . $codes, (array_key_exists($name, $selection) ? true : false), __(ucfirst($name)));
+			}
+			
+			// Add custom options
+			foreach(array_diff_key($selection, $this->languages) as $name => $codes) {
+				$options[$name] = array($name . '::' . $codes, true, __(ucfirst($name)));
+			}
+			
+			// Sort options
+			ksort($options);			
+			
+			// Add fieldset
+			$group = new XMLElement('fieldset', '<legend>' . __('Date and Time') . '</legend>', array('class' => 'settings'));
+			$select = Widget::Select('settings[datetime][]', $options, array('multiple' => 'multiple'));
+			$label = Widget::Label('Languages included in the Date and Time Data Source', $select);
+			$group->appendChild($label);
+			$help = new XMLElement('p', __('You can add more languages in you configuration file.'), array('class' => 'help'));
+			$group->appendChild($help);
+			$context['wrapper']->appendChild($group);
+		}
+
+		/**
+		 * Save preferences
+		 */
+		public function __savePreferences($context) {
+	
+			// Remove old selection
+			Symphony::Configuration()->remove('datetime');	
+
+			// Get selection
+			$selection = $context['settings']['datetime'];
+			
+			// Prepare preferences
+			$context['settings'] = array();
+			foreach($selection as $language) {
+				$settings = explode('::', $language);
+				$context['settings']['datetime'][$settings[0]] = $settings[1];
+			}
+		}
+				
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#install
 		 */
@@ -74,7 +156,7 @@
 			$status[] = Stage::install();
 
 			// Add language strings to configuration			
-			Symphony::Configuration()->set('english', 'en, en.UTF8', 'datetime');
+			Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
 			Administration::instance()->saveConfig();
 
 			// Report status
@@ -158,8 +240,8 @@
 			if(version_compare($previousVersion, '2.4', '<')) {
 				
 				// Move language codes to configuration
-				Symphony::Configuration()->set('english', 'en, en.UTF8', 'datetime');
-				Symphony::Configuration()->set('german', 'de, de_DE.UTF8, de_DE', 'datetime');
+				Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
+				Symphony::Configuration()->set('german', $this->languages['german'], 'datetime');
 				Administration::instance()->saveConfig();
 			}
 

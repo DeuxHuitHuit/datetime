@@ -52,6 +52,13 @@
 		 */
 		public function grab(&$param_pool=NULL) {
 			$result = new XMLElement('datetime');
+			
+			// No language specified
+			if(empty($this->dsParamLANG)) {
+				$empty = new XMLElement('error', __('No language specified. Please select one or more in the system preferences.'));
+				$result->appendChild($empty);
+				return $result;
+			}
 
 			// Date
 			$date = new DateTime('1st January');
