@@ -14,6 +14,7 @@ div.calendar {
 	z-index: 2000;
 	position: relative;
 	display: none;
+	-webkit-font-smoothing: antialiased;
 }
 
 div.calendar div.date {
@@ -23,64 +24,133 @@ div.calendar div.date {
 	position: relative;
 }
 
-div.calendar div.date strong {
-	padding: 0 0 7px;
-	width: 100%;
-	display: block;
-	font-size: 109.09%;
-	font-weight: normal;
-	position: relative;
+div.calendar div.date nav {
+	border-bottom: 1px solid #41403f;
+	height: 25px;
 }
 
-div.calendar div.date select {
+div.calendar div.date nav a {
 	display: inline-block;
-	width: auto;
-	font-size: 90%;
-}
-
-div.calendar div.date span.nav {
-	display: block;
+	background: url(images/previous.png) 6px center no-repeat;
+	text-indent: -1000em;
+	width: 22px;
+	height: 20px;
 	position: absolute;
 	top: 0;
-	right: 0;
-	height: 21px;
-	width: 43px;
-	padding: 0;
-	background: none !important;
-	cursor: pointer !important;
-	font-size: 109.09%;
-}
-
-div.calendar div.date span.nav a {
-	border: 1px solid #535351;
-	border-radius: 10px 0 0 10px;
-	-webkit-border-radius: 10px 0 0 10px;
-	-moz-border-radius: 10px 0 0 10px;
-	position: absolute;
 	left: 0;
-	top: 1px;
-	display: block;
-	width: 20px;
-	height: 17px;
-	padding: 0;
-	margin: 0;
-	text-indent: -1000em;
-	overflow: hidden;
-	background: url(images/previous.png) 6px center no-repeat;
+	z-index: 1000;
 }
 
-div.calendar div.date span.nav a.next {
+div.calendar div.date nav a:last-of-type {
 	background: url(images/next.png) 3px center no-repeat;
-	border-left: none;
-	left: 22px;
-	border-radius: 0 10px 10px 0;
-	-webkit-border-radius: 0 10px 10px 0;
-	-moz-border-radius: 0 10px 10px 0;
+	left: auto;
+	right: 0;
 }
 
+div.calendar div.date div {
+	width: 181px;
+	margin: 0 0 0 -90px;
+	background: transparent;
+	float: left;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	overflow: hidden;
+	height: 21px;
+	border-radius: 5px;
+	border: 1px solid transparent;
+	z-index: 2000;
+}
 
-div.calendar div.date span.nav a:hover {
-	background-color: #1f1f1e;
+div.calendar div.date div.active {
+	background: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	height: auto;
+	top: -116px;
+	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+div.calendar div.date ul {
+	width: 90px;
+	float: left;
+	font-size: 109.09%;
+	background: none;
+	border: none;
+	padding: 0;
+	margin: -116px 0 0;
+}
+
+div.calendar div.date ul.months li:nth-child(6) {
+	background: url('images/select.png') 10px -26px no-repeat;
+}
+
+div.calendar div.date ul.years li:nth-child(6) {
+	background: url('images/select.png') 80px -26px no-repeat;
+}
+
+div.calendar div.date div:hover ul li:nth-child(6) {
+	background-position-y: -1px;
+}
+
+div.calendar div.date div.active ul {
+	margin: 0;
+}
+
+div.calendar div.date ul:first-of-type {
+	text-align: right;
+	border-right: 1px solid transparent;
+}
+
+div.calendar div.date div.active ul:first-of-type {
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+div.calendar div.date li {
+	width: 92px;
+	color: #fff;
+	background: none;
+	border: none;
+	height: 23px;
+	line-height: 1;
+	cursor: pointer;
+	padding: 5px !important;
+	margin: 0 -1px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+div.calendar div.date div.active li {
+	color: #000;
+}
+
+div.calendar div.date div.active ul:hover li:nth-child(6) {
+	background: transparent;
+	color: #000;
+}
+
+div.calendar div.date div.active li:nth-child(6) {
+	background: #5677c3;
+	color: #fff;
+}
+
+div.calendar div.date div.active li:hover {
+	background: #5677c3 !important;
+	color: #fff !important;
+}
+
+div.calendar div.date div:before {
+	width: 13px;
+	height: 23px;
+	border: 1px solid #000;
+	background: #000;
+	border-radius: 3px 0;
+	position: absolute;
+	left: -15px;
+	top: 0;
 }
 
 div.calendar table {
@@ -91,7 +161,6 @@ div.calendar table {
 
 div.calendar thead tr {
 	background: #353533;
-	border-top: 1px solid #535351;
 }
 
 div.calendar thead td, div.calendar thead td:nth-last-child(odd) {
@@ -173,7 +242,6 @@ div.calendar thead td:hover {
 
 	fieldset.primary div.calendar {
 		height: 244px;
-		overflow: auto;
 		padding: 18px 38px 18px 18px;
 	}
 	

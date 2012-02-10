@@ -5,6 +5,10 @@
  * @source: http://github.com/nilshoerrmann/datetime
  */
 
+.field-datetime div.stage ul {
+	overflow: visible;
+}
+
 .field-datetime div.stage ul.selection li {
 	padding-right: 0;
 }
