@@ -137,8 +137,6 @@ div.range, div.selector {
 	background: rgba(58, 100, 183, 0.5);
 	border: 1px solid #31466f;
 	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	height: 5px;
 	display: block;
 	width: 5px;
@@ -148,13 +146,13 @@ div.range, div.selector {
 	cursor: pointer !important;
 	margin: 0 0 0 -4px;
 	padding: 0;
-	min-width: 5px;
 }
 
 div.selector {
 	background: none;
 	border: 1px solid rgba(200, 200, 200, 0.2);
 	overflow: visible;
+	min-width: 5px;
 }
 
 li.range div.range {
@@ -174,20 +172,18 @@ div.timeline code {
 	top: -23px;
 	background: #56554D;
 	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
 	padding: 1px 3px;
 	color: #e4e4e4;
 	font-size: 1em;
 	white-space: nowrap;
+	min-width: 28px;
+	text-align: center;
 }
 
 div.timeline div.selector code {
 	background: #2a2a28;
 	color: rgba(255, 255, 255, 0.7);
 	box-shadow: 0 0 10px #353533;
-	-webkit-box-shadow: 0 0 8px 3px #353533;
-	-moz-box-shadow: 0 0 10px #353533;
 	display: block;
 }
 
@@ -202,8 +198,6 @@ div.range span, div.selector span.current {
 	width: 5px !important;
 	background: #c0c0c0 !important;
 	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -235,9 +229,11 @@ div.range span.active {
 	margin: 0;
 	height: 0;
 	z-index: 1000;
-	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 @media screen and (min-width: 1000px) {
