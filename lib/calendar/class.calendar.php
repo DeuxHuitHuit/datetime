@@ -97,7 +97,7 @@
 			return '<div class="date">
 				<nav>
 					<a class="previous">&#171;</a>
-					<div>
+					<div class="switch">
 						<ul class="months"></ul>
 						<ul class="years"></ul>
 					</div>
