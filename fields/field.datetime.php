@@ -15,6 +15,8 @@
 		require_once(EXTENSIONS . '/datetime/lib/calendar/class.calendar.php');
 	}
 
+	require_once TOOLKIT . '/fields/field.date.php';
+
 	Class fieldDatetime extends Field {
 
 		const RANGE = 1;
