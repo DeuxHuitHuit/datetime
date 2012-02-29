@@ -126,7 +126,7 @@
 			$selection = $context['settings']['datetime'];
 			
 			// Prepare preferences
-			$context['settings'] = array();
+			$context['settings']['datetime'] = array()
 			foreach($selection as $language) {
 				$settings = explode('::', $language);
 				$context['settings']['datetime'][$settings[0]] = $settings[1];
