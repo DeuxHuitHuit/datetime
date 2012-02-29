@@ -15,6 +15,8 @@
 		require_once(EXTENSIONS . '/datetime/lib/calendar/class.calendar.php');
 	}
 
+	require_once TOOLKIT . '/fields/field.date.php';
+
 	Class fieldDatetime extends Field {
 
 		const RANGE = 1;
@@ -198,7 +200,7 @@
 			elseif($this->get('range') == 0 && $this->get('required') == 'no') {
 				$help = '<i>' . __('Optional') . '</i>';
 			}
-			
+
 
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
@@ -318,6 +320,7 @@
 		 */
 		function prepareImportValue($data) {
 			if(!is_array($data)) $data = array($data);
+			if(is_array($data[0])) $data = $data[0];
 
 			// Reformat array
 			if(!array_key_exists('start', $data)) {
