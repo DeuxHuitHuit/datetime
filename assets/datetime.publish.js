@@ -263,7 +263,7 @@
 			
 			// Merge new date with old times
 			var mergeTimes = function(current, update, mode) {
-
+			
 				// Empty date	
 				if(update == null || update == '') {
 					return '';
@@ -323,7 +323,7 @@
 				displayStatus(dates);
 				
 				// Hide end date
-				end.attr('data-timestamp', '').slideUp('fast', function() {
+				end.attr('data-timestamp', '').val('').slideUp('fast', function() {
 					item.removeClass('range');
 				});
 			};
