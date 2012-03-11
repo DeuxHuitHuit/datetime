@@ -28,8 +28,8 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
 		 */
-		function __construct(&$parent) {
-			parent::__construct($parent);
+		function __construct() {
+			parent::__construct();
 			$this->_name = __('Date/Time');
 			$this->_required = true;
 			$this->set('location', 'sidebar');

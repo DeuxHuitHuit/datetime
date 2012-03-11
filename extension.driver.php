@@ -23,8 +23,8 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#__construct
 		 */
-		public function __construct(Array $args){
-			parent::__construct($args);
+		public function __construct(){
+			parent::__construct();
 
 			// Include Stage
 			if(!class_exists('Stage')) {
