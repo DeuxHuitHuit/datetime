@@ -45,8 +45,8 @@
 		public function about() {
 			return array(
 				'name' => 'Date and Time',
-				'version' => '2.4',
-				'release-date' => '2012-02-14',
+				'version' => '2.4.1',
+				'release-date' => '2012-03-23',
 				'author' => array(
 					array(
 						'name' => 'Büro für Web- und Textgestaltung',
