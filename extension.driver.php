@@ -21,7 +21,7 @@
 		);
 
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#__construct
+		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#__construct
 		 */
 		public function __construct(){
 			parent::__construct();
@@ -40,31 +40,7 @@
 		}
 
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#about
-		 */
-		public function about() {
-			return array(
-				'name' => 'Date and Time',
-				'version' => '2.4',
-				'release-date' => '2012-02-14',
-				'author' => array(
-					array(
-						'name' => 'Büro für Web- und Textgestaltung',
-						'website' => 'http://hananils.de',
-						'email' => 'buero@hananils.de'
-					),
-					array(
-						'name' => 'Nils Hörrmann',
-						'website' => 'http://nilshoerrmann.de',
-						'email' => 'post@nilshoerrmann.de'
-					)
-				),
-				'description' => 'Date and time management for Symphony'
-			);
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#getSubscribedDelegates
+		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#getSubscribedDelegates
 		 */
 		public function getSubscribedDelegates() {
 			return array(
@@ -134,7 +110,7 @@
 		}
 				
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#install
+		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#install
 		 */
 		public function install() {
 			$status = array();
@@ -169,7 +145,7 @@
 		}
 
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#update
+		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#update
 		 */
 		public function update($previousVersion) {
 			$status = array();
@@ -255,7 +231,7 @@
 		}
 
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/extension/#uninstall
+		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#uninstall
 		 */
 		public function uninstall() {
 

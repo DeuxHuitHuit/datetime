@@ -5,7 +5,61 @@
  * @source: http://github.com/nilshoerrmann/datetime
  */
 
-.field-datetime div.stage ul {
+.field-datetime label {
+	margin-bottom: 2px;
+}
+
+.field-datetime .frame header {
+	padding: 4px 10px 3px;
+}
+
+.field-datetime .frame header div {
+	padding: 0 3px 0;
+	margin: 0;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	border-radius: 2px;
+	background: #fff;
+	position: relative;
+}
+
+.field-datetime header input,
+.field-datetime header input:hover,
+.field-datetime header input:active,
+.field-datetime header input:focus {
+	border: none;
+	box-shadow: none;
+	padding: 1px 2px 0;
+	margin: 0;
+	height: 23px;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.field-datetime header input:last-of-type {
+	border-top: 1px solid #E4E4DE;
+	background: transparent url(images/range.png) 3px 7px no-repeat;
+	padding-left: 25px;
+/*	display: none;*/
+}
+
+.field-datetime .frame header a.destructor {
+	top: 9px;
+	right: 10px;
+	border: none;
+}
+
+.field-datetime header em.label {
+	color: #C2C2C2;
+	position: absolute;
+	top: 4px;
+	right: 10px;
+	margin-top: 0;
+	font-style: normal;
+}
+
+
+/*
+ .field-datetime div.stage ul {
 	overflow: visible;
 }
 
@@ -80,13 +134,6 @@
 	outline: none;
 }
 
-.field-datetime div.stage span.dates em.label {
-	color: #C2C2C2;
-	position: absolute;
-	top: 4px;
-	right: 10px;
-	margin-top: 0;
-}
 
 .field-datetime div.stage span.dates em.end.label {
 	top: 28px;
@@ -98,4 +145,4 @@
 
 .field-datetime #error div.stage + p {
 	padding-top: 1em;
-}
+}*/

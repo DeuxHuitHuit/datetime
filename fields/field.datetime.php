@@ -173,10 +173,6 @@
 				return;
 			}
 
-			// Stage
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/stage/stage.publish.js', 101, false);
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/stage/stage.publish.css', 'screen', 102, false);
-
 			// Datetime
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/datetime.publish.js', 103, false);
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css', 'screen', 104, false);
@@ -201,7 +197,6 @@
 				$help = '<i>' . __('Optional') . '</i>';
 			}
 
-
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
 			$label = new XMLElement('label', $this->get('label') . $help);
@@ -223,36 +218,49 @@
 				$settings[] = 'simple';
 			}
 
+			// Create interface
+			$duplicator = new XMLElement('div', null, array(
+				'class' => 'dark frame'
+			));
+			$list = new XMLElement('ol', null, array(
+				'data-add' => __('Add date'),
+				'data-remove' => __('Remove')
+			));
+
 			// Existing dates
-			$content = array();
 			if(is_array($data)) {
 				if(!is_array($data['start'])) $data['start'] = array($data['start']);
 				if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
 				for($i = 0; $i < count($data['start']); $i++) {
-					$content[] = Calendar::createDate($this->get('element_name'), $data['start'][$i], $data['end'][$i], NULL, $this->get('prepopulate'), $this->get('time'));
+					$list->appendChild(
+						Calendar::createDate($this->get('element_name'), $data['start'][$i], $data['end'][$i], NULL, $this->get('prepopulate'), $this->get('time'))
+					);
 				}
 			}
 
 			// Current date and time
 			else {
-				$content[] = Calendar::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'));
+				$list->appendChild(
+					Calendar::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'))
+				);
 			}
 
 			// Add template
-			$content[] = Calendar::createDate($this->get('element_name'), NULL, NULL, 'template empty create', $this->get('prepopulate'), $this->get('time'));
+			$list->appendChild(
+				Calendar::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'))
+			);
 
-			// Create stage
-			$stage = Stage::create('datetime', $this->get('id'), implode($settings, ' '), $content);
+//			
+//			$stage = Stage::create('datetime', $this->get('id'), implode($settings, ' '), $content);
 
-			// Append Stage
-			if($stage) {
-				if(!is_null($flagWithError)) {
-					$wrapper->appendChild(Widget::wrapFormElementWithError($stage, $flagWithError));
-				}
-				else {
-					$wrapper->appendChild($stage);
-				}
+			// Append Duplicator
+			$duplicator->appendChild($list);
+			if(!is_null($flagWithError)) {
+				$wrapper->appendChild(Widget::wrapFormElementWithError($duplicator, $flagWithError));
+			}
+			else {
+				$wrapper->appendChild($duplicator);
 			}
 		}
 

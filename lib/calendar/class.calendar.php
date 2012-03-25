@@ -47,13 +47,13 @@
 			// Create element
 			return new XMLElement(
 				'li', 
-				'<span>
-					<span class="dates">' . 
+				'<header>
+					<div>' . 
 						self::__createDateField($element, 'start', $start, $time, $prepopulate) . 
 						self::__createDateField($element, 'end', $end, $time) . 
-					'</span>
-				</span>
-				<div class="calendar">' .
+				'	</div>
+				</header>
+				<div class="calendar content">' .
 					self::__createCalendar() .			
 					$cutter .
 				'</div>', 
