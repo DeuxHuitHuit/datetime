@@ -8,9 +8,6 @@
 	 */
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
-	if(!class_exists('Stage')) {
-		require_once(EXTENSIONS . '/datetime/lib/stage/class.stage.php');
-	}
 	if(!class_exists('Calendar')) {
 		require_once(EXTENSIONS . '/datetime/lib/calendar/class.calendar.php');
 	}
@@ -89,42 +86,46 @@
 
 		/*-----------------------------------------------------------------------*/
 
-			// Behaviour
-			$fieldset = Stage::displaySettings(
-				$this->get('id'),
-				$this->get('sortorder'),
-				__('Behaviour'),
-				array('constructable', 'draggable')
-			);
-			$group = $fieldset->getChildren();
+			$columns = new XMLElement('div', null, array('class' => 'two columns'));
+			$wrapper->appendChild($columns);
 
-			// Handle missing settings
-			if(!$this->get('id') && $errors == NULL) {
-				$this->set('prepopulate', 1);
-				$this->set('time', 1);
-				$this->set('range', 1);
+			// Prepopulation
+			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][prepopulate]', 'yes', 'checkbox');
+			if($this->get('prepopulate') == 1) {
+				$checkbox->setAttribute('checked', 'checked');
 			}
-
+			$setting = new XMLElement('label', __('%s Pre-populate with current date', array($checkbox->generate())), array('class' => 'column'));
+			$columns->appendChild($setting);
+			
 			// Time
-			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][time]" value="yes" type="checkbox"' . ($this->get('time') == 0 ? '' : ' checked="checked"') . '/> ' . __('Allow time editing') . ' <i>' . __('This will display date and time in the interface') . '</i>');
-			$group[0]->appendChild($setting);
-
-			// Ranges
-			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][range]" value="yes" type="checkbox"' . ($this->get('range') == 0 ? '' : ' checked="checked"') . '/> ' . __('Allow date ranges') . ' <i>' . __('This will enable range editing') . '</i>');
-			$group[0]->appendChild($setting);
-
-			// Prepopulate
-			$setting = new XMLElement('label', '<input name="fields[' . $this->get('sortorder') . '][prepopulate]" value="yes" type="checkbox"' . ($this->get('prepopulate') == 0 ? '' : ' checked="checked"') . '/> ' . __('Pre-populate field') . ' <i>' . __('This will automatically add the current date to new entries') . '</i>');
-			$group[0]->appendChild($setting);
-
-			// Append behaviour settings
-			$wrapper->appendChild($fieldset);
+			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][time]', 'yes', 'checkbox');
+			if($this->get('time') == 1) {
+				$checkbox->setAttribute('checked', 'checked');
+			}
+			$setting = new XMLElement('label', __('%s Display time', array($checkbox->generate())), array('class' => 'column'));
+			$columns->appendChild($setting);
+			
+			// Multiple dates
+			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][multiple]', 'yes', 'checkbox');
+			if($this->get('multiple') == 1) {
+				$checkbox->setAttribute('checked', 'checked');
+			}
+			$setting = new XMLElement('label', __('%s Allow multiple dates', array($checkbox->generate())), array('class' => 'column'));
+			$columns->appendChild($setting);
+			
+			// Date ranges
+			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][range]', 'yes', 'checkbox');
+			if($this->get('range') == 1) {
+				$checkbox->setAttribute('checked', 'checked');
+			}
+			$setting = new XMLElement('label', __('%s Enable date ranges', array($checkbox->generate())), array('class' => 'column'));
+			$columns->appendChild($setting);
 
 		/*-----------------------------------------------------------------------*/
 
 			// General
 			$fieldset = new XMLElement('fieldset');
-			$group = new XMLElement('div', NULL, array('class' => 'group'));
+			$group = new XMLElement('div', NULL, array('class' => 'two columns'));
 			$this->appendRequiredCheckbox($group);
 			$this->appendShowColumnCheckbox($group);
 			$fieldset->appendChild($group);
@@ -144,14 +145,10 @@
 			// Set up fields
 			$fields = array();
 			$fields['field_id'] = $id;
-			$fields['time'] = ($this->get('time') ? 1 : 0);
-			$fields['range'] = ($this->get('range') ? 1 : 0);
 			$fields['prepopulate'] = ($this->get('prepopulate') ? 1 : 0);
-
-			// Save new stage settings for this field
-			$stage = $this->get('stage');
-			$stage['destructable'] = 1;
-			Stage::saveSettings($this->get('id'), $stage, 'datetime');
+			$fields['time'] = ($this->get('time') ? 1 : 0);
+			$fields['multiple'] = ($this->get('multiple') ? 1 : 0);
+			$fields['range'] = ($this->get('range') ? 1 : 0);
 
 			// Delete old field settings
 			Symphony::Database()->query(
@@ -204,8 +201,7 @@
 
 			// Get settings
 			$settings = array();
-			$stage = Stage::getComponents($this->get('id'));
-			if(in_array('constructable', $stage)) {
+			if($this->get('multiple') == 1) {
 				$settings[] = 'multiple';
 			}
 			else {
@@ -250,9 +246,6 @@
 			$list->appendChild(
 				Calendar::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'))
 			);
-
-//			
-//			$stage = Stage::create('datetime', $this->get('id'), implode($settings, ' '), $content);
 
 			// Append Duplicator
 			$duplicator->appendChild($list);

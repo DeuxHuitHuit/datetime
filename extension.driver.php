@@ -21,25 +21,6 @@
 		);
 
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#__construct
-		 */
-		public function __construct(){
-			parent::__construct();
-
-			// Include Stage
-			if(!class_exists('Stage')) {
-				try {
-					if((include_once(EXTENSIONS . '/datetime/lib/stage/class.stage.php')) === FALSE) {
-						throw new Exception();
-					}
-				}
-				catch(Exception $e) {
-				    throw new SymphonyErrorPage(__('Please make sure that the Stage submodule is initialised and available at %s.', array('<code>' . EXTENSIONS . '/datetime/lib/stage/</code>')) . '<br/><br/>' . __('It\'s available at %s.', array('<a href="https://github.com/nilshoerrmann/stage">github.com/nilshoerrmann/stage</a>')), __('Stage not found'));
-				}
-			}
-		}
-
-		/**
 		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#getSubscribedDelegates
 		 */
 		public function getSubscribedDelegates() {
@@ -122,14 +103,12 @@
 					`field_id` int(11) unsigned NOT NULL,
 					`prepopulate` tinyint(1) DEFAULT '1',
 					`time` tinyint(1) DEFAULT '1',
+					`multiple` tinyint(1) DEFAULT '1',
 					`range` tinyint(1) DEFAULT '1',
         	  		PRIMARY KEY  (`id`),
 			  		KEY `field_id` (`field_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
 			);
-
-			// Create stage
-			$status[] = Stage::install();
 
 			// Add language strings to configuration			
 			Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
@@ -149,6 +128,9 @@
 		 */
 		public function update($previousVersion) {
 			$status = array();
+
+			// Get table columns
+			$columns = Symphony::Database()->fetchCol('Field', "SHOW COLUMNS FROM `tbl_fields_datetime`");
 
 			// Prior version 2.0
 			if(version_compare($previousVersion, '2.0', '<')) {
@@ -172,9 +154,6 @@
 						 OR `end` = '0000-00-00 00:00'"
 					);
 				}
-
-				// Get table columns
-				$columns = Symphony::Database()->fetchCol('Field', "SHOW COLUMNS FROM `tbl_fields_datetime`");
 
 				// Remove allow multiple setting
 				if(in_array('allow_multiple_dates', $columns)) {
@@ -207,9 +186,6 @@
 					"UPDATE tbl_fields_datetime
 					 SET `prepopulate` = 0 WHERE `prepopulate` > 1"
 				);
-
-				// Create stage
-				$status[] = Stage::install();
 			}
 
 			// Prior version 2.4
@@ -220,7 +196,21 @@
 				Symphony::Configuration()->set('german', $this->languages['german'], 'datetime');
 				Administration::instance()->saveConfig();
 			}
-
+			
+			// Prior version 3.0
+			if(version_compare($previousVersion, '3.0', '<')) {
+			
+				// Add multiple setting
+				if(!in_array('multiple', $columns)) {
+					$status[] = Symphony::Database()->query(
+						"ALTER TABLE `tbl_fields_datetime` ADD `multiple` tinyint(1) DEFAULT '1'"
+					);
+				}
+				
+				// @todo: Transfer old Stage settings
+				// @todo: Remove old Stage instances
+			}
+			
 			// Report status
 			if(in_array(false, $status, true)) {
 				return false;
@@ -239,6 +229,8 @@
 			Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
 			Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
 
+			// @todo: Remove old Stage tables if they are empty
+			
 			// Drop date and time table
 			Symphony::Database()->query("DROP TABLE `tbl_fields_datetime`");
 			
