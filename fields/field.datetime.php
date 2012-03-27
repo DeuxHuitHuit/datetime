@@ -82,7 +82,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displaySettingsPanel
 		 */
-		function displaySettingsPanel(&$wrapper, $errors=NULL) {
+		function displaySettingsPanel(XMLElement &$wrapper, $errors = null) {
 
 			// Initialize field settings based on class defaults (name, placement)
 			parent::displaySettingsPanel($wrapper, $errors);
@@ -165,7 +165,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displayPublishPanel
 		 */
-		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL) {
+		function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null) {
 
 			// Houston, we have problem: we've been called out of context!
 			$callback = Administration::instance()->getPageCallback();
@@ -259,7 +259,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#checkPostFieldData
 		 */
-		public function checkPostFieldData($data, &$message, $entry_id=NULL) {
+		public function checkPostFieldData($data, &$message, $entry_id = null) {
 			if($this->get('required') && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
 				return self::__MISSING_FIELDS__;
@@ -275,7 +275,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#processRawFieldData
 		 */
-		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL) {
+		function processRawFieldData($data, &$status, &$message=null, $simulate=false, $entry_id=null) {
 			$status = self::__OK__;
 			if(!is_array($data)) return NULL;
 
@@ -362,7 +362,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#prepareTableValue
 		 */
-		function prepareTableValue($data, XMLElement $link=NULL) {
+		function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
@@ -782,7 +782,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#appendFormattedElement
 		 */
-		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
+		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
 			$datetime = new XMLElement($this->get('element_name'));
 
 			// Prepare data
@@ -846,7 +846,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#getParameterPoolValue
 		 */
-		public function getParameterPoolValue($data) {
+		public function getParameterPoolValue(array $data, $entry_id=NULL) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
@@ -866,7 +866,7 @@
 				}
 			}
 
-			return implode(',', $values);
+			return $values;
 		}
 
 		/**

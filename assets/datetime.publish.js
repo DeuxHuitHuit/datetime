@@ -5,9 +5,9 @@
 		'yesterday': false,
 		'tomorrow': false
 	});
-	
+
 	Symphony.DateTime = {
-	
+
 		// Reduce timestamp to days
 		reduce: function(timestamp) {
 			return Math.floor((this.clearTime(timestamp) + 7200000) / 86400000);
@@ -27,7 +27,7 @@
 	};
 
 	/**
-	 * The Date and Time extension provides an interface to add 
+	 * The Date and Time extension provides an interface to add
 	 * one or more single dates or date ranges to an entry.
 	 *
 	 * @author: Nils Hörrmann, post@nilshoerrmann.de
@@ -40,15 +40,15 @@
 			var manager = $(this),
 				stage = manager.find('div.stage'),
 				selection = stage.find('ul.selection');
-			
+
 		/*---- Events -----------------------------------------------------------*/
-		
+
 			// Constructing
 			stage.bind('constructanim', function(event, item) {
 				var input = item.find('input.start'),
 					all = item.prevAll(),
 					prev;
-				
+
 				// Prepopulate with previous date, if possible
 				if(stage.is('.prepopulate') && all.length > 0 && !(selection.is('.destructing') && all.length == 1)) {
 					prev = all.filter(':first').find('input.start');
@@ -57,12 +57,12 @@
 			});
 			stage.bind('constructstop', function(event, item) {
 				var input = item.find('input.start');
-				
+
 				// Store and contextualise date
 				input.data('validated', input.val());
 				contextualise(input);
 			});
-		
+
 			// Visualising
 			selection.delegate('input', 'focus', function() {
 				var input = $(this),
@@ -75,17 +75,17 @@
 
 				// Set focus
 				dates.addClass('focus').siblings('.focus').removeClass('focus');
-		
+
 				// Visualise
 				if(!dates.is('.invalid')) {
 					item.trigger('visualise', [{
 						start: start,
 						end: end
 					}, date]);
-					calendar.slideDown('fast');		
+					calendar.slideDown('fast');
 				}
 			});
-			
+
 			// Setting
 			selection.delegate('li', 'setdate.datetime', function(event, range, focus, mode) {
 				var item = $(this),
@@ -93,7 +93,7 @@
 					end = item.find('input.end'),
 					from = mergeTimes(start.attr('data-timestamp'), range.start, mode),
 					to;
-					
+
 				// Move multiple day range to single day
 				if(mode === 'single') {
 					to = mergeTimes(start.attr('data-timestamp'), range.end, mode);
@@ -101,7 +101,7 @@
 				else {
 					to = mergeTimes(end.attr('data-timestamp'), range.end, mode);
 				}
-					
+
 				// Date range
 				if(range.start && range.end) {
 					validate(start, from, false);
@@ -116,7 +116,7 @@
 					empty(end);
 					item.removeClass('range');
 				}
-				
+
 				// Visualise
 				item.trigger('visualise', [{
 					start: from,
@@ -132,13 +132,13 @@
 						end: null
 					},
 					from, to;
-					
+
 				// Start time
 				from = new Date(parseInt(start.attr('data-timestamp')));
 				from.setHours(first.hours);
 				from.setMinutes(first.minutes);
 				range.start = from.getTime();
-				
+
 				// End time, date range over multiple days
 				if(mode == 'multiple' && last != null) {
 					to = new Date(parseInt(end.attr('data-timestamp')));
@@ -146,7 +146,7 @@
 					to.setMinutes(last.minutes);
 					range.end = to.getTime();
 				}
-				
+
 				// End time, date range on single day
 				else if(mode == 'single' && last != null) {
 					to = from;
@@ -154,7 +154,7 @@
 					to.setMinutes(last.minutes);
 					range.end = to.getTime();
 				}
-				
+
 				// Set focus
 				if(focus == 'start') {
 					focus = range.start;
@@ -162,11 +162,11 @@
 				else {
 					focus = range.end;
 				}
-							
+
 				// Visualise
 				item.trigger('setdate', [range, focus, mode]);
 			});
-			
+
 			// Keypress
 			if(!stage.is('.simple')) {
 				selection.delegate('input', 'keydown.datetime', function(event) {
@@ -181,56 +181,56 @@
 					}
 				});
 			}
-			
+
 			// Validating
 			selection.delegate('input', 'blur.datetime', function(event) {
 				var input = $(this),
 					date = input.val(),
 					validated = input.data('validated');
-				
+
 				// Empty date
 				if(date == '') {
 					empty(input);
 				}
-				
+
 				// Validate
 				else if(date != validated) {
-					validate(input, date, true);			
-				}			
+					validate(input, date, true);
+				}
 			});
-						
+
 			// Closing
 			$('body').bind('click.datetime', function() {
-				
+
 				// Hide calendar
 				selection.find('div.calendar').slideUp('fast');
 				selection.find('.focus').removeClass('focus');
 			});
-						
+
 		/*---- Functions --------------------------------------------------------*/
-		
+
 			// Validate and set date
 			var validate = function(input, date, visualise) {
 				var item = input.parents('li'),
 					dates = input.parent(),
 					calendar = item.find('div.calendar');
-				
+
 				// Call validator
 				if(input.attr('data-timestamp') != date) {
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
 						url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
-						data: { 
+						data: {
 							date: date,
 							time: Math.min(calendar.find('.timeline').size(), 1)
 						},
 						success: function(parsed) {
-						
+
 							// Valid date
 							if(parsed.status == 'valid') {
 								input.attr('data-timestamp', parsed.timestamp).val(parsed.date).removeClass('invalid');
-							
+
 								// Visualise
 								if(visualise === true) {
 									item.trigger('visualise', [{
@@ -239,71 +239,71 @@
 									}, input.attr('data-timestamp')]);
 								}
 							}
-							
+
 							// Invalid date
 							else {
 								input.attr('data-timestamp', '').addClass('invalid');
-								
+
 								// Clear
-								calendar.slideUp('fast');		
+								calendar.slideUp('fast');
 							}
-	
+
 							// Store date
 							input.data('validated', parsed.date);
-							
+
 							// Display status
 							displayStatus(dates);
-		
+
 							// Get date context
 							contextualise(input);
 						}
 					});
 				}
 			};
-			
+
 			// Merge new date with old times
 			var mergeTimes = function(current, update, mode) {
-			
-				// Empty date	
+
+				// Empty date
 				if(update == null || update == '') {
 					return '';
 				}
-				
+
 				// New date
 				else if(current == null || current == '') {
 					return update;
 				}
-				
+
 				// Existing date
 				else {
 					var time, date
-					
+
 					// Set date, keep time
 					if(mode == 'date') {
 						time = new Date(parseInt(current)),
 						date = new Date(parseInt(update));
 					}
-					
+
 					// Set time, keep date
 					else {
 						time = new Date(parseInt(update)),
 						date = new Date(parseInt(current));
 					}
-						
+
 					// Set hours and minutes
 					date.setHours(time.getHours());
 					date.setMinutes(time.getMinutes());
-	
+
 					return date.getTime();
 				}
 			}
-			
+
 			// Empty date
 			var empty = function(input) {
 				var item = input.parents('li'),
 					dates = input.parent(),
 					end = dates.find('.end');
-			
+
 				// Empty dates are valid
 				input.removeClass('invalid');
 
@@ -311,36 +311,36 @@
 				if(input.is('.start') && end.val() != '') {
 					input.val(end.val());
 					end.val('');
-					
+
 					// Keep errors
 					if(end.is('.invalid')) {
 						end.removeClass('invalid');
-						input.addClass('invalid');					
+						input.addClass('invalid');
 					}
 				}
-				
+
 				// Display status
 				displayStatus(dates);
-				
+
 				// Hide end date
 				end.attr('data-timestamp', '').val('').slideUp('fast', function() {
 					item.removeClass('range');
 				});
 			};
-			
+
 			// Display validity status
 			var displayStatus = function(dates) {
-			
+
 				// At least one date is invalid
 				if(dates.find('input.invalid').size() > 0) {
 					dates.addClass('invalid');
 				}
-				
+
 				// All dates are valid
 				else {
 					dates.removeClass('invalid');
 				}
-			};	
+			};
 
 			// Get context
 			var contextualise = function(input) {
@@ -348,11 +348,11 @@
 					time = parseInt(input.attr('data-timestamp')),
 					now = new Date(),
 					day, today, yesterday, tomorrow, label;
-				
+
 				// Reduze timestamps to days:
 				day = Symphony.DateTime.reduce(time);
 				today = Symphony.DateTime.reduce(now.getTime());
-				
+
 				// Create label
 				if(day == today) {
 					label = Symphony.Language.get('today');
@@ -363,20 +363,20 @@
 				else if(day - today == 1) {
 					label = Symphony.Language.get('tomorrow');
 				}
-				
+
 				// Attach label
 				if(label) {
 					input.next('em.label').text(label).fadeIn('fast');
 				}
-				
+
 				// Detach label
 				else {
 					input.next('em.label').fadeOut('fast');
 				}
 			};
-			
+
 		/*---- Initialisation ---------------------------------------------------*/
-		
+
 			// Create calendar and timer
 			selection.symphonyCalendar();
 			selection.symphonyTimer();
@@ -390,9 +390,9 @@
 
 			// Set errors
 			selection.find('input.invalid').parents('span.dates').addClass('invalid');
-			
+
 		});
 
 	});
-		
+
 })(jQuery.noConflict());

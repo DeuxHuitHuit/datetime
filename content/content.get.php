@@ -1,11 +1,11 @@
 <?php
- 
+
 	/**
 	 * @package content
 	 */
 	require_once(TOOLKIT . '/class.administrationpage.php');
 	require_once(EXTENSIONS . '/datetime/lib/calendar/class.calendar.php');
-	
+
 	class contentExtensionDatetimeGet extends AdministrationPage {
 
 		/**
@@ -17,5 +17,3 @@
 		}
 
 	}
- 
-?>

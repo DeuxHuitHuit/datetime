@@ -42,9 +42,9 @@
 }
 
 .field-datetime div.stage span.dates.focus {
-	box-shadow: 0 0 5px #a7a7a7;
 	-webkit-box-shadow: 0 0 5px #a7a7a7;
 	-moz-box-shadow: 0 0 5px #a7a7a7;
+	box-shadow: 0 0 5px #a7a7a7;
 }
 
 .field-datetime div.stage span.dates input {
