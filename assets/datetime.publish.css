@@ -11,6 +11,7 @@
 
 .field-datetime .frame header {
 	padding: 4px 10px 3px;
+	position: relative;
 }
 
 .field-datetime .frame header div {
@@ -39,7 +40,7 @@
 	border-top: 1px solid #E4E4DE;
 	background: transparent url(images/range.png) 3px 7px no-repeat;
 	padding-left: 25px;
-/*	display: none;*/
+	display: none;
 }
 
 .field-datetime .frame header a.destructor {

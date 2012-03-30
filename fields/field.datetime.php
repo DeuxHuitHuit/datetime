@@ -200,7 +200,7 @@
 			$wrapper->appendChild($label);
 
 			// Get settings
-			$settings = array();
+			$settings = array('dark', 'frame');
 			if($this->get('multiple') == 1) {
 				$settings[] = 'multiple';
 			}
@@ -216,7 +216,7 @@
 
 			// Create interface
 			$duplicator = new XMLElement('div', null, array(
-				'class' => 'dark frame'
+				'class' => implode(' ', $settings)
 			));
 			$list = new XMLElement('ol', null, array(
 				'data-add' => __('Add date'),

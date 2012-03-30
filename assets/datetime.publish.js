@@ -1,7 +1,6 @@
 (function($) {
 
 	Symphony.Language.add({
-		'Remove': false,
 		'today': false,
 		'yesterday': false,
 		'tomorrow': false
@@ -15,7 +14,7 @@
 		},
 
 		// Given a timestamp, set the hours and minutes of the resulting
-		// date to 0, for use with selection detection
+		// date to 0, for use with dates detection
 		clearTime: function(timestamp) {
 			if(timestamp == '') return timestamp;
 
@@ -35,21 +34,199 @@
 	 * @source: http://github.com/nilshoerrmann/datetime
 	 */
 	$(document).ready(function() {
-		$('div.field-datetime').each(function datetime() {
-			var datetime = $('div.field-datetime'),
-				selection = datetime.find('ol'),
-				headers = selection.find('header'),
-				destructor, width;
-	
-		/*---- Events -----------------------------------------------------------*/
 
+		// Date and time
+		$('div.field-datetime').each(function datetime() {
+			var field = $(this),
+				datetime = field.find('.frame'),
+				dates = datetime.find('ol'),
+				headers = dates.find('header'),
+				destructor, width;
+			
+		/*---- Events -----------------------------------------------------------*/
+		
+			// Destructor
+			datetime.on('constructstop.duplicator', 'li', function(event) {
+				var item = $(this),
+					destructor = item.find('a.destructor'),
+					width = destructor.width();
+					
+					console.log(item, width);
+			
+				if(width > 0) {
+					item.find('header').css('padding-right', width + 20);
+				}
+			});
+		
+			// Constructing
+			datetime.on('constructshow.duplicator', 'li', function(event) {
+				var item = $(this),
+					input = item.find('input.start'),
+					all = item.prevAll(),
+					prev;
+				
+				// Prepopulate with previous date, if possible
+				if(datetime.is('.prepopulate') && all.length > 0 && !(dates.is('.destructing') && all.length == 1)) {
+					prev = all.filter(':first').find('input.start');
+					input.val(prev.val()).attr('data-timestamp', prev.attr('data-timestamp'));
+				}
+			});
+			datetime.on('constructstop.duplicator', 'li', function(event) {
+				var item = $(this),
+					input = item.find('input.start');
+				
+				// Store and contextualise date
+				input.data('validated', input.val());
+				contextualise(input);
+			});
+		
+			// Visualising
+			datetime.on('focus', 'input', function() {
+				var input = $(this),
+					item = input.parents('li'),
+					calendar = item.find('div.calendar'),
+					datespan = input.parent().addClass('focus'),
+					date = input.attr('data-timestamp'),
+					start = datespan.find('input.start').attr('data-timestamp'),
+					end = datespan.find('input.end').attr('data-timestamp');
+
+				// Set focus
+				datespan.addClass('focus').siblings('.focus').removeClass('focus');
+		
+				// Visualise
+				if(!datespan.is('.invalid')) {
+					item.trigger('visualise', [{
+						start: start,
+						end: end
+					}, date]);
+					//calendar.slideDown('fast');		
+				}
+			});
+			datetime.on('collapsestart.collapsible', 'li', function() {
+				var item = $(this);
+				
+				item.find('input:first').trigger('focus');
+			});
+			
+			// Setting
+			datetime.on('setdate.datetime', 'li', function(event, range, focus, mode) {
+				var item = $(this),
+					start = item.find('input.start'),
+					end = item.find('input.end'),
+					from = mergeTimes(start.attr('data-timestamp'), range.start, mode),
+					to;
+					
+				// Move multiple day range to single day
+				if(mode === 'single') {
+					to = mergeTimes(start.attr('data-timestamp'), range.end, mode);
+				}
+				else {
+					to = mergeTimes(end.attr('data-timestamp'), range.end, mode);
+				}
+					
+				// Date range
+				if(range.start && range.end) {
+					validate(start, from, false);
+					validate(end, to, false);
+					end.slideDown('fast');
+					item.addClass('range');
+				}
+
+				// Single date
+				else {
+					validate(start, from, false);
+					empty(end);
+					item.removeClass('range');
+				}
+				
+				// Visualise
+				item.trigger('visualise', [{
+					start: from,
+					end: to
+				}, focus]);
+			});
+			datetime.on('settime.datetime', 'li', function(event, first, last, mode, focus) {
+				var item = $(this),
+					start = item.find('.start'),
+					end = item.find('.end'),
+					range = {
+						start: null,
+						end: null
+					},
+					from, to;
+					
+				// Start time
+				from = new Date(parseInt(start.attr('data-timestamp')));
+				from.setHours(first.hours);
+				from.setMinutes(first.minutes);
+				range.start = from.getTime();
+				
+				// End time, date range over multiple days
+				if(mode == 'multiple' && last != null) {
+					to = new Date(parseInt(end.attr('data-timestamp')));
+					to.setHours(last.hours);
+					to.setMinutes(last.minutes);
+					range.end = to.getTime();
+				}
+				
+				// End time, date range on single day
+				else if(mode == 'single' && last != null) {
+					to = from;
+					to.setHours(last.hours);
+					to.setMinutes(last.minutes);
+					range.end = to.getTime();
+				}
+				
+				// Set focus
+				if(focus == 'start') {
+					focus = range.start;
+				}
+				else {
+					focus = range.end;
+				}
+							
+				// Visualise
+				item.trigger('setdate', [range, focus, mode]);
+			});
+			
+			// Keypress
+			if(!datetime.is('.simple')) {
+				datetime.on('keydown.datetime', 'input', function(event) {
+					var input = $(this);
+
+					// If tab is pressed while the user is in the first
+					// date, allow the focus to shifted to the end date
+					// instead of the calendar.
+					if(event.which == 9 && !event.shiftKey && input.is('.start')) {
+						input.nextAll('input.end').show().focus();
+						event.preventDefault();
+					}
+				});
+			}
+			
+			// Validating
+			datetime.on('blur.datetime', 'input', function(event) {
+				var input = $(this),
+					date = input.val(),
+					validated = input.data('validated');
+				
+				// Empty date
+				if(date == '') {
+					empty(input);
+				}
+				
+				// Validate
+				else if(date != validated) {
+					validate(input, date, true);			
+				}			
+			});
 						
 		/*---- Functions --------------------------------------------------------*/
 		
 			// Validate and set date
 			var validate = function(input, date, visualise) {
 				var item = input.parents('li'),
-					dates = input.parent(),
+					datespan = input.parent(),
 					calendar = item.find('div.calendar');
 				
 				// Call validator
@@ -71,8 +248,8 @@
 								// Visualise
 								if(visualise === true) {
 									item.trigger('visualise', [{
-										start: dates.find('.start').attr('data-timestamp'),
-										end: dates.find('.end').attr('data-timestamp')
+										start: datespan.find('.start').attr('data-timestamp'),
+										end: datespan.find('.end').attr('data-timestamp')
 									}, input.attr('data-timestamp')]);
 								}
 							}
@@ -89,7 +266,7 @@
 							input.data('validated', parsed.date);
 							
 							// Display status
-							displayStatus(dates);
+							displayStatus(datespan);
 		
 							// Get date context
 							contextualise(input);
@@ -138,8 +315,8 @@
 			// Empty date
 			var empty = function(input) {
 				var item = input.parents('li'),
-					dates = input.parent(),
-					end = dates.find('.end');
+					datespan = input.parent(),
+					end = datespan.find('.end');
 			
 				// Empty dates are valid
 				input.removeClass('invalid');
@@ -157,7 +334,7 @@
 				}
 				
 				// Display status
-				displayStatus(dates);
+				displayStatus(datespan);
 				
 				// Hide end date
 				end.attr('data-timestamp', '').val('').slideUp('fast', function() {
@@ -166,22 +343,22 @@
 			};
 			
 			// Display validity status
-			var displayStatus = function(dates) {
+			var displayStatus = function(datespan) {
 			
 				// At least one date is invalid
-				if(dates.find('input.invalid').size() > 0) {
-					dates.addClass('invalid');
+				if(datespan.find('input.invalid').size() > 0) {
+					datespan.addClass('invalid');
 				}
 				
 				// All dates are valid
 				else {
-					dates.removeClass('invalid');
+					datespan.removeClass('invalid');
 				}
 			};	
 
 			// Get context
 			var contextualise = function(input) {
-				var dates = input.parent(),
+				var datespan = input.parent(),
 					time = parseInt(input.attr('data-timestamp')),
 					now = new Date(),
 					day, today, yesterday, tomorrow, label;
@@ -213,239 +390,28 @@
 			};
 			
 		/*---- Initialisation ---------------------------------------------------*/
-		
-			// Get destructor width
-			destructor = $('<a />', {
-				text: Symphony.Language.get('Remove'),
-				class: 'destructor'
-			}).appendTo(headers.eq(0));
-			width = destructor.width();
-			destructor.remove();
-		
-			// Set destructor width
-			headers.each(function setDestructorWidth() {
-				$(this).css('padding-right', width + 20);
-			});
 	
 			// Create calendar and timer
-			selection.symphonyCalendar();
-			selection.symphonyTimer();
+			dates.symphonyCalendar();
+			dates.symphonyTimer();
 	
 			// Store and contextualise dates
-			selection.find('input').each(function() {
+			dates.find('input').each(function() {
 				var input = $(this);
 				input.data('validated', input.val());
 				contextualise(input);
 			}).load();
 	
 			// Set errors
-			selection.find('input.invalid').parent('div').addClass('invalid');		
+			dates.find('input.invalid').parent('div').addClass('invalid');		
 		
-			// Initialise Duplicator
-			selection.symphonyDuplicator({
+			// Initialise datetime
+			dates.symphonyDuplicator({
 				orderable: true,
-				collapsible: true
+				collapsible: true,
+				minimum: 1,
+				maximum: (datetime.is('.single') ? 1 : 1000)
 			});
-		});
-	
-	
-			
-			
-		
-	/*-----------------------------------------------------------------*/
-	/*---- OLD CODE ---------------------------------------------------*/
-	/*-----------------------------------------------------------------*/
-
-		// Date and time
-		$('div.field-datetimeOLD').each(function() {
-			var manager = $(this),
-				stage = manager.find('div.stage'),
-				selection = stage.find('ul.selection');
-			
-		/*---- Events -----------------------------------------------------------*/
-		
-			// Constructing
-			stage.bind('constructanim', function(event, item) {
-				var input = item.find('input.start'),
-					all = item.prevAll(),
-					prev;
-				
-				// Prepopulate with previous date, if possible
-				if(stage.is('.prepopulate') && all.length > 0 && !(selection.is('.destructing') && all.length == 1)) {
-					prev = all.filter(':first').find('input.start');
-					input.val(prev.val()).attr('data-timestamp', prev.attr('data-timestamp'));
-				}
-			});
-			stage.bind('constructstop', function(event, item) {
-				var input = item.find('input.start');
-				
-				// Store and contextualise date
-				input.data('validated', input.val());
-				contextualise(input);
-			});
-		
-			// Visualising
-			selection.delegate('input', 'focus', function() {
-				var input = $(this),
-					item = input.parents('li'),
-					calendar = item.find('div.calendar'),
-					dates = input.parent().addClass('focus'),
-					date = input.attr('data-timestamp'),
-					start = dates.find('input.start').attr('data-timestamp'),
-					end = dates.find('input.end').attr('data-timestamp');
-
-				// Set focus
-				dates.addClass('focus').siblings('.focus').removeClass('focus');
-		
-				// Visualise
-				if(!dates.is('.invalid')) {
-					item.trigger('visualise', [{
-						start: start,
-						end: end
-					}, date]);
-					calendar.slideDown('fast');		
-				}
-			});
-			
-			// Setting
-			selection.delegate('li', 'setdate.datetime', function(event, range, focus, mode) {
-				var item = $(this),
-					start = item.find('input.start'),
-					end = item.find('input.end'),
-					from = mergeTimes(start.attr('data-timestamp'), range.start, mode),
-					to;
-					
-				// Move multiple day range to single day
-				if(mode === 'single') {
-					to = mergeTimes(start.attr('data-timestamp'), range.end, mode);
-				}
-				else {
-					to = mergeTimes(end.attr('data-timestamp'), range.end, mode);
-				}
-					
-				// Date range
-				if(range.start && range.end) {
-					validate(start, from, false);
-					validate(end, to, false);
-					end.slideDown('fast');
-					item.addClass('range');
-				}
-
-				// Single date
-				else {
-					validate(start, from, false);
-					empty(end);
-					item.removeClass('range');
-				}
-				
-				// Visualise
-				item.trigger('visualise', [{
-					start: from,
-					end: to
-				}, focus]);
-			});
-			selection.delegate('li', 'settime.datetime', function(event, first, last, mode, focus) {
-				var item = $(this),
-					start = item.find('.start'),
-					end = item.find('.end'),
-					range = {
-						start: null,
-						end: null
-					},
-					from, to;
-					
-				// Start time
-				from = new Date(parseInt(start.attr('data-timestamp')));
-				from.setHours(first.hours);
-				from.setMinutes(first.minutes);
-				range.start = from.getTime();
-				
-				// End time, date range over multiple days
-				if(mode == 'multiple' && last != null) {
-					to = new Date(parseInt(end.attr('data-timestamp')));
-					to.setHours(last.hours);
-					to.setMinutes(last.minutes);
-					range.end = to.getTime();
-				}
-				
-				// End time, date range on single day
-				else if(mode == 'single' && last != null) {
-					to = from;
-					to.setHours(last.hours);
-					to.setMinutes(last.minutes);
-					range.end = to.getTime();
-				}
-				
-				// Set focus
-				if(focus == 'start') {
-					focus = range.start;
-				}
-				else {
-					focus = range.end;
-				}
-							
-				// Visualise
-				item.trigger('setdate', [range, focus, mode]);
-			});
-			
-			// Keypress
-			if(!stage.is('.simple')) {
-				selection.delegate('input', 'keydown.datetime', function(event) {
-					var input = $(this);
-
-					// If tab is pressed while the user is in the first
-					// date, allow the focus to shifted to the end date
-					// instead of the calendar.
-					if(event.which == 9 && !event.shiftKey && input.is('.start')) {
-						input.nextAll('input.end').show().focus();
-						event.preventDefault();
-					}
-				});
-			}
-			
-			// Validating
-			selection.delegate('input', 'blur.datetime', function(event) {
-				var input = $(this),
-					date = input.val(),
-					validated = input.data('validated');
-				
-				// Empty date
-				if(date == '') {
-					empty(input);
-				}
-				
-				// Validate
-				else if(date != validated) {
-					validate(input, date, true);			
-				}			
-			});
-						
-			// Closing
-			$('body').bind('click.datetime', function() {
-				
-				// Hide calendar
-				selection.find('div.calendar').slideUp('fast');
-				selection.find('.focus').removeClass('focus');
-			});
-						
-		/*---- Functions --------------------------------------------------------*/
-			
-		/*---- Initialisation ---------------------------------------------------*/
-		
-			// Create calendar and timer
-			selection.symphonyCalendar();
-			selection.symphonyTimer();
-
-			// Store and contextualise dates
-			selection.find('input').each(function() {
-				var input = $(this);
-				input.data('validated', input.val());
-				contextualise(input);
-			}).load();
-
-			// Set errors
-			selection.find('input.invalid').parents('span.dates').addClass('invalid');
-			
 		});
 
 	});

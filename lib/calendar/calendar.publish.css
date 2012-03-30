@@ -6,14 +6,10 @@
  */
  
 div.calendar {
-	background: #353533;
-	border-top: none;
 	min-width: 23em;
-	margin: 0 -1px;
-	padding: 17px 38px 42px 18px;
 	z-index: 2000;
 	position: relative;
-	display: none;
+/*	display: none;*/
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -34,6 +30,8 @@ div.calendar div.date nav {
 div.calendar div.date nav a {
 	display: inline-block;
 	background: url(images/arrows.png) 6px -13px no-repeat;
+	border: none;
+	margin: 0;
 	text-indent: -1000em;
 	width: 20px;
 	height: 13px;
