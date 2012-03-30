@@ -41,20 +41,21 @@
 				datetime = field.find('.frame'),
 				dates = datetime.find('ol'),
 				headers = dates.find('header'),
-				destructor, width;
+				width = 0;
 			
 		/*---- Events -----------------------------------------------------------*/
 		
 			// Destructor
-			datetime.on('constructstop.duplicator', 'li', function(event) {
+			datetime.on('constructstop.duplicator constructshow.duplicator', 'li', function(event) {
 				var item = $(this),
-					destructor = item.find('a.destructor'),
-					width = destructor.width();
+					destructor = item.find('a.destructor');
 					
-					console.log(item, width);
+				if(width < 1) {
+					width = destructor.width();
+				}
 			
 				if(width > 0) {
-					item.find('header').css('padding-right', width + 20);
+					item.find('header div').css('margin-right', width + 10);
 				}
 			});
 		
