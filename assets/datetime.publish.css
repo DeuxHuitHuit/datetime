@@ -23,6 +23,11 @@
 	position: relative;
 }
 
+.field-datetime .frame header div.focus {
+	border-color: rgba(0, 0, 0, 0.4);
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
 .field-datetime header input,
 .field-datetime header input:hover,
 .field-datetime header input:active,
