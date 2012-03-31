@@ -82,31 +82,16 @@
 			});
 		
 			// Visualising
-			datetime.on('focus', 'input', function() {
-				var input = $(this),
-					item = input.parents('li'),
-					calendar = item.find('div.calendar'),
-					datespan = input.parent().addClass('focus'),
-					date = input.attr('data-timestamp'),
-					start = datespan.find('input.start').attr('data-timestamp'),
-					end = datespan.find('input.end').attr('data-timestamp');
+			datetime.on('focus', 'input', function(event) {
+				var input = $(this);
 
 				// Set focus
-				datespan.addClass('focus').siblings('.focus').removeClass('focus');
+				datetime.find('.focus').removeClass('focus');
+				input.parent().addClass('focus');
 		
 				// Visualise
-				if(!datespan.is('.invalid')) {
-					item.trigger('visualise', [{
-						start: start,
-						end: end
-					}, date]);
-					//calendar.slideDown('fast');		
-				}
-			});
-			datetime.on('collapsestart.collapsible', 'li', function() {
-				var item = $(this);
-				
-				item.find('input:first').trigger('focus');
+				visualise(input);
+				input.parents('li').trigger('expand');
 			});
 			
 			// Setting
@@ -224,6 +209,22 @@
 						
 		/*---- Functions --------------------------------------------------------*/
 		
+			// Visualise date
+			var visualise = function(input) {
+				var item = input.parents('li'),
+					datespan = input.parent(),
+					date = input.attr('data-timestamp'),
+					start = datespan.find('input.start').attr('data-timestamp'),
+					end = datespan.find('input.end').attr('data-timestamp');
+			
+				if(!datespan.is('.invalid')) {
+					item.trigger('visualise', [{
+						start: start,
+						end: end
+					}, date]);
+				}
+			};
+		
 			// Validate and set date
 			var validate = function(input, date, visualise) {
 				var item = input.parents('li'),
@@ -260,7 +261,7 @@
 								input.attr('data-timestamp', '').addClass('invalid');
 								
 								// Clear
-								calendar.slideUp('fast');		
+								item.trigger('collapse');
 							}
 	
 							// Store date
@@ -396,23 +397,37 @@
 			dates.symphonyCalendar();
 			dates.symphonyTimer();
 	
-			// Store and contextualise dates
+			// Initialise dates
 			dates.find('input').each(function() {
 				var input = $(this);
+				
+				// Store date
 				input.data('validated', input.val());
+				
+				// Contexualise
 				contextualise(input);
+				
+				// Visualise calendar once
+				if(input.is('.start')) {
+					visualise(input);
+				}
 			}).load();
 	
 			// Set errors
-			dates.find('input.invalid').parent('div').addClass('invalid');		
+			dates.find('input.invalid').parent('div').addClass('invalid');
 		
 			// Initialise datetime
 			dates.symphonyDuplicator({
 				orderable: true,
-				collapsible: true,
+				collapsible: false,
 				minimum: 1,
 				maximum: (datetime.is('.single') ? 1 : 1000)
 			});
+			datetime.symphonyCollapsible({
+				items: 'li',
+				handles: 'header',
+				ignore: 'input'
+			});			
 		});
 
 	});
