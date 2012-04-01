@@ -8,23 +8,22 @@
 	 */
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
-	if(!class_exists('Calendar')) {
-		require_once(EXTENSIONS . '/datetime/lib/class.calendar.php');
-	}
-
 	require_once TOOLKIT . '/fields/field.date.php';
+	require_once(EXTENSIONS . '/datetime/lib/class.calendar.php');
 
 	Class fieldDatetime extends fieldDate {
 
-		const RANGE = 1;
-		const START = 2;
-		const END = 3;
-		const STRICT = 4;
-		const EXTRANGE = 5; // same as RANGE, but end dates can be = to start date
+		const SIMPLE = 0;
+		const REGEXP = 1;
+		
+		const RANGE = 10;
+		const START = 11;
+		const END = 12;
+		const STRICT = 13;
+		const EXTRANGE = 14;
+		
+		const ERROR = 20;
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#__construct
-		 */
 		function __construct() {
 			parent::__construct();
 			$this->_name = __('Date/Time');
@@ -32,53 +31,50 @@
 			$this->set('location', 'sidebar');
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#canFilter
-		 */
-		function canFilter() {
-			return true;
-		}
+	/*-------------------------------------------------------------------------
+		Definition:
+	-------------------------------------------------------------------------*/
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#isSortable
-		 */
-		function isSortable() {
-			return true;
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#canPrePopulate
-		 */
 		function canPrePopulate() {
 			return false;
 		}
 
 		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#allowDatasourceOutputGrouping
-		 */
-		function allowDatasourceOutputGrouping() {
-			return true;
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#allowDatasourceParamOutput
-		 */
-		function allowDatasourceParamOutput() {
-			return true;
-		}
-
-		/**
 		 * Method that flag the DS to add a DISTINCT keyword when retreiving entries
 		 * @see symphony/lib/toolkit/Field::requiresSQLGrouping()
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#requiresSQLGrouping
+		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/field/#requiresSQLGrouping
 		 */
 		public function requiresSQLGrouping(){
 			return true;
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displaySettingsPanel
-		 */
+	/*-------------------------------------------------------------------------
+		Setup:
+	-------------------------------------------------------------------------*/
+
+		function createTable() {
+			return Symphony::Database()->query(
+				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
+				`id` int(11) unsigned NOT NULL auto_increment,
+				`entry_id` int(11) unsigned NOT NULL,
+				`start` datetime NOT NULL,
+				`end` datetime NOT NULL,
+				PRIMARY KEY (`id`),
+				KEY `entry_id` (`entry_id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
+			);
+		}
+
+	/*-------------------------------------------------------------------------
+		Utilities:
+	-------------------------------------------------------------------------*/
+
+
+
+	/*-------------------------------------------------------------------------
+		Settings:
+	-------------------------------------------------------------------------*/
+
 		function displaySettingsPanel(XMLElement &$wrapper, $errors = null) {
 
 			// Initialize field settings based on class defaults (name, placement)
@@ -132,9 +128,6 @@
 			$wrapper->appendChild($fieldset);
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#commit
-		 */
 		function commit() {
 
 			// Prepare commit
@@ -159,9 +152,10 @@
 			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#displayPublishPanel
-		 */
+	/*-------------------------------------------------------------------------
+		Publish:
+	-------------------------------------------------------------------------*/
+
 		function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null) {
 
 			// Houston, we have problem: we've been called out of context!
@@ -257,25 +251,16 @@
 			}
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#checkPostFieldData
-		 */
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
 			if($this->get('required') && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
 				return self::__MISSING_FIELDS__;
 			}
 
-			// At the moment the Date validation is done via AJAX, so we can return __OK__.
-			// If a user enters an invalid date and immediately saves (skipping AJAX) then
-			// an odd result is returned. Possible TODO here for validating the dates and
-			// returning `__INVALID_FIELDS__` if they fail.
+			// @todo validate all dates and flag errors
 			return self::__OK__;
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#processRawFieldData
-		 */
 		function processRawFieldData($data, &$status, &$message=null, $simulate=false, $entry_id=null) {
 			$status = self::__OK__;
 			if(!is_array($data)) return NULL;
@@ -311,58 +296,71 @@
 			}
 		}
 
-		/**
-		 * This function prepares values for import with XMLImporter
-		 *
-		 * @param string|array $data
-		 *	Data that should be prepared for import
-		 * @return array
-		 *  Return an associative array of start and end dates
-		 */
-		function prepareImportValue($data) {
-			if(!is_array($data)) $data = array($data);
-			if(is_array($data[0])) $data = $data[0];
+	/*-------------------------------------------------------------------------
+		Output:
+	-------------------------------------------------------------------------*/
 
-			// Reformat array
-			if(!array_key_exists('start', $data)) {
-				$datetime = array();
+		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
+			$datetime = new XMLElement($this->get('element_name'));
+
+			// Prepare data
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
+
+			// Get timeline
+			$timeline = $data['start'];
+			sort($timeline);
+
+			// Generate XML
+			foreach($data['start'] as $id => $date) {
+				$date = new XMLElement('date');
+				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
 
 				// Start date
-				$datetime['start'] = array($data[0]);
+				$start = new DateTime($data['start'][$id]);
+				$date->appendChild(
+					$start = new XMLElement(
+						'start',
+						$start->format('Y-m-d'),
+						array(
+							'iso' => $start->format('c'),
+							'time' => $start->format('H:i'),
+							'weekday' => $start->format('N'),
+							'offset' => $start->format('O')
+						)
+					)
+				);
 
-				// End date
-				if($data[1]) {
-					$datetime['end'] = array($data[1]);
+				// Date range
+				if($data['end'][$id] != $data['start'][$id]) {
+					$end = new DateTime($data['end'][$id]);
+					$date->appendChild(
+						$end = new XMLElement(
+							'end',
+							$end->format('Y-m-d'),
+							array(
+								'iso' => $end->format('c'),
+								'time' => $end->format('H:i'),
+								'weekday' => $end->format('N'),
+								'offset' => $end->format('O')
+							)
+						)
+					);
+					$date->setAttribute('type', 'range');
 				}
+
+				// Single date
 				else {
-					$datetime['end'] = array($data[0]);
+					$date->setAttribute('type', 'exact');
 				}
 
-				return $datetime;
+				$datetime->appendChild($date);
 			}
 
-			return $data;
+			// append date and time to data source
+			$wrapper->appendChild($datetime);
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#createTable
-		 */
-		function createTable() {
-			return Symphony::Database()->query(
-				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-				 `id` int(11) unsigned NOT NULL auto_increment,
-				 `entry_id` int(11) unsigned NOT NULL,
-				 `start` datetime NOT NULL,
-				 `end` datetime NOT NULL,
-				 PRIMARY KEY (`id`),
-				 KEY `entry_id` (`entry_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
-			);
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#prepareTableValue
-		 */
 		function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
@@ -440,27 +438,33 @@
 			}
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildSortingSQL
-		 */
-		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
-			$field_id = $this->get('id');
+		public function getParameterPoolValue(array $data, $entry_id=NULL) {
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
-			// If we already have a JOIN to the entry table, don't create another one,
-			// this prevents issues where an entry with multiple dates is returned multiple
-			// times in the SQL, but is actually the same entry.
-			if(!preg_match('/`t' . $field_id . '`/', $joins)) {
-				$joins .= "LEFT OUTER JOIN `tbl_entries_data_" . $field_id . "` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
-				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`start` $order");
+			$values = array();
+			for($i = 0; $i < count($data['start']); $i++) {
+				$start = $this->__getEarliestDate($data['start'][$i]);
+				$end = $this->__getLatestDate($data['end'][$i]);
+
+				// Different dates
+				if($start != $end) {
+					$values[] = $start . ' to ' . $end;
+				}
+
+				// Same date
+				else {
+					$values[] = $start;
+				}
 			}
-			else {
-				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`t" . $field_id . "`.`start` $order");
-			}
+
+			return $values;
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#buildDSRetrivalSQL
-		 */
+	/*-------------------------------------------------------------------------
+		Filtering:
+	-------------------------------------------------------------------------*/
+
 		function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
 
 			// Parse dates
@@ -479,6 +483,123 @@
 
 			return true;
 		}
+
+	/*-------------------------------------------------------------------------
+		Sorting:
+	-------------------------------------------------------------------------*/
+
+		function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC') {
+			$field_id = $this->get('id');
+
+			// If we already have a JOIN to the entry table, don't create another one,
+			// this prevents issues where an entry with multiple dates is returned multiple
+			// times in the SQL, but is actually the same entry.
+			if(!preg_match('/`t' . $field_id . '`/', $joins)) {
+				$joins .= "LEFT OUTER JOIN `tbl_entries_data_" . $field_id . "` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
+				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`start` $order");
+			}
+			else {
+				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`t" . $field_id . "`.`start` $order");
+			}
+		}
+
+	/*-------------------------------------------------------------------------
+		Grouping:
+	-------------------------------------------------------------------------*/
+
+		public function groupRecords($records) {
+			if(!is_array($records) || empty($records)) return;
+			$groups = array('year' => array());
+
+			// Walk through dates
+			foreach($records as $entry) {
+				$data = $entry->getData($this->get('id'));
+				if(!is_array($data['start'])) $data['start'] = array($data['start']);
+				if(!is_array($data['end'])) $data['end'] = array($data['end']);
+
+				// Create calendar
+				for($i = 0; $i < count($data['start']); $i++) {
+					$start = new DateTime($data['start'][$i]);
+					$end = new DateTime($data['end'][$i]);
+
+					// Find matching months
+					while($start->format('Y-m-01') <= $end->format('Y-m-01')) {
+						$year = $start->format('Y');
+						$month = $start->format('n');
+
+						// Add entry
+						$groups['year'][$year]['attr']['value'] = $year;
+						$groups['year'][$year]['groups']['month'][$month]['attr']['value'] = $start->format('m');
+						$groups['year'][$year]['groups']['month'][$month]['records'][] = $entry;
+
+						// Jump to next month
+						$start->modify('+1 month');
+					}
+				}
+			}
+
+			// Sort years and months
+			ksort($groups['year']);
+			foreach($groups['year'] as $year) {
+				$current = $year['attr']['value'];
+				ksort($groups['year'][$current]['groups']['month']);
+			}
+
+			// Return calendar groups
+			return $groups;
+		}
+
+	/*-------------------------------------------------------------------------
+		Events:
+	-------------------------------------------------------------------------*/
+
+		public function getExampleFormMarkup() {
+			$label = Widget::Label($this->get('label'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][start][]'));
+
+			return $label;
+		}
+
+	/*-------------------------------------------------------------------------
+		Importing:
+	-------------------------------------------------------------------------*/
+
+		/**
+		 * This function prepares values for import with XMLImporter
+		 *
+		 * @param string|array $data
+		 *	Data that should be prepared for import
+		 * @return array
+		 *  Return an associative array of start and end dates
+		 */
+		function prepareImportValue($data) {
+			if(!is_array($data)) $data = array($data);
+			if(is_array($data[0])) $data = $data[0];
+
+			// Reformat array
+			if(!array_key_exists('start', $data)) {
+				$datetime = array();
+
+				// Start date
+				$datetime['start'] = array($data[0]);
+
+				// End date
+				if($data[1]) {
+					$datetime['end'] = array($data[1]);
+				}
+				else {
+					$datetime['end'] = array($data[0]);
+				}
+
+				return $datetime;
+			}
+
+			return $data;
+		}
+
+	/*-------------------------------------------------------------------------
+		Miscellaneous:
+	-------------------------------------------------------------------------*/
 
 		/**
 		 * Build filter sql.
@@ -524,22 +645,22 @@
 					// Filter by full date range, start and end have to be in range
 					case self::STRICT:
 						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') AND
-								   (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
 						break;
 
 					// Filter by full date range, start or end have to be in range
 					case self::RANGE:
 						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								   (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								   (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
 						break;
 
 					// Filter by extended date range
 					case self::EXTRANGE:
 						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								   (`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								   (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								   (`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end = `t$field_id`.start))";
+								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end = `t$field_id`.start))";
 						break;
 				}
 			}
@@ -735,148 +856,4 @@
 			}
 		}
 
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#groupRecords
-		 */
-		public function groupRecords($records) {
-			if(!is_array($records) || empty($records)) return;
-			$groups = array('year' => array());
-
-			// Walk through dates
-			foreach($records as $entry) {
-				$data = $entry->getData($this->get('id'));
-				if(!is_array($data['start'])) $data['start'] = array($data['start']);
-				if(!is_array($data['end'])) $data['end'] = array($data['end']);
-
-				// Create calendar
-				for($i = 0; $i < count($data['start']); $i++) {
-					$start = new DateTime($data['start'][$i]);
-					$end = new DateTime($data['end'][$i]);
-
-					// Find matching months
-					while($start->format('Y-m-01') <= $end->format('Y-m-01')) {
-						$year = $start->format('Y');
-						$month = $start->format('n');
-
-						// Add entry
-						$groups['year'][$year]['attr']['value'] = $year;
-						$groups['year'][$year]['groups']['month'][$month]['attr']['value'] = $start->format('m');
-						$groups['year'][$year]['groups']['month'][$month]['records'][] = $entry;
-
-						// Jump to next month
-						$start->modify('+1 month');
-					}
-				}
-			}
-
-			// Sort years and months
-			ksort($groups['year']);
-			foreach($groups['year'] as $year) {
-				$current = $year['attr']['value'];
-				ksort($groups['year'][$current]['groups']['month']);
-			}
-
-			// Return calendar groups
-			return $groups;
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#appendFormattedElement
-		 */
-		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
-			$datetime = new XMLElement($this->get('element_name'));
-
-			// Prepare data
-			if(!is_array($data['start'])) $data['start'] = array($data['start']);
-			if(!is_array($data['end'])) $data['end'] = array($data['end']);
-
-			// Get timeline
-			$timeline = $data['start'];
-			sort($timeline);
-
-			// Generate XML
-			foreach($data['start'] as $id => $date) {
-				$date = new XMLElement('date');
-				$date->setAttribute('timeline', array_search($data['start'][$id], $timeline) + 1);
-
-				// Start date
-				$start = new DateTime($data['start'][$id]);
-				$date->appendChild(
-					$start = new XMLElement(
-						'start',
-						$start->format('Y-m-d'),
-						array(
-							'iso' => $start->format('c'),
-							'time' => $start->format('H:i'),
-							'weekday' => $start->format('N'),
-							'offset' => $start->format('O')
-						)
-					)
-				);
-
-				// Date range
-				if($data['end'][$id] != $data['start'][$id]) {
-					$end = new DateTime($data['end'][$id]);
-					$date->appendChild(
-						$end = new XMLElement(
-							'end',
-							$end->format('Y-m-d'),
-							array(
-								'iso' => $end->format('c'),
-								'time' => $end->format('H:i'),
-								'weekday' => $end->format('N'),
-								'offset' => $end->format('O')
-							)
-						)
-					);
-					$date->setAttribute('type', 'range');
-				}
-
-				// Single date
-				else {
-					$date->setAttribute('type', 'exact');
-				}
-
-				$datetime->appendChild($date);
-			}
-
-			// append date and time to data source
-			$wrapper->appendChild($datetime);
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#getParameterPoolValue
-		 */
-		public function getParameterPoolValue(array $data, $entry_id=NULL) {
-			if(!is_array($data['start'])) $data['start'] = array($data['start']);
-			if(!is_array($data['end'])) $data['end'] = array($data['end']);
-
-			$values = array();
-			for($i = 0; $i < count($data['start']); $i++) {
-				$start = $this->__getEarliestDate($data['start'][$i]);
-				$end = $this->__getLatestDate($data['end'][$i]);
-
-				// Different dates
-				if($start != $end) {
-					$values[] = $start . ' to ' . $end;
-				}
-
-				// Same date
-				else {
-					$values[] = $start;
-				}
-			}
-
-			return $values;
-		}
-
-		/**
-		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#getExampleFormMarkup
-		 */
-		public function getExampleFormMarkup() {
-			$label = Widget::Label($this->get('label'));
-			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][start][]'));
-
-			return $label;
-		}
 	}
