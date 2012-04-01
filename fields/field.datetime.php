@@ -9,7 +9,7 @@
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
 	if(!class_exists('Calendar')) {
-		require_once(EXTENSIONS . '/datetime/lib/calendar/class.calendar.php');
+		require_once(EXTENSIONS . '/datetime/lib/class.calendar.php');
 	}
 
 	require_once TOOLKIT . '/fields/field.date.php';
@@ -175,12 +175,12 @@
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/datetime.publish.css', 'screen', 104, false);
 
 			// Calendar
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.css', 'screen', 105, false);
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/calendar/calendar.publish.js', 106, false);
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/calendar.publish.css', 'screen', 105, false);
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/calendar.publish.js', 106, false);
 
 			// Timer
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/lib/timer/timer.publish.css', 'screen', 107, false);
-			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/lib/timer/timer.publish.js', 108, false);
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/timer.publish.css', 'screen', 107, false);
+			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/timer.publish.js', 108, false);
 
 			// Help
 			$help = '';
