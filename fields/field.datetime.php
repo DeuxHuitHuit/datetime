@@ -14,7 +14,7 @@
 
 	require_once TOOLKIT . '/fields/field.date.php';
 
-	Class fieldDatetime extends Field {
+	Class fieldDatetime extends fieldDate {
 
 		const RANGE = 1;
 		const START = 2;
