@@ -7,7 +7,7 @@
 	 * @source: http://github.com/nilshoerrmann/timer
 	 */
 	$.fn.symphonyTimer = function(custom_settings) {
-		var manager = $(this),
+		var dates = $(this),
 			settings = {
 				item: 'li',
 				timer: 'div.timer'
@@ -21,13 +21,13 @@
 	/*---- Events -----------------------------------------------------------*/
 		
 		// Select
-		manager.delegate('div.timeline', 'click.timer', function(event) {
+		dates.on('click.timer', 'div.timeline', function(event) {
 			var timeline = $(this);
-			choose(timeline, event.pageX, (event.shiftKey && !manager.parent().is('.simple')));
+			choose(timeline, event.pageX, (event.shiftKey && !dates.parent().is('.simple')));
 		});
 
 		// Visualise
-		manager.delegate(settings.item, 'visualise.timer', function(event, range, focus) {
+		dates.on('visualise.timer', settings.item, function(event, range, focus) {
 			var item = $(this),
 				timer = item.find(settings.timer),
 				ranges = timer.find('div.range'),
@@ -60,7 +60,7 @@
 		});
 		
 		// Hover
-		manager.delegate('div.timeline', 'mouseover.timer', function(event) {
+		dates.on('mouseover.timer', 'div.timeline', function(event) {
 			var timeline = $(this),
 				selected = getTime(timeline, event.pageX),
 				date = new Date(),
@@ -81,14 +81,14 @@
 			setPosition(selector, selected, selected);
 			selector.css('visibility', 'visible');
 		});
-		manager.delegate(settings.timer, 'mouseout.timer', function(event) {
+		dates.on('mouseout.timer', settings.timer, function(event) {
 		
 			// Hide selector
 			selector.css('visibility', 'hidden');
 		});
 			
 		// Resizing
-		$(window).bind('resize.timer', function() {
+		$(window).on('resize.timer', function() {
 			$(settings.timer).find('div.timeline').each(function() {
 				var range = $(this).find('div.range');
 				setTimerPosition(range);
