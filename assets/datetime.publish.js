@@ -259,9 +259,7 @@
 							// Invalid date
 							else {
 								input.attr('data-timestamp', '').addClass('invalid');
-								
-								// Clear
-								item.trigger('collapse');
+								visualise(input);
 							}
 	
 							// Store date
