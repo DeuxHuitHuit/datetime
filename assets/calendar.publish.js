@@ -153,8 +153,6 @@
 			if(!date) {
 				date = now.getTime();
 				then = now;
-				start = null;
-				end = null;
 			}
 			
 			// Current date
