@@ -216,13 +216,11 @@
 					date = input.attr('data-timestamp'),
 					start = datespan.find('input.start').attr('data-timestamp'),
 					end = datespan.find('input.end').attr('data-timestamp');
-			
-				if(!datespan.is('.invalid')) {
-					item.trigger('visualise', [{
-						start: start,
-						end: end
-					}, date]);
-				}
+		
+				item.trigger('visualise', [{
+					start: start,
+					end: end
+				}, date]);
 			};
 		
 			// Validate and set date
