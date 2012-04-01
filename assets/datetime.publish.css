@@ -41,11 +41,15 @@
 	box-sizing: border-box;
 }
 
-.field-datetime header input:last-of-type {
+.field-datetime header input.end {
 	border-top: 1px solid #E4E4DE;
 	background: transparent url(images/range.png) 3px 7px no-repeat;
 	padding-left: 25px;
 	display: none;
+}
+
+.field-datetime li.range header input.end {
+	display: block;
 }
 
 .field-datetime .frame header a.destructor {
@@ -61,6 +65,10 @@
 	right: 10px;
 	margin-top: 0;
 	font-style: normal;
+}
+
+.field-datetime header em.end.label {
+	top: 27px;
 }
 
 
@@ -141,9 +149,7 @@
 }
 
 
-.field-datetime div.stage span.dates em.end.label {
-	top: 28px;
-}
+
 
 .field-datetime #error div.stage {
 	margin-bottom: 0;
