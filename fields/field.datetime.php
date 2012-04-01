@@ -68,8 +68,133 @@
 	/*-------------------------------------------------------------------------
 		Utilities:
 	-------------------------------------------------------------------------*/
+	
+		/**
+		 * Get filtering mode from string.
+		 *
+		 * @param string $string
+		 *	A filter string
+		 * @return string
+		 *  Returns the filter mode
+		 */
+		private function __getModeFromString(&$string) {
+			$string = trim($string);
 
+			// Filter by start date
+			if(strpos($string, 'start:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::START;
+			}
 
+			// Filter by end date
+			elseif(strpos($string, 'end:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::END;
+			}
+
+			// Filter by full range (strict)
+			elseif(strpos($string, 'strict:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::STRICT;
+			}
+
+			// Remove unsupported regular expressions prefixes in order to support Publish Filtering
+			elseif(strpos($string, 'regexp:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::RANGE;
+			}
+
+			// Filter by extended range (end date can be null)
+			elseif(strpos($string, 'extended:') === 0) {
+				$this->__removeModeFromString($string);
+				$mode = self::EXTRANGE;
+			}
+
+			// Filter by full range
+			else {
+				$mode = self::RANGE;
+			}
+			
+			return $mode;
+		}
+
+		/**
+		 * Remove filter mode from the first data source filter.
+		 *
+		 * @param string $string
+		 *	Current data source filter
+		 */
+		private function __removeModeFromString(&$string) {
+			$filter = explode(':', $string, 2);
+			$string = $filter[1];
+		}
+		
+		/**
+		 * Build range filter sql.
+		 *
+		 * @param array $data
+		 *	An array of all date ranges that have been set as filters
+		 * @param string $joins
+		 *	Tables joins
+		 * @param string $where
+		 *	Filter statements
+		 * @param boolean $andOperation
+		 *	Connect filters with 'AND' if true, defaults to false
+		 */
+		public function buildRangeFilterSQL($data, &$joins, &$where, $andOperation = false) {
+			$field_id = $this->get('id');
+
+			// Get filter connection
+			if($andOperation) {
+				$connector = ' AND ';
+			}
+			else {
+				$connector = ' OR ';
+			}
+
+			// Prepare SQL
+			foreach($data as $range) {
+
+				// Filter mode
+				switch($range['mode']) {
+
+					// Filter by start date
+					case self::START:
+						$tmp[] = "(`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "')";
+						break;
+
+					// Filter by end date
+					case self::END:
+						$tmp[] = "(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "')";
+						break;
+
+					// Filter by full date range, start and end have to be in range
+					case self::STRICT:
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') AND
+								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+						break;
+
+					// Filter by full date range, start or end have to be in range
+					case self::RANGE:
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
+						break;
+
+					// Filter by extended date range
+					case self::EXTRANGE:
+						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
+								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end = `t$field_id`.start))";
+						break;
+				}
+			}
+
+			// Build SQL
+			$joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id` ON `e`.`id` = `t$field_id`.entry_id ";
+			$where .= " AND (" . implode($connector, $tmp) . ") ";
+		}
 
 	/*-------------------------------------------------------------------------
 		Settings:
@@ -297,6 +422,17 @@
 		}
 
 	/*-------------------------------------------------------------------------
+		Events:
+	-------------------------------------------------------------------------*/
+
+		public function getExampleFormMarkup() {
+			$label = Widget::Label($this->get('label'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][start][]'));
+
+			return $label;
+		}
+
+	/*-------------------------------------------------------------------------
 		Output:
 	-------------------------------------------------------------------------*/
 
@@ -469,16 +605,19 @@
 
 			// Parse dates
 			$dates = array();
-			foreach($data as $string) {
-				$range = $this->__parseString($string);
+			foreach($data as $range) {
+				$mode = $this->__getModeFromString($range);
+				self::parseFilter($range);
+
 				if(!empty($range)) {
+					$range['mode'] = $mode;
 					$dates[] = $range;
 				}
 			}
 
 			// Build filter SQL
 			if(!empty($dates)) {
-				$this->__buildFilterSQL($dates, $mode, $joins, $where, $andOperation);
+				$this->buildRangeFilterSQL($dates, $joins, $where, $andOperation);
 			}
 
 			return true;
@@ -550,17 +689,6 @@
 		}
 
 	/*-------------------------------------------------------------------------
-		Events:
-	-------------------------------------------------------------------------*/
-
-		public function getExampleFormMarkup() {
-			$label = Widget::Label($this->get('label'));
-			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][start][]'));
-
-			return $label;
-		}
-
-	/*-------------------------------------------------------------------------
 		Importing:
 	-------------------------------------------------------------------------*/
 
@@ -596,264 +724,3 @@
 
 			return $data;
 		}
-
-	/*-------------------------------------------------------------------------
-		Miscellaneous:
-	-------------------------------------------------------------------------*/
-
-		/**
-		 * Build filter sql.
-		 *
-		 * @param array $dates
-		 *	An array of all date ranges that have been set as filters
-		 * @param string $mode
-		 *	The filtering mode allowing filtering by start date, end date or full date range
-		 * @param string $joins
-		 *	Tables joins
-		 * @param string $where
-		 *	Filter statements
-		 * @param boolean $andOperation
-		 *	Connect filters with 'AND' if true, defaults to false
-		 */
-		private function __buildFilterSQL($dates, $mode, &$joins, &$where, $andOperation = false) {
-			$field_id = $this->get('id');
-
-			// Get filter connection
-			if($andOperation) {
-				$connector = ' AND ';
-			}
-			else {
-				$connector = ' OR ';
-			}
-
-			// Prepare SQL
-			foreach($dates as $range) {
-
-				// Filter mode
-				switch($range['mode']) {
-
-					// Filter by start date
-					case self::START:
-						$tmp[] = "(`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "')";
-						break;
-
-					// Filter by end date
-					case self::END:
-						$tmp[] = "(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "')";
-						break;
-
-					// Filter by full date range, start and end have to be in range
-					case self::STRICT:
-						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') AND
-								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "'))";
-						break;
-
-					// Filter by full date range, start or end have to be in range
-					case self::RANGE:
-						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "'))";
-						break;
-
-					// Filter by extended date range
-					case self::EXTRANGE:
-						$tmp[] = "((`t$field_id`.start BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								(`t$field_id`.end BETWEEN '" . $range['start']->format('Y-m-d H:i:s') . "' AND '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end > '" . $range['end']->format('Y-m-d H:i:s') . "') OR
-								(`t$field_id`.start < '" . $range['start']->format('Y-m-d H:i:s') . "' AND `t$field_id`.end = `t$field_id`.start))";
-						break;
-				}
-			}
-
-			// Build SQL
-			$joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id` ON `e`.`id` = `t$field_id`.entry_id ";
-			$where .= " AND (" . implode($connector, $tmp) . ") ";
-		}
-
-		/**
-		 * Parse string and create date range to be used for data source filtering.
-		 *
-		 * @param string $string
-		 *	A filter string
-		 * @return array
-		 *  Returns an array containing the filter range as Datetime objects,
-		 *	if the given string could be parsed
-		 */
-		private function __parseString($string) {
-			$string = trim($string);
-
-			// Filter by start date
-			if(strpos($string, 'start:') === 0) {
-				$this->__removeModeFromString($string);
-				$mode = self::START;
-			}
-
-			// Filter by end date
-			elseif(strpos($string, 'end:') === 0) {
-				$this->__removeModeFromString($string);
-				$mode = self::END;
-			}
-
-			// Filter by full range (strict)
-			elseif(strpos($string, 'strict:') === 0) {
-				$this->__removeModeFromString($string);
-				$mode = self::STRICT;
-			}
-
-			// Remove unsupported regular expressions prefixes in order to support Publish Filtering
-			elseif(strpos($string, 'regexp:') === 0) {
-				$this->__removeModeFromString($string);
-				$mode = self::RANGE;
-			}
-
-			// Filter by extended range (end date can be null)
-			elseif(strpos($string, 'extended:') === 0) {
-				$this->__removeModeFromString($string);
-				$mode = self::EXTRANGE;
-			}
-
-			// Filter by full range
-			else {
-				$mode = self::RANGE;
-			}
-
-		/*-----------------------------------------------------------------------*/
-
-			// Earlier than
-			if(strpos($string, 'earlier than') !== false) {
-				$string = substr($string, 13);
-				$start = $this->__getDate('1970-01-01');
-				$end = $this->__getDate($this->__getEarliestDate($string));
-			}
-
-			// Later than
-			elseif(strpos($string, 'later than') !== false) {
-				$string = substr($string, 11);
-				$start = $this->__getDate($this->__getLatestDate($string));
-				$end = $this->__getDate('2038-01-01');
-			}
-
-			// Today
-			elseif($string == 'today') {
-				$start = $this->__getDate('today 00:00');
-				$end = $this->__getDate('today 23:59');
-			}
-
-			// In range
-			elseif(strpos($string, ' to ') !== false) {
-				$dates = explode(' to ', $string);
-				$start = $this->__getDate($this->__getEarliestDate($dates[0]));
-				$end = $this->__getDate($this->__getLatestDate($dates[1]));
-			}
-
-			// Single date
-			else {
-				$start = $this->__getDate($this->__getEarliestDate($string));
-				$end = $this->__getDate($this->__getLatestDate($string));
-			}
-
-			// Return valid date ranges
-			if($start !== NULL && $end !== NULL) {
-				return array(
-					'start' => $start,
-					'end' => $end,
-					'mode' => $mode
-				);
-			}
-		}
-
-		/**
-		 * Remove filter mode from the first data source filter.
-		 *
-		 * @param string $string
-		 *	Current data source filter
-		 */
-		private function __removeModeFromString(&$string) {
-			$filter = explode(':', $string, 2);
-			$string = $filter[1];
-		}
-
-		/**
-		 * Convert string to Datetime object. Log error, if given date is invalid.
-		 *
-		 * @param string $string
-		 *  String to be converted to Datetime object
-		 * @return Datetime
-		 *	Returns a Datetime object on success or `NULL` on failure
-		 */
-		private function __getDate($string) {
-
-			// Get date and time object
-			try {
-				$date = new DateTime(fieldDate::cleanFilterString(Lang::standardizeDate($string)));
-			}
-
-			// Catch and log invalid dates
-			catch(Exception $e) {
-				Symphony::$Log->pushToLog(
-					'Date and Time could not parse the following date: ' . trim($string) . '. It will be ignored for data source filtering.',
-					E_ERROR, true
-				);
-				$date = NULL;
-			}
-
-			return $date;
-		}
-
-		/**
-		 * Get earliest date.
-		 *
-		 * @param string $string
-		 *	Complete date string to represent the first possible date
-		 * @return string
-		 *	Returns date string
-		 */
-		private function __getEarliestDate($string) {
-
-			// Only year given
-			if(preg_match('/^\d{4}$/i', trim($string))) {
-				$string .= '-01-01 00:00';
-			}
-
-			return $string;
-		}
-
-		/**
-		 * Get latest date.
-		 *
-		 * @param string $string
-		 *	Complete date string to represent the latest possible date
-		 * @return string
-		 *	Returns date string
-		 */
-		private function __getLatestDate($string) {
-
-			// Find date components
-			preg_match('/^(\d{4})[-\/]?(\d{1,2})?[-\/]?(\d{1,2})?\s?(\d{1,2}:\d{2})?$/i', trim($string), $matches);
-
-			if(empty($matches)) {
-				return $string;
-			}
-
-			// No month, day or time given
-			else if(!isset($matches[2])) {
-				return 'last day of december ' . $string . ' 23:59';
-			}
-
-			// No day or time give
-			elseif(!isset($matches[3])) {
-				return 'last day of ' . $string . ' 23:59';
-			}
-
-			// No time given
-			elseif(!isset($matches[4])) {
-				return $string . ' 23:59';
-			}
-
-			// Time given
-			else {
-				return $string;
-			}
-		}
-
-	}
