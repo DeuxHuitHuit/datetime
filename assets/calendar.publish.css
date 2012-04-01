@@ -36,7 +36,7 @@ div.calendar div.date nav a {
 	height: 13px;
 	position: absolute;
 	top: 4px;
-	left: 6px;
+	left: 1px;
 	z-index: 1000;
 }
 
@@ -47,7 +47,7 @@ div.calendar div.date nav a:hover {
 div.calendar div.date nav a:last-of-type {
 	background: url(images/arrows.png) -15px -13px no-repeat;
 	left: auto;
-	right: 4px;
+	right: -6px;
 }
 
 div.calendar div.date nav a:last-of-type:hover {
