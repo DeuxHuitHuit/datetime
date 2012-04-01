@@ -9,7 +9,6 @@ div.calendar {
 	min-width: 23em;
 	z-index: 2000;
 	position: relative;
-/*	display: none;*/
 	-webkit-font-smoothing: antialiased;
 }
 
