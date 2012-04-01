@@ -183,13 +183,8 @@ div.calendar div.switch.active ul li:hover {
 /* Calendar sheet */
 
 div.calendar table {
-	background: #323230;
 	border-collapse: collapse;
 	clear: both;
-}
-
-div.calendar thead tr {
-	background: #353533;
 }
 
 div.calendar td {
@@ -208,7 +203,7 @@ div.calendar td {
 div.calendar thead td, 
 div.calendar thead td:first-child, 
 div.calendar thead td:last-child {
-	background: #353533;
+	background: transparent;
 	border: none;
 	height: 30px;
 	color: #616057;
