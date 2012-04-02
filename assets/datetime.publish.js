@@ -82,7 +82,7 @@
 			});
 		
 			// Visualising
-			datetime.on('focus', 'input', function(event) {
+			datetime.on('focus click', 'input', function(event) {
 				var input = $(this);
 
 				// Set focus
@@ -414,7 +414,7 @@
 		
 			// Initialise datetime
 			dates.symphonyDuplicator({
-				orderable: true,
+				orderable: false,
 				collapsible: false,
 				minimum: 1,
 				maximum: (datetime.is('.single') ? 1 : 1000)
@@ -423,6 +423,10 @@
 				items: 'li',
 				handles: 'header',
 				ignore: 'input'
+			}).symphonyOrderable({
+				items: 'li',
+				handles: 'header',
+				ignore: '.ignore'
 			});			
 		});
 
