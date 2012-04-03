@@ -281,6 +281,10 @@ li.ordering div.calendar nav {
 	border-bottom-color: #3c5c8c;
 }
 
+li.ordering div.calendar nav a {
+	display: none;
+}
+
 li.ordering div.calendar td {
 	border: 1px solid #44689e;
 }
@@ -297,5 +301,4 @@ li.ordering div.calendar tbody td:last-child {
 
 li.ordering div.calendar div.switch {
 	background: #44689e;
-	border: 1px solid #3c5c8c;
 }
