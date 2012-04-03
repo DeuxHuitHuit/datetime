@@ -188,7 +188,7 @@ div.calendar table {
 }
 
 div.calendar td {
-	background: #323230;
+	background: transparent /*#323230*/;
 	border: 1px solid #41403f;
 	border-style-bottom: none;
 	color: #fff;
@@ -198,6 +198,7 @@ div.calendar td {
 	vertical-align: middle;
 	padding: 0;
 	width: 35px;
+	text-shadow: none;
 }
 
 div.calendar thead td, 
@@ -206,12 +207,12 @@ div.calendar thead td:last-child {
 	background: transparent;
 	border: none;
 	height: 30px;
-	color: #616057;
+	color: rgba(255, 255, 255, 0.3);
 }
 
 div.calendar td.last, 
 div.calendar td.next {
-	color: #686865;
+	color: rgba(255, 255, 255, 0.3) /*#686865*/;
 }
 
 div.calendar td:first-child, 
@@ -252,17 +253,10 @@ div.calendar td.selected.today {
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-div.calendar td:hover {
+div.calendar tbody td:hover {
 	background: #ffb !important;
 	border: 1px solid #fff;
 	color: #9d854c;
-}
-
-div.calendar thead td:hover {
-	background: none !important;
-	border: inherit;
-	color: #616057;
-	cursor: auto;
 }
 
 @media screen and (min-width: 1000px) {
@@ -279,4 +273,29 @@ div.calendar thead td:hover {
 		left: 16px;
 	}
 
+}
+
+/* Ordering */
+
+li.ordering div.calendar nav {
+	border-bottom-color: #3c5c8c;
+}
+
+li.ordering div.calendar td {
+	border: 1px solid #44689e;
+}
+
+li.ordering div.calendar thead td {
+	border: none;
+	color: #3c5c8c;
+}
+
+li.ordering div.calendar tbody td:first-child, 
+li.ordering div.calendar tbody td:last-child {
+	background: rgba(68, 104, 158, 0.5);
+}
+
+li.ordering div.calendar div.switch {
+	background: #44689e;
+	border: 1px solid #3c5c8c;
 }
