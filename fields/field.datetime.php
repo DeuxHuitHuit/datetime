@@ -362,7 +362,7 @@
 		function displaySettingsPanel(XMLElement &$wrapper, $errors = null) {
 
 			// Initialize field settings based on class defaults (name, placement)
-			parent::displaySettingsPanel($wrapper, $errors);
+			field::displaySettingsPanel($wrapper, $errors);
 
 		/*-----------------------------------------------------------------------*/
 
@@ -415,7 +415,7 @@
 		function commit() {
 
 			// Prepare commit
-			if(!parent::commit()) return false;
+			if(!field::commit()) return false;
 			$id = $this->get('id');
 			if($id === false) return false;
 
