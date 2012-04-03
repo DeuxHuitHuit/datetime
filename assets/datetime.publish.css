@@ -50,7 +50,7 @@
 .field-datetime header input.end {
 	border-top: 1px solid #E4E4DE;
 	background: transparent url(images/range.png) 3px 7px no-repeat;
-	padding-left: 25px;
+	padding-left: 20px;
 	display: none;
 }
 
