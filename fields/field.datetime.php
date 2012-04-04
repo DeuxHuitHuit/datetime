@@ -521,9 +521,11 @@
 			}
 
 			// Add template
-			$list->appendChild(
-				self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'))
-			);
+			if($this->get('multiple') == 1) {
+				$list->appendChild(
+					self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'))
+				);
+			}
 
 			// Append Duplicator
 			$duplicator->appendChild($list);
