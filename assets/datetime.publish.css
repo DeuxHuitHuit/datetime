@@ -10,7 +10,13 @@
 }
 
 .field-datetime .frame {
-/*	overflow: visible;*/
+	overflow: visible;
+	padding-bottom: 7px;
+}
+
+.field-datetime ol,
+.field-datetime ol li {
+	float: none;
 }
 
 .field-datetime .frame header {
@@ -82,4 +88,61 @@
 
 .field-datetime .frame li.ordering header div {
 	border-color: #44689e;
+}
+
+/* Single dates */
+
+.field-datetime .frame.single.simple {
+	overflow: visible;
+	padding-bottom: 2px;
+}
+
+.field-datetime .frame.single ol {
+	background: none;
+	border: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-radius: 0;
+}
+
+.field-datetime .frame.single li {
+	border-radius: 0;
+	border: none !important;
+}
+
+.field-datetime .frame.single header {
+	padding: 0;
+	border: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.field-datetime .frame.single li header div {
+	border-radius: 2px 2px 0 0;
+	border-bottom-color: #2e2e2c;
+	-webkit-transition: border 0.1s ease-in;
+	-moz-transition: border 0.1s ease-in;
+	-ms-transition: border 0.1s ease-in;
+	-o-transition: border 0.1s ease-in;
+	transition: border 0.1s ease-in;
+}
+
+.field-datetime .frame.single li.collapsed header div {
+	border-bottom-color: rgba(0, 0, 0, 0.25);
+}
+
+.field-datetime .frame.single li.collapsed header div.focus {
+	border-bottom-color: rgba(0, 0, 0, 0.15);
+}
+
+.field-datetime .frame.single li.collapsed header div {
+	border-radius: 2px;
+}
+
+.field-datetime .frame.single .content {
+	border-radius: 0 0 4px 4px;
+	margin: 0 -10px;
+	padding: 10px;
 }

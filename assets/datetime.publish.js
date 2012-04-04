@@ -195,6 +195,9 @@
 				var input = $(this),
 					date = input.val(),
 					validated = input.data('validated');
+					
+				// Remove focus
+				input.parent().removeClass('focus');
 				
 				// Empty date
 				if(date == '') {
