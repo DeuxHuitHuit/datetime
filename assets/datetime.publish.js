@@ -412,22 +412,30 @@
 			// Set errors
 			dates.find('input.invalid').parent('div').addClass('invalid');
 		
-			// Initialise datetime
-			dates.symphonyDuplicator({
-				orderable: false,
-				collapsible: false,
-				minimum: 1,
-				maximum: (datetime.is('.single') ? 1 : 1000)
-			});
+			// Initialise datetime 
+			if(!datetime.is('.single')) {
+			
+				// Multiple dates
+				dates.symphonyDuplicator({
+					orderable: false,
+					collapsible: false,
+					minimum: 1,
+				});
+				
+				// Orderable dates
+				datetime.symphonyOrderable({
+					items: 'li',
+					handles: 'header',
+					ignore: '.ignore'
+				});
+			}
+			
+			// Collapsible calendar
 			datetime.symphonyCollapsible({
 				items: 'li',
 				handles: 'header',
 				ignore: 'input'
-			}).symphonyOrderable({
-				items: 'li',
-				handles: 'header',
-				ignore: '.ignore'
-			});			
+			})
 		});
 
 	});
