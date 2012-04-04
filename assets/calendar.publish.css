@@ -262,7 +262,7 @@ div.calendar tbody td:hover {
 @media screen and (min-width: 1000px) {
 
 	fieldset.primary div.calendar {
-		height: 244px;
+		height: 263px;
 		padding: 18px 38px 18px 18px;
 	}
 	
@@ -271,6 +271,10 @@ div.calendar tbody td:hover {
 		position: absolute;
 		top: 16px;
 		left: 16px;
+	}
+	
+	fieldset.primary div.calendar div.timer {
+		margin-top: -11px;
 	}
 
 }
