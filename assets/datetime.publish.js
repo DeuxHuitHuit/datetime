@@ -91,7 +91,6 @@
 		
 				// Visualise
 				visualise(input);
-				input.parents('li').trigger('expand');
 			});
 			
 			// Setting
@@ -429,16 +428,31 @@
 				datetime.symphonyOrderable({
 					items: 'li',
 					handles: 'header',
-					ignore: '.ignore'
+					ignore: ''
 				});
 			}
 			
 			// Collapsible calendar
-			datetime.symphonyCollapsible({
-				items: 'li',
-				handles: 'header',
-				ignore: 'input'
-			})
+			datetime
+				.symphonyCollapsible({
+					items: 'li',
+					handles: 'header',
+					ignore: 'input'
+				})
+				.on('dblclick.datetime', 'input', function toggleAll(event) {
+	
+					// Expand/collapse all
+					$(this).parent().trigger('dblclick');
+				})
+				.on('click.datetime', 'input', function toggleInput(event) {
+					var input = $(this),
+						item = input.parents('li');
+					
+					// Expand	
+					if(item.is('.collapsed')) {
+						item.trigger('expand.collapsible');
+					}
+				});			
 		});
 
 	});
