@@ -242,8 +242,11 @@ div.range span.active {
 @media screen and (min-width: 1000px) {
 
 	fieldset.primary div.timer {
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
 		display: block;
-		margin: -18px -1px 0 316px;
+		margin: -17px 1px 0 50%;
+		padding: 0 0 0 14px;
 	}
 
 }

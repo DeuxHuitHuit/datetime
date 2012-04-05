@@ -6,7 +6,6 @@
  */
  
 div.calendar {
-	min-width: 23em;
 	z-index: 2000;
 	position: relative;
 	-webkit-font-smoothing: antialiased;
@@ -16,7 +15,6 @@ div.calendar {
 
 div.calendar div.date {
 	width: 100%;
-	min-width: 250px;
 	padding: 0;
 	position: relative;
 }
@@ -262,19 +260,22 @@ div.calendar tbody td:hover {
 @media screen and (min-width: 1000px) {
 
 	fieldset.primary div.calendar {
-		height: 263px;
+		height: 254px;
 		padding: 18px 38px 18px 18px;
 	}
 	
 	fieldset.primary div.calendar div.date {
-		width: 300px;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 50%;
+		padding: 0 0 0 12px;
 		position: absolute;
-		top: 16px;
-		left: 16px;
+		top: 10px;
+		left: 0;
 	}
 	
-	fieldset.primary div.calendar div.timer {
-		margin-top: -11px;
+	fieldset.primary div.calendar div.date nav a:first-of-type {
+		left: 12px;
 	}
 
 }

@@ -5,18 +5,19 @@
  * @source: http://github.com/nilshoerrmann/datetime
  */
 
+.field-datetime + .field {
+	clear: both;
+}
+
 .field-datetime label {
 	margin-bottom: 2px;
 }
 
 .field-datetime .frame {
 	overflow: visible;
-	padding-bottom: 7px;
-}
-
-.field-datetime ol,
-.field-datetime ol li {
-	float: none;
+	margin-bottom: 21px;
+	float: left;
+	width: 100%;
 }
 
 .field-datetime .frame header {
@@ -85,7 +86,6 @@
 }
 
 .field-datetime fieldset.apply {
-	float: none;
 }
 
 /* Ordering */
@@ -125,20 +125,6 @@
 
 .field-datetime .frame.single li header div {
 	border-radius: 2px 2px 0 0;
-	border-bottom-color: #2e2e2c;
-	-webkit-transition: border 0.1s ease-in;
-	-moz-transition: border 0.1s ease-in;
-	-ms-transition: border 0.1s ease-in;
-	-o-transition: border 0.1s ease-in;
-	transition: border 0.1s ease-in;
-}
-
-.field-datetime .frame.single li.collapsed header div {
-	border-bottom-color: rgba(0, 0, 0, 0.25);
-}
-
-.field-datetime .frame.single li.collapsed header div.focus {
-	border-bottom-color: rgba(0, 0, 0, 0.15);
 }
 
 .field-datetime .frame.single li.collapsed header div {
