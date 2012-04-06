@@ -568,7 +568,7 @@
 			}
 
 			// Current date and time
-			elseif($this->get('prepopulate') == 1) {
+			elseif($this->get('prepopulate') == 1 || $this->get('multiple') == 0) {
 				$list->appendChild(
 					self::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'))
 				);
