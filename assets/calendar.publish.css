@@ -264,17 +264,17 @@ div.calendar tbody td:hover {
 		padding: 18px 38px 18px 18px;
 	}
 	
-	fieldset.primary div.calendar div.date {
+	fieldset.primary div.calendar div.date:not(:last-child) {
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
 		width: 50%;
-		padding: 0 0 0 12px;
+		padding: 0 0 0 11px;
 		position: absolute;
 		top: 10px;
 		left: 0;
 	}
 	
-	fieldset.primary div.calendar div.date nav a:first-of-type {
+	fieldset.primary div.calendar div.date:not(:last-child) nav a:first-of-type {
 		left: 12px;
 	}
 
