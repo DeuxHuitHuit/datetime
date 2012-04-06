@@ -568,7 +568,7 @@
 			}
 
 			// Current date and time
-			else {
+			elseif($this->get('prepopulate') == 1) {
 				$list->appendChild(
 					self::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'))
 				);
@@ -592,7 +592,7 @@
 		}
 
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
-			if($this->get('required') && empty($data['start'][0])) {
+			if($this->get('required') == 1 && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
 				return self::__MISSING_FIELDS__;
 			}

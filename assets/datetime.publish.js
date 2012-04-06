@@ -439,7 +439,7 @@
 				dates.symphonyDuplicator({
 					orderable: false,
 					collapsible: false,
-					minimum: 1,
+					minimum: (datetime.is('.prepopulate') ? 1 : 0),
 				});
 				
 				// Orderable dates
