@@ -181,12 +181,19 @@
 				datetime.on('keydown.datetime', 'input', function(event) {
 					var input = $(this);
 
-					// If tab is pressed while the user is in the first
-					// date, allow the focus to shifted to the end date
-					// instead of the calendar.
+					// Tab key
 					if(event.which == 9 && !event.shiftKey && input.is('.start')) {
-						input.nextAll('input.end').show().focus();
+						var item = input.parents('li');
+						
 						event.preventDefault();
+
+						// Show end date
+						input.nextAll('input.end').show().focus();
+		
+						// Expand calendar
+						if(item.is('.collapsed')) {
+							item.trigger('expand.collapsible');
+						}
 					}
 				});
 			}
