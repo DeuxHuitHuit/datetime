@@ -460,22 +460,69 @@
 			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/datetime/assets/timer.publish.css', 'screen', 107, false);
 			Administration::instance()->Page->addScriptToHead(URL . '/extensions/datetime/assets/timer.publish.js', 108, false);
 
-			// Help
-			$help = '';
-			if($this->get('range') == 1 && $this->get('required') == 'yes') {
-				$help = '<i>' . __('Range: <code>shift</code> + click') . '</i>';
-			}
-			elseif($this->get('range') == 1 && $this->get('required') == 'no') {
-				$help = '<i>' . __('Optional') . ', ' . __('range: <code>shift</code> + click') . '</i>';
-			}
-			elseif($this->get('range') == 0 && $this->get('required') == 'no') {
-				$help = '<i>' . __('Optional') . '</i>';
-			}
-
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
-			$label = new XMLElement('label', $this->get('label') . $help);
+			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') . ' | ' : '') . '<a class="help" data-show="' . __('Show Help') . '" data-hide="' . __('Hide Help') . '">' . __('Show help') . '</a></i>');
 			$wrapper->appendChild($label);
+			
+			// Input help
+			$helptexts[__('Using the input fields')][__('click')] = __('Clicking the date input will open the calendar');
+			if($this->get('multiple') == 1) {
+				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close all calendars');
+			}
+			else {
+				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close the calendar');
+			}
+			if($this->get('range') == 1) {
+				$helptexts[__('Using the input fields')][__('tab')] = __('Hitting the tab key will open the range editor');
+			}
+			if($this->get('multiple') == 1) {
+				$helptexts[__('Using the input fields')][__('drag')] = __('Dragging dates will sort the date listing');
+			}
+			
+			// Calendar help
+			if($this->get('range') == 1) {
+				$helptexts[__('Using the calendar')] = array(
+					__('click') => __('Clicking a date will create a single date'),
+					__('shift+click') => __('Clicking a second date while holding shift will create a date range')
+				);
+			}
+			else {
+				$helptexts[__('Using the calendar')] = array(
+					__('click') => __('Clicking a day will create a date'),
+				);
+			}
+
+			// Timer help
+			if($this->get('time') == 1) {
+				$helptexts[__('Using the timer')] = array(
+					__('click') => __('Clicking a time will adjust the time of a single date'),
+					__('shift+click') => __('Clicking a second time while holding shift will adjust the time of a date range')
+				);
+			}
+			
+			// Field help
+			$help = new XMLElement('div', $help, array('class' => 'inline frame help hidden'));
+			foreach($helptexts as $headline => $instructions) {
+			
+				// Add Headline
+				$help->appendChild(
+					new XMLElement('h3', $headline)
+				);
+				
+				// Add instructions
+				$list = new XMLElement('dl');
+				foreach($instructions as $action => $instruction) {
+					$list->appendChild(
+						new XMLElement('dt', '<code>' . $action . '</code>')
+					);
+					$list->appendChild(
+						new XMLElement('dd', $instruction)
+					);
+				}
+				$help->appendChild($list);
+			}
+			$wrapper->appendChild($help);
 
 			// Get settings
 			$settings = array('dark', 'frame');

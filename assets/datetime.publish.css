@@ -143,3 +143,65 @@
 	margin: 0 -10px;
 	padding: 10px;
 }
+
+/* Help */
+
+.field-datetime div.help.hidden {
+	display: none;
+}
+
+.field-datetime div.help {
+	border-radius: 4px 4px 0 0;
+	border-bottom: none;
+	box-shadow: none;
+	margin-bottom: 0;
+	display: block;
+}
+
+.field-datetime div.help + .frame li:first-child,
+.field-datetime div.help + .frame.single li:first-child div {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.field-datetime div.help h3 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0 5px 0 0;
+	color: #000;
+	background: #f5f5f5;
+	z-index: 1000;
+	position: relative;
+	display: inline-block;
+}
+
+.field-datetime div.help dl {
+	position: relative;
+	margin: -8px 0 20px;
+	padding: 17px 0 0 130px;
+	border-top: 1px solid #fff;
+}
+
+.field-datetime div.help dl:last-of-type {
+	margin-bottom: 10px;
+}
+
+.field-datetime div.help dt {
+	position: absolute;
+	left: 0;
+}
+
+.field-datetime div.help code {
+	background: #383836;
+	border-radius: 4px;
+	color: #fff;
+	line-height: 1.85;
+	min-height: 20px;
+	padding: 0 10px;
+	display: inline-block;
+}
+
+.field-datetime div.help dd {
+	margin: 0 0 10px;
+	padding: 2px 0 0;
+}
