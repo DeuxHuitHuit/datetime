@@ -207,8 +207,15 @@
 					);
 				}
 				
-				// @todo: Transfer old Stage settings
-				// @todo: Remove old Stage instances
+				// Transfer old Stage settings
+				$constructables = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` FROM  `tbl_fields_stage` WHERE  `constructable` = 0");
+				if(!empty($constructables)) {
+					Symphony::Database()->query("UPDATE `tbl_fields_datetime SET `multiple` = 0 WHERE `field_id` IN (" . implode(',', $constructable) . ")");
+				}
+				
+				// Remove old Stage instances
+				Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
+				Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
 			}
 			
 			// Report status
@@ -225,11 +232,12 @@
 		 */
 		public function uninstall() {
 
-			// Drop related entries from stage tables
-			Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
-			Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
-
-			// @todo: Remove old Stage tables if they are empty
+			// Remove old Stage tables if they are empty
+			$count = Symphony::Database()->query("SELECT COUNT(*) FROM `tbl_fields_stage`");
+			if($count == 0) {
+				Symphony::Database()->query("DROP TABLE `tbl_fields_stage`");
+				Symphony::Database()->query("DROP TABLE `tbl_fields_stage_sorting`");
+			}
 			
 			// Drop date and time table
 			Symphony::Database()->query("DROP TABLE `tbl_fields_datetime`");
