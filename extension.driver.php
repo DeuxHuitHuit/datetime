@@ -66,7 +66,7 @@
 			$select = Widget::Select('settings[datetime][]', $options, array('multiple' => 'multiple'));
 			$label = Widget::Label('Languages included in the Date and Time Data Source', $select);
 			$group->appendChild($label);
-			$help = new XMLElement('p', __('You can add more languages in you configuration file.'), array('class' => 'help'));
+			$help = new XMLElement('p', __('You can add more languages in your configuration file.'), array('class' => 'help'));
 			$group->appendChild($help);
 			$context['wrapper']->appendChild($group);
 		}

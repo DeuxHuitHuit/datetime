@@ -462,7 +462,7 @@
 
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
-			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') . ' | ' : '') . '<a class="help" data-show="' . __('Show Help') . '" data-hide="' . __('Hide Help') . '">' . __('Show help') . '</a></i>');
+			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') . ' | ' : '') . '<a class="help" data-show="' . __('Show help') . '" data-hide="' . __('Hide help') . '">' . __('Show help') . '</a></i>');
 			$wrapper->appendChild($label);
 			
 			// Input help
