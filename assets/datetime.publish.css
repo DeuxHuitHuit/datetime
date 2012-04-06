@@ -136,7 +136,7 @@
 	-ms-transition: padding 0.1s ease-out, height 0.1s ease-out;
 	-o-transition: padding 0.1s ease-out, height 0.1s ease-out;
 	transition: padding 0.1s ease-out, height 0.1s ease-out;
-	height: 23px;
+	min-height: 23px;
 }
 
 .field-datetime .frame.single li.collapsed header div {
@@ -145,6 +145,7 @@
 }
 
 .field-datetime .frame.single li.collapsed:not(.range) header div {
+	min-height: 20px;
 	height: 20px;
 }
 
