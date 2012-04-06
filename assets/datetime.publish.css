@@ -46,7 +46,7 @@
 	background: transparent;
 	border: none;
 	box-shadow: none;
-	padding: 1px 2px 0;
+	padding: 1px 0 0;
 	margin: 0;
 	height: 23px;
 	-moz-box-sizing: border-box;
@@ -56,8 +56,8 @@
 
 .field-datetime header input.end {
 	border-top: 1px solid #E4E4DE;
-	background: transparent url(images/range.png) 3px 7px no-repeat;
-	padding-left: 20px;
+	background: transparent url(images/range.png) 2px 6px no-repeat;
+	padding-left: 18px;
 	display: none;
 }
 
@@ -112,7 +112,7 @@
 
 .field-datetime .frame.single li {
 	border-radius: 0;
-	border: none !important;
+	border: none;
 }
 
 .field-datetime .frame.single header {
@@ -125,10 +125,17 @@
 
 .field-datetime .frame.single li header div {
 	border-radius: 2px 2px 0 0;
+	padding-left: 7px;
+	-webkit-transition: padding 0.2s ease-out;
+	-moz-transition: padding 0.2s ease-out;
+	-ms-transition: padding 0.2s ease-out;
+	-o-transition: padding 0.2s ease-out;
+	transition: padding 0.2s ease-out;
 }
 
 .field-datetime .frame.single li.collapsed header div {
 	border-radius: 2px;
+	padding-left: 3px;
 }
 
 .field-datetime .frame.single .content {

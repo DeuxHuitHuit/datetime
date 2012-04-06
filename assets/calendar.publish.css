@@ -307,3 +307,13 @@ li.ordering div.calendar tbody td:last-child {
 li.ordering div.calendar div.switch {
 	background: #44689e;
 }
+
+/* Single date */
+
+.frame.single div.calendar div.date nav a:first-of-type {
+	left: -6px;
+}
+
+.frame.single div.calendar div.date nav a:last-of-type {
+	right: -8px;
+}
