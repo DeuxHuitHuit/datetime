@@ -79,6 +79,11 @@
 	margin-top: 0;
 	font-style: normal;
 	text-shadow: none;
+	-webkit-transition: top 0.1s ease-out;
+	-moz-transition: top 0.1s ease-out;
+	-ms-transition: top 0.1s ease-out;
+	-o-transition: top 0.1s ease-out;
+	transition: top 0.1s ease-out;
 }
 
 .field-datetime header em.end.label {
@@ -126,16 +131,30 @@
 .field-datetime .frame.single li header div {
 	border-radius: 2px 2px 0 0;
 	padding-left: 7px;
-	-webkit-transition: padding 0.2s ease-out;
-	-moz-transition: padding 0.2s ease-out;
-	-ms-transition: padding 0.2s ease-out;
-	-o-transition: padding 0.2s ease-out;
-	transition: padding 0.2s ease-out;
+	-webkit-transition: padding 0.1s ease-out, height 0.1s ease-out;
+	-moz-transition: padding 0.1s ease-out, height 0.1s ease-out;
+	-ms-transition: padding 0.1s ease-out, height 0.1s ease-out;
+	-o-transition: padding 0.1s ease-out, height 0.1s ease-out;
+	transition: padding 0.1s ease-out, height 0.1s ease-out;
+	height: 23px;
 }
 
 .field-datetime .frame.single li.collapsed header div {
 	border-radius: 2px;
 	padding-left: 3px;
+}
+
+.field-datetime .frame.single li.collapsed:not(.range) header div {
+	height: 20px;
+}
+
+.field-datetime .frame.single li.collapsed:not(.range) header div input {
+	height: 20px;
+	border: none;
+}
+
+.field-datetime .frame.single li.collapsed:not(.range) header div em.label {
+	top: 2px;
 }
 
 .field-datetime .frame.single .content {
