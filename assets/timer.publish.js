@@ -111,7 +111,7 @@
 				};
 			}
 		
-			// Date range
+			// Time range
 			if(key) {
 				
 				// First timeline
@@ -146,9 +146,18 @@
 				}
 			}
 			
-			// Single date
+			// Single time
 			else {
-				timeline.parents(settings.item).trigger('settime', [selected, null, 'single', 'start']);
+			
+				// Single date
+				if(end.is(':hidden')) {
+					timeline.parents(settings.item).trigger('settime', [selected, null, 'single', 'start']);
+				}
+				
+				// Date range
+				else {
+					timeline.parents(settings.item).trigger('settime', [selected, selected, 'multiple', 'start']);
+				}
 			}
 		};
 	
