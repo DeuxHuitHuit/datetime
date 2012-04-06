@@ -495,10 +495,17 @@
 
 			// Timer help
 			if($this->get('time') == 1) {
-				$helptexts[__('Using the timer')] = array(
-					__('click') => __('Clicking a time will adjust the time of a single date'),
-					__('shift+click') => __('Clicking a second time while holding shift will adjust the time of a date range')
-				);
+				if($this->get('range') == 1) {
+					$helptexts[__('Using the timer')] = array(
+						__('click') => __('Clicking on a time will set start and end date to the same time'),
+						__('shift+click') => __('Clicking on a time while holding shift will either set the time for the start date (when the time is before the current range) or for the end date (when the time is after the current range)')
+					);
+				}
+				else {
+					$helptexts[__('Using the timer')] = array(
+						__('click') => __('Clicking on a time will set the date to that time'),
+					);
+				}
 			}
 			
 			// Field help
