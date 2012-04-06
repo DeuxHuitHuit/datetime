@@ -40,7 +40,7 @@
 			var field = $(this),
 				help = field.find('i a.help'),
 				instructions = field.find('div.help'),
-				datetime = field.find('.frame'),
+				datetime = field.find('.dark.frame'),
 				dates = datetime.find('ol'),
 				headers = dates.find('header'),
 				width = 0;
