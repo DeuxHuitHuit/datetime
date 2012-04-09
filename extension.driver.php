@@ -209,8 +209,8 @@
 				
 				// Transfer old Stage settings
 				$constructables = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` FROM  `tbl_fields_stage` WHERE  `constructable` = 0");
-				if(!empty($constructables)) {
-					Symphony::Database()->query("UPDATE `tbl_fields_datetime SET `multiple` = 0 WHERE `field_id` IN (" . implode(',', $constructable) . ")");
+				if(!empty($constructables) && is_array($constructables)) {
+					Symphony::Database()->query("UPDATE `tbl_fields_datetime` SET `multiple` = 0 WHERE `field_id` IN (" . implode(',', $constructables) . ")");
 				}
 				
 				// Remove old Stage instances
