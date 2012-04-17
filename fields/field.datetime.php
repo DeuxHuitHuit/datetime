@@ -260,7 +260,7 @@
 		 * @see http://symphony-cms.com/learn/api/2.2/toolkit/field/#checkPostFieldData
 		 */
 		public function checkPostFieldData($data, &$message, $entry_id=NULL) {
-			if($this->get('required') && empty($data['start'][0])) {
+			if($this->get('required') == 'yes' && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
 				return self::__MISSING_FIELDS__;
 			}
@@ -840,7 +840,9 @@
 			}
 
 			// append date and time to data source
-			$wrapper->appendChild($datetime);
+			if(!empty($data['start'][0])) {
+				$wrapper->appendChild($datetime);
+			}
 		}
 
 		/**
