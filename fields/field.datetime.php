@@ -840,7 +840,9 @@
 			}
 
 			// append date and time to data source
-			$wrapper->appendChild($datetime);
+			if(!empty($data['start'][0])) {
+				$wrapper->appendChild($datetime);
+			}
 		}
 
 		/**
