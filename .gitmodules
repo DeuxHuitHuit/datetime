@@ -1,3 +1,0 @@
-[submodule "lib/stage"]
-	path = lib/stage
-	url = git://github.com/hananils/stage.git

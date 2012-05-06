@@ -1,4 +1,4 @@
-# Date and Time 2
+# Date and Time 3
 
 ![Date and Time Field](http://projekte.nilshoerrmann.de/extensions/datetime/datetime24.png)
 
@@ -6,14 +6,7 @@ Date and Time provides advanced date and time management for Symphony. It offers
 
 ## Installation
 
-Date and Time contains two components:
-
-- The Date and Time field itself which provides the calendar widget,
-- [Stage](https://github.com/hananils/stage/) which offers the basic interface for adding and ordering dates.
-
-If you are working with Git, please don't forget to pull the Stage submodule as well. If you are not using Git and want to install this extension using FTP, please just download a copy of the `master` branch and add [Stage](https://github.com/hananils/stage/) to `lib/stage/` manually. More information about [installing and updating extensions](http://symphony-cms.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://symphony-cms.com/learn/>. 
-
-All interface related components of Date and Time are JavaScript based. If you are upgrading from an earlier version, please make sure to clear your browser cache to avoid interface issues. If another extension or the Symphony core throws a JavaScript error, Date and Time will stop working.
+Information about [installing and updating extensions](http://symphony-cms.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://symphony-cms.com/learn/>. 
 
 ## Updating
 
@@ -22,6 +15,8 @@ To update Date and Time to a newer version perform the following steps:
 - Make sure that you have a working backup of your Symphony install.
 - Update the Date and Time folder by either updating the repository and submodule or by replacing the files manually.
 - Log into the backend and enable the Date and Time extension to run the update script.
+
+All interface related components of Date and Time are JavaScript based. Please make sure to clear your browser cache to avoid interface issues. If another extension or the Symphony core throws a JavaScript error, Date and Time will stop working.
 
 ## Field Settings
 
@@ -35,15 +30,10 @@ Date and Time offers the following field settings:
 
 ## Data Source Filtering
 
-Version 2.0 introduces new filter options in the data source editor:
-
 - prefixing a filter with `start:` will only check start dates,
 - prefixing a filter with `end:` will only check end dates,
 - prefixing a filter with `strict:` will check, if start **and** end date are in the given filter range,
 - filters without prefixes will check, if start **or** end date are in the given filter range.
-
-As of version 2.1 there is an additional filter mode:
-
 - prefixing a filter with `extended:` will work like the unprefixed filter but will additionally fetch single dates (those without end date) that lie in the past. This is helpful if you like to display banners only between certain dates and if the user didn't enter an end date. Using the `extended` filter, this will be interpreted as "display for ever".
 
 Filters separated by comma will find all dates that match one of the given dates or ranges.  

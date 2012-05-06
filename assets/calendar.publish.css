@@ -6,14 +6,8 @@
  */
  
 div.calendar {
-	background: #353533;
-	border-top: none;
-	min-width: 23em;
-	margin: 0 -1px;
-	padding: 17px 38px 42px 18px;
 	z-index: 2000;
 	position: relative;
-	display: none;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -21,7 +15,6 @@ div.calendar {
 
 div.calendar div.date {
 	width: 100%;
-	min-width: 250px;
 	padding: 0;
 	position: relative;
 }
@@ -34,12 +27,14 @@ div.calendar div.date nav {
 div.calendar div.date nav a {
 	display: inline-block;
 	background: url(images/arrows.png) 6px -13px no-repeat;
+	border: none;
+	margin: 0;
 	text-indent: -1000em;
 	width: 20px;
 	height: 13px;
 	position: absolute;
 	top: 4px;
-	left: 6px;
+	left: 1px;
 	z-index: 1000;
 }
 
@@ -50,7 +45,7 @@ div.calendar div.date nav a:hover {
 div.calendar div.date nav a:last-of-type {
 	background: url(images/arrows.png) -15px -13px no-repeat;
 	left: auto;
-	right: 4px;
+	right: -6px;
 }
 
 div.calendar div.date nav a:last-of-type:hover {
@@ -186,17 +181,12 @@ div.calendar div.switch.active ul li:hover {
 /* Calendar sheet */
 
 div.calendar table {
-	background: #323230;
 	border-collapse: collapse;
 	clear: both;
 }
 
-div.calendar thead tr {
-	background: #353533;
-}
-
 div.calendar td {
-	background: #323230;
+	background: transparent /*#323230*/;
 	border: 1px solid #41403f;
 	border-style-bottom: none;
 	color: #fff;
@@ -206,20 +196,21 @@ div.calendar td {
 	vertical-align: middle;
 	padding: 0;
 	width: 35px;
+	text-shadow: none;
 }
 
 div.calendar thead td, 
 div.calendar thead td:first-child, 
 div.calendar thead td:last-child {
-	background: #353533;
+	background: transparent;
 	border: none;
 	height: 30px;
-	color: #616057;
+	color: rgba(255, 255, 255, 0.3);
 }
 
 div.calendar td.last, 
 div.calendar td.next {
-	color: #686865;
+	color: rgba(255, 255, 255, 0.3) /*#686865*/;
 }
 
 div.calendar td:first-child, 
@@ -260,31 +251,69 @@ div.calendar td.selected.today {
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-div.calendar td:hover {
+div.calendar tbody td:hover {
 	background: #ffb !important;
 	border: 1px solid #fff;
 	color: #9d854c;
 }
 
-div.calendar thead td:hover {
-	background: none !important;
-	border: inherit;
-	color: #616057;
-	cursor: auto;
-}
-
 @media screen and (min-width: 1000px) {
 
 	fieldset.primary div.calendar {
-		height: 244px;
+		height: 254px;
 		padding: 18px 38px 18px 18px;
 	}
 	
-	fieldset.primary div.calendar div.date {
-		width: 300px;
+	fieldset.primary div.calendar div.date:not(:last-child) {
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 50%;
+		padding: 0 0 0 11px;
 		position: absolute;
-		top: 16px;
-		left: 16px;
+		top: 10px;
+		left: 0;
+	}
+	
+	fieldset.primary div.calendar div.date:not(:last-child) nav a:first-of-type {
+		left: 12px;
 	}
 
+}
+
+/* Ordering */
+
+li.ordering div.calendar nav {
+	border-bottom-color: #3c5c8c;
+}
+
+li.ordering div.calendar nav a {
+	display: none;
+}
+
+li.ordering div.calendar td {
+	border: 1px solid #44689e;
+}
+
+li.ordering div.calendar thead td {
+	border: none;
+	color: #3c5c8c;
+}
+
+li.ordering div.calendar tbody td:first-child, 
+li.ordering div.calendar tbody td:last-child {
+	background: rgba(68, 104, 158, 0.5);
+}
+
+li.ordering div.calendar div.switch {
+	background: #44689e;
+}
+
+/* Single date */
+
+.frame.single div.calendar div.date nav a:first-of-type {
+	left: -6px;
+}
+
+.frame.single div.calendar div.date nav a:last-of-type {
+	right: -8px;
 }
