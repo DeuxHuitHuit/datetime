@@ -1,6 +1,6 @@
 # Date and Time 3
 
-![Date and Time Field](http://projekte.nilshoerrmann.de/screenshots/extensions/datetime/datetime3.png)
+![Date and Time Field](http://projekte.nilshoerrmann.de/extensions/datetime/datetime3.png)
 
 Date and Time provides advanced date and time management for Symphony. It offers an easy interface providing a calendar widget that helps creating multiple dates and date ranges. The field respects the system settings and displays date and time accordingly. Nevertheless, it is capable to read and understand [relative date formats](http://www.php.net/manual/en/datetime.formats.php).
 
