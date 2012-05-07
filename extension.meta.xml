@@ -11,22 +11,25 @@
 	<authors>
 		<author>
 			<name github="hananils" symphony="hananils">Büro für Web- und Textgestaltung</name>
-			<website>http://hananils.de</website>
+			<website>http://hananils.de?symphony=datetime</website>
 		</author>
 		<author>
 			<name github="nilshoerrmann" symphony="Nils">Nils Hörrmann</name>
-			<website>http://nilshoerrmann.de</website>
+			<website>http://nilshoerrmann.de?symphony=datetime</website>
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.2" date="2012-05-07" min="2.3">
+			- Fix problems with Date and Time fields inside subsections.
+		</release>
 		<release version="3.0.1" date="2012-05-07" min="2.3">
-			- Remove accidentally bundled Stage submodule
+			- Remove accidentally bundled Stage submodule.
 		</release>
 		<release version="3.0" date="2012-05-06" min="2.3">
-			- Symphony 2.3 compatibility
-			- Switched from Stage to Duplicator to generate the interface
-			- Added inline help
-			- Simplified layout for single date fields
+			- Symphony 2.3 compatibility.
+			- Switched from Stage to Duplicator to generate the interface.
+			- Added inline help.
+			- Simplified layout for single date fields.
 		</release>
 		<release version="2.4" date="2012-02-14" min="2.2.1" max="2.2.5">
 			- Allow field to be required. (Thanks, Brendan!)

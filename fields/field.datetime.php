@@ -576,9 +576,10 @@
 
 			// Add template
 			if($this->get('multiple') == 1) {
-				$list->appendChild(
-					self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'))
-				);
+				$template = self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'));
+				$template->setAttribute('data-name', 'datetime');
+				$template->setAttribute('data-type', 'datetime');
+				$list->appendChild($template);
 			}
 
 			// Append Duplicator
