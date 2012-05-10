@@ -64,7 +64,7 @@
 			// Add fieldset
 			$group = new XMLElement('fieldset', '<legend>' . __('Date and Time') . '</legend>', array('class' => 'settings'));
 			$select = Widget::Select('settings[datetime][]', $options, array('multiple' => 'multiple'));
-			$label = Widget::Label('Languages included in the Date and Time Data Source', $select);
+			$label = Widget::Label(__('Languages included in the Date and Time Data Source'), $select);
 			$group->appendChild($label);
 			$help = new XMLElement('p', __('You can add more languages in your configuration file.'), array('class' => 'help'));
 			$group->appendChild($help);
