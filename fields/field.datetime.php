@@ -592,6 +592,7 @@
 			}
 		}
 
+
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
 			if($this->get('required') == 1 && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
@@ -710,7 +711,9 @@
 			}
 
 			// append date and time to data source
-			$wrapper->appendChild($datetime);
+			if(!empty($data['start'][0])) {
+				$wrapper->appendChild($datetime);
+			}
 		}
 
 		function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
