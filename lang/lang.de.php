@@ -7,7 +7,7 @@
 			'email' => 'post@nilshoerrmann.de',
 			'website' => 'http://nilshoerrmann.de'
 		),
-		'release-date' => '2011-06-17'
+		'release-date' => '2012-05-10'
 	);
 
 	/**
@@ -15,88 +15,103 @@
 	 */
 	$dictionary = array(
 
-		'1 result' => 
-		'1 Ergebnis',
+		'%s Allow multiple dates' => 
+		'%s Mehrere Datumsangaben zulassen',
 
-		'Allow creation of new items' => 
-		'Erstellen von Einträgen zulassen',
+		'%s Display time' => 
+		'%s Zeit anzeigen',
 
-		'Allow date ranges' => 
-		'Zeitdauer zulassen',
+		'%s Enable date ranges' => 
+		'%s Zeiträume ermöglichen',
 
-		'Allow deselection of items' => 
-		'Abwahl von Einträgen zulassen',
+		'Add date' => 
+		'Datum hinzufügen',
 
-		'Allow dropping of items' => 
-		'Einfügen von Einträge erlauben',
+		'Clicking a date will create a single date' => 
+		'Ein Klick auf ein Datum erstellt ein einzelnes Datum',
 
-		'Allow selection of items from a list of existing items' => 
-		'Auswahl aus einer Liste bereits bestehender Einträge zulassen',
+		'Clicking a day will create a date' => 
+		'Ein Klick auf einen Tag erstellt ein Datumseintrag',
 
-		'Allow sorting of items' => 
-		'Sortieren von Einträgen erlauben.',
+		'Clicking a second date while holding shift will create a date range' => 
+		'Ein zweiter Klick bei gehaltener Shift-Taste erstellt einen Zeitraum',
 
-		'Allow time editing' => 
-		'Zeitbearbeitung erlauben',
+		'Clicking on a time while holding shift will either set the time for the start date (when the time is before the current range) or for the end date (when the time is after the current range)' => 
+		'Ein Klick auf eine Uhrzeit bei gehaltener Shift-Taste wird entweder die Anfangs- oder die Endzeit anpassen, abhängig davon, ob Sie vor oder hinter den bisherigen Zeitraum klicken',
 
-		'Behaviour' => 
-		'Verhalten',
+		'Clicking on a time will set start and end date to the same time' => 
+		'Ein Klick auf eine Uhrzeit ändert Anfangs- und Endzeit',
 
-		'Browse' => 
-		'Durchsuchen',
+		'Clicking on a time will set the date to that time' => 
+		'Ein Klick auf eine Uhrzeit das Datum auf diese Uhrzeit',
+
+		'Clicking the date input will open the calendar' => 
+		'Ein Klick auf das Datumsfeld öffnet den Kalender',
+
+		'Date and Time' => 
+		'Datum und Zeit',
 
 		'Date/Time' => 
 		'Datum/Uhrzeit',
 
+		'Double-clicking a date input will close all calendars' => 
+		'Ein Doppelklick auf ein Datumsfeld schließt alle Kalender',
+
+		'Double-clicking a date input will close the calendar' => 
+		'Ein Doppelklcik auf ein Datumsfeld schließt den Kalender',
+
+		'Dragging dates will sort the date listing' => 
+		'Datumsangaben können durch schieben sortiert werden',
+
+		'Hide help' => 
+		'Hilfe ausblenden',
+
+		'Hitting the tab key will open the range editor' => 
+		'Die Tabulaturtaste öffnen die Zeitraumeingabe',
+
 		'No Date' => 
 		'Kein Datum',
 
-		'No items found.' => 
-		'Keine Einträge gefunden.',
+		'No language specified. Please select one or more in the system preferences.' => 
+		'Keine Sprache festgelegt. Bitte wählen Sie eine oder mehrere Sprachen in den Systemeinstellungen aus.',
 
-		'Please make sure that the Stage submodule is initialised and available at %s.' => 
-		'Bitte überprüfen Sie, ob das Submodul Stage initialisiert wurde und unter %s zur Verfügung steht.',
+		'Remove' => 
+		'Entfernen',
 
-		'Range: <code>shift</code> + click' => 
-		'Zeitraum: <code>shift</code> + Klick',
+		'Show help' => 
+		'Hilfe einblenden',
 
-		'Stage not found' => 
-		'Stage konnte nicht gefunden werden',
+		'Using the calendar' => 
+		'Im Kalender',
 
-		'This will add a <code>Create New</code> button to the interface' => 
-		'Dies fügt einen <code>Neu-erstellen</code>-Knopf hinzu',
+		'Using the input fields' => 
+		'In den Eingabefeldern',
 
-		'This will add a <code>Remove</code> button to the interface' => 
-		'Dies fügt einen <code>Löschen</code>-Knopf hinzu',
+		'Using the timer' => 
+		'In der Zeitübersicht',
 
-		'This will add a search field to the interface' => 
-		'Dies fügt ein Suchfeld hinzu',
+		'You can add more languages in your configuration file.' => 
+		'Sie können weitere Sprachen in Ihrer Konfiguration hinzufügen.',
 
-		'This will automatically add the current date to new entries' => 
-		'Dies fügt neuen Einträgen automatisch das heutige Datum hinzu',
+		'click' => 
+		'Klick',
 
-		'This will display date and time in the interface' => 
-		'Hierdurch werden sowohl Datum als auch Uhrzeit angezeigt',
+		'double-click' => 
+		'Doppelklick',
 
-		'This will enable item dragging and reordering' => 
-		'Dies ermöglicht das Verschieben und Neuordnen von Einträgen',
+		'drag' => 
+		'Schieben',
 
-		'This will enable item dropping on textareas' => 
-		'Dies ermöglicht das Ziehen von Einträgen in Textfelder',
+		'shift+click' => 
+		'Shift+Klick',
 
-		'This will enable range editing' => 
-		'Dies ermöglicht das bearbeiten von Zeiträumen',
+		'tab' => 
+		'Tab',
 
-		'no results' => 
-		'Keine Suchergebnisse',
+		'Languages included in the Date and Time Data Source' => 
+		'Sprachen die in der Datums-und-Zeit-Datenquelle eingebunden werden',
 
-		'{$count} results' => 
-		'{$count} Ergebnisse',
-
-		'It\'s available at %s.' => 
-		'Es wird unter %s zur Verfügung gestellt.',
-
-		'Pre-populate field' => 
-		'Feld vorausfüllen',
+		'\'%s\' is a required field.' => 
+		'\'%s\' ist ein verpflichtendes Feld.',
 
 	);

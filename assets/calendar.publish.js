@@ -23,7 +23,7 @@
 	 * @source: http://github.com/nilshoerrmann/calendar
 	 */
 	$.fn.symphonyCalendar = function(custom_settings) {
-		var manager = $(this),
+		var dates = $(this),
 			settings = {
 				item: 'li',
 				calendar: 'div.calendar'
@@ -59,23 +59,23 @@
 	/*---- Events -----------------------------------------------------------*/
 
 		// Visualise
-		manager.delegate(settings.item, 'visualise.calendar', function(event, range, focus) {
+		dates.on('visualise.calendar', settings.item, function(event, range, focus) {
 			var item = $(this);
 			visualise(item, focus, range);
 		});
 
 		// Choosing
-		manager.delegate('td', 'click.calendar', function(event) {
+		dates.on('click.calendar', 'td', function(event) {
 			var cell = $(event.target),
 				calendar = cell.parents(settings.calendar),
 				timestamp = parseInt(cell.attr('data-timestamp'));
 				
 			// Set date
-			choose(calendar, timestamp, (event.shiftKey && !manager.parent().is('.simple')));
+			choose(calendar, timestamp, (event.shiftKey && !dates.parent().is('.simple')));
 		});
 			
 		// Flipping
-		manager.delegate('nav a', 'click.calendar', function(event) {
+		dates.on('click.calendar', 'nav a', function(event) {
 			var calendar = $(this).parents(settings.calendar),
 				direction = $(this).attr('class');
 				
@@ -84,7 +84,7 @@
 		});
 		
 		// Switching
-		manager.delegate('nav div', 'click.calendar', function(event) {
+		dates.on('click.calendar', 'nav div', function(event) {
 			var selector = $(this).addClass('active');
 			event.stopPropagation();
 			
@@ -93,7 +93,7 @@
 				selector.removeClass('active');
 			});
 		});
-		manager.delegate('div.active li', 'click', function(event) {
+		dates.on('click', 'div.active li', function(event) {
 			var selection = $(this),
 				type = selection.parent().attr('class'),
 				calendar = selection.parents(settings.calendar),
@@ -103,7 +103,7 @@
 			event.stopPropagation();
 				
 			// Hide selector
-			manager.find('nav div.active').removeClass('active');
+			dates.find('nav div.active').removeClass('active');
 
 			// Switch month
 			if(type == 'months') {
@@ -153,8 +153,6 @@
 			if(!date) {
 				date = now.getTime();
 				then = now;
-				start = null;
-				end = null;
 			}
 			
 			// Current date
