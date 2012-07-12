@@ -443,6 +443,10 @@
 		function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null) {
 
 			// Houston, we have problem: we've been called out of context!
+			if( !Symphony::Engine() instanceof Administration ){
+				return;
+			}
+
 			$callback = Administration::instance()->getPageCallback();
 			if($callback['context']['page'] != 'edit' && $callback['context']['page'] != 'new') {
 				return;
