@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.4" date="2012-07-12" min="2.3">
+			- Minor fixes and improvements. 
+		</release>
 		<release version="3.0.3" date="2012-05-10" min="2.3">
 			- Updated German translation.
 		</release>
