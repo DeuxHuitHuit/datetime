@@ -35,9 +35,9 @@
 			elseif(ctype_digit($date)) {
 
 				// Switch between milliseconds and seconds
-				if($date > 9999999999) {
-					$date = $date / 1000;
-				}                    
+				if(strlen($date) > 10) {
+					$date = substr($date, 0, -3);
+				}
 				$timestamp = $date;
 			}
 			else {
