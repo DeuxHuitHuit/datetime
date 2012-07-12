@@ -799,17 +799,16 @@
 
 			$values = array();
 			for($i = 0; $i < count($data['start']); $i++) {
-				$start = $this->__getEarliestDate($data['start'][$i]);
-				$end = $this->__getLatestDate($data['end'][$i]);
+				$parts = self::parseDate($data['start'][$i]);
 
 				// Different dates
-				if($start != $end) {
-					$values[] = $start . ' to ' . $end;
+				if($parts['start'] != $parts['end']) {
+					$values[] = $parts['start'] . ' to ' . $parts['end'];
 				}
 
 				// Same date
 				else {
-					$values[] = $start;
+					$values[] = $parts['start'];
 				}
 			}
 
