@@ -84,9 +84,11 @@
 			
 			// Prepare preferences
 			$context['settings']['datetime'] = array();
-			foreach($selection as $language) {
-				$settings = explode('::', $language);
-				$context['settings']['datetime'][$settings[0]] = $settings[1];
+			if(is_array($selection)) {
+				foreach($selection as $language) {
+					$settings = explode('::', $language);
+					$context['settings']['datetime'][$settings[0]] = $settings[1];
+				}
 			}
 		}
 				
