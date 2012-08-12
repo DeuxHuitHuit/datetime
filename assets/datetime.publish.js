@@ -461,7 +461,8 @@
 			datetime.symphonyCollapsible({
 					items: 'li',
 					handles: 'header',
-					ignore: 'input'
+					ignore: 'input',
+					storage: 'symphony.datetime.' + Symphony.Context.get('env').section_handle + '.' + field.attr('id') + '.'
 				})
 				.on('dblclick.datetime', 'input', function toggleAll(event) {
 	
