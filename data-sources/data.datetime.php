@@ -20,8 +20,10 @@
 			
 			// Load language codes from configuration
 			$languages = Symphony::Configuration()->get('datetime');
-			foreach($languages as $name => $codes) {
-				$this->dsParamLANG[] = explode(', ', $codes);
+			if(is_array($languages)) {
+				foreach($languages as $name => $codes) {
+					$this->dsParamLANG[] = explode(', ', $codes);
+				}
 			}
 		}
 				
