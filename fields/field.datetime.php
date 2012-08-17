@@ -918,11 +918,13 @@
 		 * This function prepares values for import with XMLImporter
 		 *
 		 * @param string|array $data
-		 *	Data that should be prepared for import
+		 *  Data that should be prepared for import
+		 * @param integer $entry_id
+		 *  The current entry_id, if it exists, otherwise null.
 		 * @return array
 		 *  Return an associative array of start and end dates
 		 */
-		function prepareImportValue($data) {
+		public function prepareImportValue($data, $entry_id = null) {
 			if(!is_array($data)) $data = array($data);
 			if(is_array($data[0])) $data = $data[0];
 
