@@ -922,7 +922,7 @@
 		 * @return array
 		 *  Return an associative array of start and end dates
 		 */
-		function prepareImportValue($data) {
+		function prepareImportValue($data, $entry_id = null) {
 			if(!is_array($data)) $data = array($data);
 			if(is_array($data[0])) $data = $data[0];
 
