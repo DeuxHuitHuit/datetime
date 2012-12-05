@@ -92,12 +92,14 @@
 				$months = new XMLElement('months');
 				$count = 1;
 				foreach($storage['months'] as $month) {
+					$month_name = $this->convertIfWindows(strftime('%B', $month));
+					$month_abbr = $this->convertIfWindows(strftime('%b', $month));
 					$months->appendChild(new XMLElement(
 						'month', 
-						strftime('%B', $month), 
+						$month_name, 
 						array(
 							'id' => $count++,
-							'abbr' => strftime('%b', $month)
+							'abbr' => $month_abbr
 						)
 					));
 				}
@@ -107,12 +109,14 @@
 				$weekdays = new XMLElement('weekdays');
 				$count = 1;
 				foreach($storage['weekdays'] as $weekday) {
+					$weekday_name = $this->convertIfWindows(strftime('%A', $weekday));
+					$weekday_abbr = $this->convertIfWindows(strftime('%a', $weekday));
 					$weekdays->appendChild(new XMLElement(
 						'day', 
-						strftime('%A', $weekday), 
+						$weekday_name, 
 						array(
 							'id' => $count++,
-							'abbr' => strftime('%a', $weekday)
+							'abbr' => $weekday_abbr
 						)
 					));
 				}
@@ -123,6 +127,14 @@
 			}
 
 			return $result;
+		}
+
+		private function convertIfWindows($str) {
+			if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+				return iconv('ISO-8859-1', 'UTF-8', $str);
+			} else {
+				return $str;
+			}
 		}
 		
 	}
