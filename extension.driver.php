@@ -9,15 +9,15 @@
 	Class extension_datetime extends Extension {
 	
 		private $languages = array(
-			'english' => 'en, en_GB.UTF8, en_GB',
-			'finnish' => 'fi, fi_FI.UTF8, fi_FI',
-			'french' => 'fr, fr_FR.UTF8, fr_FR',
-			'german' => 'de, de_DE.UTF8, de_DE',
-			'italian' => 'it, it_IT.UTF8, it_IT',
-			'norwegian' => 'no, no_NO.UTF8, no_NO',
+			'english' => 'en, en_GB.UTF8, en_GB, english',
+			'finnish' => 'fi, fi_FI.UTF8, fi_FI, fin',
+			'french' => 'fr, fr_FR.UTF8, fr_FR, fra',
+			'german' => 'de, de_DE.UTF8, de_DE, deu',
+			'italian' => 'it, it_IT.UTF8, it_IT, ita',
+			'norwegian' => 'no, no_NO.UTF8, no_NO, norwegian',
 			'romanian' => 'ro, ro_RO.UTF8, ro_RO',
-			'russian' => 'ru, ru_RU.UTF8, ru_RU',
-			'portuguese' => 'pt, pt_PT.UTF8, pt_PT'
+			'russian' => 'ru, ru_RU.UTF8, ru_RU, rus',
+			'portuguese' => 'pt, pt_PT.UTF8, pt_PT, ptg'
 		);
 
 		/**
