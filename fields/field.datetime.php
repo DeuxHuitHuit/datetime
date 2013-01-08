@@ -15,13 +15,13 @@
 
 		const SIMPLE = 0;
 		const REGEXP = 1;
-		
+
 		const RANGE = 10;
 		const START = 11;
 		const END = 12;
 		const STRICT = 13;
 		const EXTRANGE = 14;
-		
+
 		const ERROR = 20;
 
 		function __construct() {
@@ -68,7 +68,7 @@
 	/*-------------------------------------------------------------------------
 		Utilities:
 	-------------------------------------------------------------------------*/
-	
+
 		/**
 		 * Create date element.
 		 *
@@ -79,7 +79,7 @@
 		 * @param mixed $class
 		 *  class names that will be added to the date element
 		 * @param int $prepopulate
-		 *  if set to 1, prepopulate element with the current date 
+		 *  if set to 1, prepopulate element with the current date
 		 * @param int $time
 		 *  if set to 1, display time
 		 * @return XMLElement
@@ -87,47 +87,47 @@
 		 */
 		public static function createDate($element, $start=NULL, $end=NULL, $class=NULL, $prepopulate=1, $time=1) {
 			$classes = array();
-					
+
 			// This is hacky: remove empty end dates
 			if($end == $start) {
 				$end = NULL;
 			}
-		
+
 			// Range
 			if(isset($end)) {
 				$classes[] = 'range';
 			}
-			
+
 			// Additional classes
 			if($class) {
 				$classes[] = $class;
 			}
-			
+
 			// Get timer
 			if($time == 1) {
 				$cutter = '<div class="timer">' .
-					self::__createTimeline('start') . 
-					self::__createTimeline('end') . 
+					self::__createTimeline('start') .
+					self::__createTimeline('end') .
 				'</div>';
 			}
-			
+
 			// Create element
 			return new XMLElement(
-				'li', 
+				'li',
 				'<header>
-					<div>' . 
-						self::__createDateField($element, 'start', $start, $time, $prepopulate) . 
-						self::__createDateField($element, 'end', $end, $time) . 
+					<div>' .
+						self::__createDateField($element, 'start', $start, $time, $prepopulate) .
+						self::__createDateField($element, 'end', $end, $time) .
 				'	</div>
 				</header>
 				<div class="calendar content">' .
-					self::__createCalendar() .			
+					self::__createCalendar() .
 					$cutter .
-				'</div>', 
+				'</div>',
 				array('class' => implode($classes, ' '))
 			);
 		}
-		
+
 		/**
 		 * Create a date input field containing the given date
 		 *
@@ -143,23 +143,23 @@
 		 *  prepopulate with current date, if set to 1; either 1 or 0
 		 * @return string
 		 *  returns an input field as string
-		 */		
+		 */
 		private static function __createDateField($element, $type, $date, $time, $prepopulate=0) {
-		
+
 			// Parse date
 			if(isset($date) || $prepopulate) {
 				$parsed = Calendar::formatDate($date, $time);
-				
+
 				// Generate field
 				if($parsed['status'] == 'invalid') {
 					$class = 'invalid';
 				}
 			}
-			
+
 			// Generate field
 			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="' . $type . ' label"></em>';
 		}
-		
+
 		private static function __createCalendar() {
 			return '<div class="date">
 				<nav>
@@ -193,7 +193,7 @@
 				</table>
 			</div>';
 		}
-		
+
 		private static function __createTimeline($type) {
 			return '<div class="timeline ' . $type . '">
 				<span class="hour1"></span>
@@ -227,7 +227,7 @@
 				</div>
 			</div>';
 		}
-			
+
 		/**
 		 * Get filtering mode from string.
 		 *
@@ -273,7 +273,7 @@
 			else {
 				$mode = self::RANGE;
 			}
-			
+
 			return $mode;
 		}
 
@@ -287,7 +287,7 @@
 			$filter = explode(':', $string, 2);
 			$string = $filter[1];
 		}
-		
+
 		/**
 		 * Build range filter sql.
 		 *
@@ -376,7 +376,7 @@
 			}
 			$setting = new XMLElement('label', __('%s Pre-populate with current date', array($checkbox->generate())), array('class' => 'column'));
 			$columns->appendChild($setting);
-			
+
 			// Time
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][time]', 'yes', 'checkbox');
 			if($this->get('time') == 1) {
@@ -384,7 +384,7 @@
 			}
 			$setting = new XMLElement('label', __('%s Display time', array($checkbox->generate())), array('class' => 'column'));
 			$columns->appendChild($setting);
-			
+
 			// Multiple dates
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][multiple]', 'yes', 'checkbox');
 			if($this->get('multiple') == 1) {
@@ -392,7 +392,7 @@
 			}
 			$setting = new XMLElement('label', __('%s Allow multiple dates', array($checkbox->generate())), array('class' => 'column'));
 			$columns->appendChild($setting);
-			
+
 			// Date ranges
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][range]', 'yes', 'checkbox');
 			if($this->get('range') == 1) {
@@ -468,7 +468,7 @@
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
 			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') . ' | ' : '') . '<a class="help" data-show="' . __('Show help') . '" data-hide="' . __('Hide help') . '">' . __('Show help') . '</a></i>');
 			$wrapper->appendChild($label);
-			
+
 			// Input help
 			$helptexts[__('Using the input fields')][__('click')] = __('Clicking the date input will open the calendar');
 			if($this->get('multiple') == 1) {
@@ -483,7 +483,7 @@
 			if($this->get('multiple') == 1) {
 				$helptexts[__('Using the input fields')][__('drag')] = __('Dragging dates will sort the date listing');
 			}
-			
+
 			// Calendar help
 			if($this->get('range') == 1) {
 				$helptexts[__('Using the calendar')] = array(
@@ -511,16 +511,16 @@
 					);
 				}
 			}
-			
+
 			// Field help
 			$help = new XMLElement('div', $help, array('class' => 'inline frame help hidden'));
 			foreach($helptexts as $headline => $instructions) {
-			
+
 				// Add Headline
 				$help->appendChild(
 					new XMLElement('h3', $headline)
 				);
-				
+
 				// Add instructions
 				$list = new XMLElement('dl');
 				foreach($instructions as $action => $instruction) {
@@ -914,6 +914,12 @@
 		Importing:
 	-------------------------------------------------------------------------*/
 
+		public function getImportModes() {
+			return array(
+				'getPostdata' =>	ImportableField::ARRAY_VALUE
+			);
+		}
+
 		/**
 		 * This function prepares values for import with XMLImporter
 		 *
@@ -924,29 +930,36 @@
 		 * @return array
 		 *  Return an associative array of start and end dates
 		 */
-		public function prepareImportValue($data, $entry_id = null) {
-			if(!is_array($data)) $data = array($data);
-			if(is_array($data[0])) $data = $data[0];
+		public function prepareImportValue($data, $mode, $entry_id = null) {
+			$message = $status = null;
+			$modes = (object)$this->getImportModes();
 
-			// Reformat array
-			if(!array_key_exists('start', $data)) {
-				$datetime = array();
+			if($mode === $modes->getPostdata) {
+				if(!is_array($data)) $data = array($data);
+				if(is_array($data[0])) $data = $data[0];
 
-				// Start date
-				$datetime['start'] = array($data[0]);
+				// Reformat array
+				if(!array_key_exists('start', $data)) {
+					$datetime = array();
 
-				// End date
-				if($data[1]) {
-					$datetime['end'] = array($data[1]);
+					// Start date
+					$datetime['start'] = array($data[0]);
+
+					// End date
+					if($data[1]) {
+						$datetime['end'] = array($data[1]);
+					}
+					else {
+						$datetime['end'] = array($data[0]);
+					}
+
+					$data = $datetime;
 				}
-				else {
-					$datetime['end'] = array($data[0]);
-				}
 
-				return $datetime;
+				return $this->processRawFieldData($data, $status, $message, true, $entry_id);
 			}
 
-			return $data;
+			return null;
 		}
 
 	}
