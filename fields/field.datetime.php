@@ -413,7 +413,6 @@
 		}
 
 		function commit() {
-
 			// Prepare commit
 			if(!field::commit()) return false;
 			$id = $this->get('id');
@@ -427,13 +426,7 @@
 			$fields['multiple'] = ($this->get('multiple') ? 1 : 0);
 			$fields['range'] = ($this->get('range') ? 1 : 0);
 
-			// Delete old field settings
-			Symphony::Database()->query(
-				"DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id' LIMIT 1"
-			);
-
-			// Save new field setting
-			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
+			return FieldManager::saveSettings($id, $fields);
 		}
 
 	/*-------------------------------------------------------------------------
