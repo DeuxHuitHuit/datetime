@@ -1,11 +1,11 @@
 <?php
 
 	/**
-	* @package datetime
-	*/
+	 * @package datetime
+	 */
 	/**
-	* This field provides an interface to manage single or multiple dates as well as date ranges.
-	*/
+	 * This field provides an interface to manage single or multiple dates as well as date ranges.
+	 */
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
 	require_once TOOLKIT . '/fields/field.date.php';
@@ -371,7 +371,7 @@
 
 			// Prepopulation
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][prepopulate]', 'yes', 'checkbox');
-			if($this->get('prepopulate') == 1) {
+			if((int)$this->get('prepopulate') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Pre-populate with current date', array($checkbox->generate())), array('class' => 'column'));
@@ -379,7 +379,7 @@
 			
 			// Time
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][time]', 'yes', 'checkbox');
-			if($this->get('time') == 1) {
+			if((int)$this->get('time') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Display time', array($checkbox->generate())), array('class' => 'column'));
@@ -387,7 +387,7 @@
 			
 			// Multiple dates
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][multiple]', 'yes', 'checkbox');
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Allow multiple dates', array($checkbox->generate())), array('class' => 'column'));
@@ -395,7 +395,7 @@
 			
 			// Date ranges
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][range]', 'yes', 'checkbox');
-			if($this->get('range') == 1) {
+			if((int)$this->get('range') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Enable date ranges', array($checkbox->generate())), array('class' => 'column'));
@@ -422,10 +422,10 @@
 			// Set up fields
 			$fields = array();
 			$fields['field_id'] = $id;
-			$fields['prepopulate'] = ($this->get('prepopulate') ? 1 : 0);
-			$fields['time'] = ($this->get('time') ? 1 : 0);
-			$fields['multiple'] = ($this->get('multiple') ? 1 : 0);
-			$fields['range'] = ($this->get('range') ? 1 : 0);
+			$fields['prepopulate'] = ((int)$this->get('prepopulate') ? 1 : 0);
+			$fields['time'] = ((int)$this->get('time') ? 1 : 0);
+			$fields['multiple'] = ((int)$this->get('multiple') ? 1 : 0);
+			$fields['range'] = ((int)$this->get('range') ? 1 : 0);
 
 			// Delete old field settings
 			Symphony::Database()->query(
@@ -471,21 +471,21 @@
 			
 			// Input help
 			$helptexts[__('Using the input fields')][__('click')] = __('Clicking the date input will open the calendar');
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close all calendars');
 			}
 			else {
 				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close the calendar');
 			}
-			if($this->get('range') == 1) {
+			if((int)$this->get('range') === 1) {
 				$helptexts[__('Using the input fields')][__('tab')] = __('Hitting the tab key will open the range editor');
 			}
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$helptexts[__('Using the input fields')][__('drag')] = __('Dragging dates will sort the date listing');
 			}
 			
 			// Calendar help
-			if($this->get('range') == 1) {
+			if((int)$this->get('range') === 1) {
 				$helptexts[__('Using the calendar')] = array(
 					__('click') => __('Clicking a date will create a single date'),
 					__('shift+click') => __('Clicking a second date while holding shift will create a date range')
@@ -498,8 +498,8 @@
 			}
 
 			// Timer help
-			if($this->get('time') == 1) {
-				if($this->get('range') == 1) {
+			if((int)$this->get('time') === 1) {
+				if((int)$this->get('range') === 1) {
 					$helptexts[__('Using the timer')] = array(
 						__('click') => __('Clicking on a time will set start and end date to the same time'),
 						__('shift+click') => __('Clicking on a time while holding shift will either set the time for the start date (when the time is before the current range) or for the end date (when the time is after the current range)')
@@ -537,16 +537,16 @@
 
 			// Get settings
 			$settings = array('dark', 'frame');
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$settings[] = 'multiple';
 			}
 			else {
 				$settings[] = 'single';
 			}
-			if($this->get('prepopulate') == 1) {
+			if((int)$this->get('prepopulate') === 1) {
 				$settings[] = 'prepopulate';
 			}
-			if($this->get('range') == 0) {
+			if((int)$this->get('range') === 0) {
 				$settings[] = 'simple';
 			}
 
@@ -572,14 +572,14 @@
 			}
 
 			// Current date and time
-			elseif($this->get('prepopulate') == 1 || $this->get('multiple') == 0) {
+			elseif((int)$this->get('prepopulate') === 1 || (int)$this->get('multiple') === 0) {
 				$list->appendChild(
 					self::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'))
 				);
 			}
 
 			// Add template
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$template = self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'));
 				$template->setAttribute('data-name', 'datetime');
 				$template->setAttribute('data-type', 'datetime');
@@ -598,7 +598,7 @@
 
 
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
-			if($this->get('required') == 1 && empty($data['start'][0])) {
+			if($this->get('required') === 'yes' && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
 				return self::__MISSING_FIELDS__;
 			}
@@ -736,7 +736,7 @@
 			}
 
 			// Get schema
-			if($this->get('time') == 1) {
+			if((int)$this->get('time') === 1) {
 				$scheme = __SYM_DATETIME_FORMAT__;
 			}
 			else {
@@ -762,7 +762,7 @@
 					else {
 
 						// Show time
-						if($this->get('time') == 1) {
+						if((int)$this->get('time') === 1) {
 
 							// Adjust separator
 							if(Symphony::Configuration()->get('time_format', 'region') == 'H:i') {
