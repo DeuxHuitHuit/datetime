@@ -1,11 +1,11 @@
 <?php
 
 	/**
-	* @package datetime
-	*/
+	 * @package datetime
+	 */
 	/**
-	* This field provides an interface to manage single or multiple dates as well as date ranges.
-	*/
+	 * This field provides an interface to manage single or multiple dates as well as date ranges.
+	 */
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
 	require_once TOOLKIT . '/fields/field.date.php';
