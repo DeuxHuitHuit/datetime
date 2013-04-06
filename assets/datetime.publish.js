@@ -225,8 +225,8 @@
 			// Close calender
 			$('body').on('click.datetime', function(event) {
 				var target = $(event.target);
-				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.parents('.duplicator').parents('.field-datetime').length == 0) {
-					datetime.find('.instance').trigger('collapse.collapsible');
+				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.parents('.collapsible').parents('.field-datetime').length == 0) {
+					datetime.find('li').trigger('collapse.collapsible');
 				}
 			});
 						
@@ -430,7 +430,7 @@
 				if(input.is('.start')) {
 					visualise(input);
 				}
-			}).load();
+			}).trigger('load.datetime');
 	
 			// Set errors
 			dates.find('input.invalid').parent('div').addClass('invalid');
