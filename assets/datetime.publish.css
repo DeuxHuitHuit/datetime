@@ -90,9 +90,14 @@
 	top: 27px;
 }
 
-.field-datetime fieldset.apply {
+/* Invalid */
+.field-datetime .frame header .invalid {
+	border-color: #cc3311;
 }
 
+.field-datetime .frame header .invalid input {
+	color: #cc3311;
+}
 /* Ordering */
 
 .field-datetime .frame li.ordering header div {

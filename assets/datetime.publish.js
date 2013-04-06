@@ -251,7 +251,7 @@
 			};
 		
 			// Validate and set date
-			var validate = function(input, date, visualise) {
+			var validate = function(input, date, show) {
 				var item = input.parents('li'),
 					datespan = input.parent(),
 					calendar = item.find('div.calendar');
@@ -272,8 +272,8 @@
 							if(parsed.status == 'valid') {
 								input.attr('data-timestamp', parsed.timestamp).val(parsed.date).removeClass('invalid');
 							
-								// Visualise
-								if(visualise === true) {
+								// Show
+								if(show === true) {
 									item.trigger('visualise', [{
 										start: datespan.find('.start').attr('data-timestamp'),
 										end: datespan.find('.end').attr('data-timestamp')
