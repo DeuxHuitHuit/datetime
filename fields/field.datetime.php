@@ -413,6 +413,7 @@
 		}
 
 		function commit() {
+
 			// Prepare commit
 			if(!field::commit()) return false;
 			$id = $this->get('id');
@@ -421,10 +422,10 @@
 			// Set up fields
 			$fields = array();
 			$fields['field_id'] = $id;
-			$fields['prepopulate'] = ((int)$this->get('prepopulate') ? 1 : 0);
-			$fields['time'] = ((int)$this->get('time') ? 1 : 0);
-			$fields['multiple'] = ((int)$this->get('multiple') ? 1 : 0);
-			$fields['range'] = ((int)$this->get('range') ? 1 : 0);
+			$fields['prepopulate'] = ($this->get('prepopulate') ? 1 : 0);
+			$fields['time'] = ($this->get('time') ? 1 : 0);
+			$fields['multiple'] = ($this->get('multiple') ? 1 : 0);
+			$fields['range'] = ($this->get('range') ? 1 : 0);
 
 			return FieldManager::saveSettings($id, $fields);
 		}
