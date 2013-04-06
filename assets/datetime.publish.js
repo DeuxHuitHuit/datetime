@@ -82,16 +82,22 @@
 			});
 		
 			// Visualising
-			datetime.on('focus click', 'input', function(event) {
-				var input = $(this);
+			datetime.on('focus.datetime click.datetime', 'input', function(event) {
+				var input = $(this),
+					item = input.parents('li');
 
 				// Set focus
 				datetime.find('.focus').removeClass('focus');
 				input.parent().addClass('focus');
+				
+				// Expand	
+				if(item.is('.collapsed')) {
+					item.trigger('expand.collapsible');
+				}
 		
 				// Visualise
 				visualise(input);
-			});
+			});		
 			
 			// Setting
 			datetime.on('setdate.datetime', 'li', function(event, range, focus, mode) {
@@ -214,6 +220,14 @@
 				else if(date != validated) {
 					validate(input, date, true);			
 				}			
+			});
+			
+			// Close calender
+			$('body').on('click.datetime', function(event) {
+				var target = $(event.target);
+				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.parents('.duplicator').parents('.field-datetime').length == 0) {
+					datetime.find('.instance').trigger('collapse.collapsible');
+				}
 			});
 						
 		/*---- Functions --------------------------------------------------------*/
@@ -441,25 +455,11 @@
 			
 			// Collapsible calendar
 			datetime.symphonyCollapsible({
-					items: 'li',
-					handles: 'header',
-					ignore: 'input',
-					storage: 'symphony.datetime.' + Symphony.Context.get('env').section_handle + '.' + field.attr('id') + '.'
-				})
-				.on('dblclick.datetime', 'input', function toggleAll(event) {
-	
-					// Expand/collapse all
-					$(this).parent().trigger('dblclick');
-				})
-				.on('click.datetime', 'input', function toggleInput(event) {
-					var input = $(this),
-						item = input.parents('li');
-					
-					// Expand	
-					if(item.is('.collapsed')) {
-						item.trigger('expand.collapsible');
-					}
-				});	
+				items: 'li',
+				handles: 'header',
+				ignore: 'input',
+				storage: 'symphony.datetime.' + Symphony.Context.get('env').section_handle + '.' + field.attr('id') + '.'
+			});
 		});
 
 	});
