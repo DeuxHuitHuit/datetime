@@ -28,16 +28,38 @@ Date and Time offers the following field settings:
 - allow date ranges: this will enable range editing
 - pre-populate this field with today's date: this will automatically add the current date to new entries
 
+## Field Behaviour
+
+### General
+
+- Clicking the date input will open the calendar.
+- Clicking on a day in the calendar will either select or update the date.
+- Clicking outside the field will close all calendars.
+- If enabled, dragging dates will sort the date listing.
+
+### Date ranges
+
+- Clicking either the start or end date input will open the calendar showing the selected date.
+- Clicking on a date in the calendar will either select or update the date.
+- Hitting the tab key in the start input will create a range an jump to the end date.
+- Clicking on a day in the calendar will either select or update a single date.
+- Clicking on a day in the calendar while holding down `shift` will create a day range.
+
+### Times
+
+- Clicking on a time will set start and end date to the same time.
+- Clicking on a time while holding down `shift` will create a time range.
+
 ## Data Source Filtering
 
 - prefixing a filter with `start:` will only check start dates,
 - prefixing a filter with `end:` will only check end dates,
 - prefixing a filter with `strict:` will check, if start **and** end date are in the given filter range,
 - filters without prefixes will check, if start **or** end date are in the given filter range.
-- prefixing a filter with `extended:` will work like the unprefixed filter but will additionally fetch single dates (those without end date) that lie in the past. This is helpful if you like to display banners only between certain dates and if the user didn't enter an end date. Using the `extended` filter, this will be interpreted as "display for ever".
+- prefixing a filter with `extended:` will work like the unprefixed filter but will treat single dates as an "open range", starting with the given date but never ending.
 
 Filters separated by comma will find all dates that match one of the given dates or ranges.  
-Filters separated by `+` will only find dates that match all of the given dates or ranges.
+Filters separated by `+` will only find dates that match all of the given dates or ranges. 
 
 This extensions accepts all relative dates known to [PHP's DateTime class](http://www.php.net/manual/en/datetime.formats.php) for filtering. It also allows the creation of filter ranges with `to` or `earlier than` and `later than`.
 
