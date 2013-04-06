@@ -14,8 +14,8 @@
 		/**
 		 * Initialise data source
 		 */
-		public function __construct(&$parent, $env=NULL, $process_params=true){
-			parent::__construct($parent, $env, $process_params);
+		public function __construct($env=NULL, $process_params=true){
+			parent::__construct($env, $process_params);
 			$this->dsParamLANG = array();
 			
 			// Load language codes from configuration
@@ -52,7 +52,7 @@
 		/**
 		 * This function generates a list of month and weekday names for each language provided.
 		 */
-		public function grab(&$param_pool=NULL) {
+		public function grab(array &$param_pool=NULL) {
 			$result = new XMLElement('datetime');
 			
 			// No language specified

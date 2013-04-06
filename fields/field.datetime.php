@@ -1,11 +1,11 @@
 <?php
 
 	/**
-	* @package datetime
-	*/
+	 * @package datetime
+	 */
 	/**
-	* This field provides an interface to manage single or multiple dates as well as date ranges.
-	*/
+	 * This field provides an interface to manage single or multiple dates as well as date ranges.
+	 */
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
 	require_once TOOLKIT . '/fields/field.date.php';
@@ -15,13 +15,13 @@
 
 		const SIMPLE = 0;
 		const REGEXP = 1;
-		
+
 		const RANGE = 10;
 		const START = 11;
 		const END = 12;
 		const STRICT = 13;
 		const EXTRANGE = 14;
-		
+
 		const ERROR = 20;
 
 		function __construct() {
@@ -68,7 +68,7 @@
 	/*-------------------------------------------------------------------------
 		Utilities:
 	-------------------------------------------------------------------------*/
-	
+
 		/**
 		 * Create date element.
 		 *
@@ -79,7 +79,7 @@
 		 * @param mixed $class
 		 *  class names that will be added to the date element
 		 * @param int $prepopulate
-		 *  if set to 1, prepopulate element with the current date 
+		 *  if set to 1, prepopulate element with the current date
 		 * @param int $time
 		 *  if set to 1, display time
 		 * @return XMLElement
@@ -87,47 +87,47 @@
 		 */
 		public static function createDate($element, $start=NULL, $end=NULL, $class=NULL, $prepopulate=1, $time=1) {
 			$classes = array();
-					
+
 			// This is hacky: remove empty end dates
 			if($end == $start) {
 				$end = NULL;
 			}
-		
+
 			// Range
 			if(isset($end)) {
 				$classes[] = 'range';
 			}
-			
+
 			// Additional classes
 			if($class) {
 				$classes[] = $class;
 			}
-			
+
 			// Get timer
 			if($time == 1) {
 				$cutter = '<div class="timer">' .
-					self::__createTimeline('start') . 
-					self::__createTimeline('end') . 
+					self::__createTimeline('start') .
+					self::__createTimeline('end') .
 				'</div>';
 			}
-			
+
 			// Create element
 			return new XMLElement(
-				'li', 
+				'li',
 				'<header>
-					<div>' . 
-						self::__createDateField($element, 'start', $start, $time, $prepopulate) . 
-						self::__createDateField($element, 'end', $end, $time) . 
+					<div>' .
+						self::__createDateField($element, 'start', $start, $time, $prepopulate) .
+						self::__createDateField($element, 'end', $end, $time) .
 				'	</div>
 				</header>
 				<div class="calendar content">' .
-					self::__createCalendar() .			
+					self::__createCalendar() .
 					$cutter .
-				'</div>', 
+				'</div>',
 				array('class' => implode($classes, ' '))
 			);
 		}
-		
+
 		/**
 		 * Create a date input field containing the given date
 		 *
@@ -143,23 +143,23 @@
 		 *  prepopulate with current date, if set to 1; either 1 or 0
 		 * @return string
 		 *  returns an input field as string
-		 */		
+		 */
 		private static function __createDateField($element, $type, $date, $time, $prepopulate=0) {
-		
+
 			// Parse date
 			if(isset($date) || $prepopulate) {
 				$parsed = Calendar::formatDate($date, $time);
-				
+
 				// Generate field
 				if($parsed['status'] == 'invalid') {
 					$class = 'invalid';
 				}
 			}
-			
+
 			// Generate field
 			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="' . $type . ' label"></em>';
 		}
-		
+
 		private static function __createCalendar() {
 			return '<div class="date">
 				<nav>
@@ -193,7 +193,7 @@
 				</table>
 			</div>';
 		}
-		
+
 		private static function __createTimeline($type) {
 			return '<div class="timeline ' . $type . '">
 				<span class="hour1"></span>
@@ -227,7 +227,7 @@
 				</div>
 			</div>';
 		}
-			
+
 		/**
 		 * Get filtering mode from string.
 		 *
@@ -273,7 +273,7 @@
 			else {
 				$mode = self::RANGE;
 			}
-			
+
 			return $mode;
 		}
 
@@ -287,7 +287,7 @@
 			$filter = explode(':', $string, 2);
 			$string = $filter[1];
 		}
-		
+
 		/**
 		 * Build range filter sql.
 		 *
@@ -371,31 +371,31 @@
 
 			// Prepopulation
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][prepopulate]', 'yes', 'checkbox');
-			if($this->get('prepopulate') == 1) {
+			if((int)$this->get('prepopulate') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Pre-populate with current date', array($checkbox->generate())), array('class' => 'column'));
 			$columns->appendChild($setting);
-			
+
 			// Time
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][time]', 'yes', 'checkbox');
-			if($this->get('time') == 1) {
+			if((int)$this->get('time') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Display time', array($checkbox->generate())), array('class' => 'column'));
 			$columns->appendChild($setting);
-			
+
 			// Multiple dates
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][multiple]', 'yes', 'checkbox');
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Allow multiple dates', array($checkbox->generate())), array('class' => 'column'));
 			$columns->appendChild($setting);
-			
+
 			// Date ranges
 			$checkbox = Widget::Input('fields[' . $this->get('sortorder') . '][range]', 'yes', 'checkbox');
-			if($this->get('range') == 1) {
+			if((int)$this->get('range') === 1) {
 				$checkbox->setAttribute('checked', 'checked');
 			}
 			$setting = new XMLElement('label', __('%s Enable date ranges', array($checkbox->generate())), array('class' => 'column'));
@@ -413,7 +413,6 @@
 		}
 
 		function commit() {
-
 			// Prepare commit
 			if(!field::commit()) return false;
 			$id = $this->get('id');
@@ -422,18 +421,12 @@
 			// Set up fields
 			$fields = array();
 			$fields['field_id'] = $id;
-			$fields['prepopulate'] = ($this->get('prepopulate') ? 1 : 0);
-			$fields['time'] = ($this->get('time') ? 1 : 0);
-			$fields['multiple'] = ($this->get('multiple') ? 1 : 0);
-			$fields['range'] = ($this->get('range') ? 1 : 0);
+			$fields['prepopulate'] = ((int)$this->get('prepopulate') ? 1 : 0);
+			$fields['time'] = ((int)$this->get('time') ? 1 : 0);
+			$fields['multiple'] = ((int)$this->get('multiple') ? 1 : 0);
+			$fields['range'] = ((int)$this->get('range') ? 1 : 0);
 
-			// Delete old field settings
-			Symphony::Database()->query(
-				"DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id' LIMIT 1"
-			);
-
-			// Save new field setting
-			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
+			return FieldManager::saveSettings($id, $fields);
 		}
 
 	/*-------------------------------------------------------------------------
@@ -468,24 +461,24 @@
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
 			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') . ' | ' : '') . '<a class="help" data-show="' . __('Show help') . '" data-hide="' . __('Hide help') . '">' . __('Show help') . '</a></i>');
 			$wrapper->appendChild($label);
-			
+
 			// Input help
 			$helptexts[__('Using the input fields')][__('click')] = __('Clicking the date input will open the calendar');
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close all calendars');
 			}
 			else {
 				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close the calendar');
 			}
-			if($this->get('range') == 1) {
+			if((int)$this->get('range') === 1) {
 				$helptexts[__('Using the input fields')][__('tab')] = __('Hitting the tab key will open the range editor');
 			}
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$helptexts[__('Using the input fields')][__('drag')] = __('Dragging dates will sort the date listing');
 			}
-			
+
 			// Calendar help
-			if($this->get('range') == 1) {
+			if((int)$this->get('range') === 1) {
 				$helptexts[__('Using the calendar')] = array(
 					__('click') => __('Clicking a date will create a single date'),
 					__('shift+click') => __('Clicking a second date while holding shift will create a date range')
@@ -498,8 +491,8 @@
 			}
 
 			// Timer help
-			if($this->get('time') == 1) {
-				if($this->get('range') == 1) {
+			if((int)$this->get('time') === 1) {
+				if((int)$this->get('range') === 1) {
 					$helptexts[__('Using the timer')] = array(
 						__('click') => __('Clicking on a time will set start and end date to the same time'),
 						__('shift+click') => __('Clicking on a time while holding shift will either set the time for the start date (when the time is before the current range) or for the end date (when the time is after the current range)')
@@ -511,16 +504,16 @@
 					);
 				}
 			}
-			
+
 			// Field help
 			$help = new XMLElement('div', $help, array('class' => 'inline frame help hidden'));
 			foreach($helptexts as $headline => $instructions) {
-			
+
 				// Add Headline
 				$help->appendChild(
 					new XMLElement('h3', $headline)
 				);
-				
+
 				// Add instructions
 				$list = new XMLElement('dl');
 				foreach($instructions as $action => $instruction) {
@@ -537,16 +530,16 @@
 
 			// Get settings
 			$settings = array('dark', 'frame');
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$settings[] = 'multiple';
 			}
 			else {
 				$settings[] = 'single';
 			}
-			if($this->get('prepopulate') == 1) {
+			if((int)$this->get('prepopulate') === 1) {
 				$settings[] = 'prepopulate';
 			}
-			if($this->get('range') == 0) {
+			if((int)$this->get('range') === 0) {
 				$settings[] = 'simple';
 			}
 
@@ -572,14 +565,14 @@
 			}
 
 			// Current date and time
-			elseif($this->get('prepopulate') == 1 || $this->get('multiple') == 0) {
+			elseif((int)$this->get('prepopulate') === 1 || (int)$this->get('multiple') === 0) {
 				$list->appendChild(
 					self::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'))
 				);
 			}
 
 			// Add template
-			if($this->get('multiple') == 1) {
+			if((int)$this->get('multiple') === 1) {
 				$template = self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'));
 				$template->setAttribute('data-name', 'datetime');
 				$template->setAttribute('data-type', 'datetime');
@@ -598,7 +591,7 @@
 
 
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
-			if($this->get('required') == 1 && empty($data['start'][0])) {
+			if($this->get('required') === 'yes' && empty($data['start'][0])) {
 				$message = __("'%s' is a required field.", array($this->get('label')));
 				return self::__MISSING_FIELDS__;
 			}
@@ -649,6 +642,7 @@
 		public function getExampleFormMarkup() {
 			$label = Widget::Label($this->get('label'));
 			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][start][]'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][end][]'));
 
 			return $label;
 		}
@@ -720,7 +714,7 @@
 			}
 		}
 
-		function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
+		public function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
@@ -736,7 +730,7 @@
 			}
 
 			// Get schema
-			if($this->get('time') == 1) {
+			if((int)$this->get('time') === 1) {
 				$scheme = __SYM_DATETIME_FORMAT__;
 			}
 			else {
@@ -762,7 +756,7 @@
 					else {
 
 						// Show time
-						if($this->get('time') == 1) {
+						if((int)$this->get('time') === 1) {
 
 							// Adjust separator
 							if(Symphony::Configuration()->get('time_format', 'region') == 'H:i') {
@@ -798,25 +792,7 @@
 		}
 
 		public function getParameterPoolValue(array $data, $entry_id=NULL) {
-			if(!is_array($data['start'])) $data['start'] = array($data['start']);
-			if(!is_array($data['end'])) $data['end'] = array($data['end']);
-
-			$values = array();
-			for($i = 0; $i < count($data['start']); $i++) {
-				$parts = self::parseDate($data['start'][$i]);
-
-				// Different dates
-				if($parts['start'] != $parts['end']) {
-					$values[] = $parts['start'] . ' to ' . $parts['end'];
-				}
-
-				// Same date
-				else {
-					$values[] = $parts['start'];
-				}
-			}
-
-			return $values;
+			return $this->prepareExportValue($data, ExportableField::LIST_OF + ExportableField::VALUE, $entry_id);
 		}
 
 	/*-------------------------------------------------------------------------
@@ -914,37 +890,130 @@
 		Importing:
 	-------------------------------------------------------------------------*/
 
+		public function getImportModes() {
+			return array(
+				'getPostdata' =>	ImportableField::ARRAY_VALUE
+			);
+		}
+
 		/**
 		 * This function prepares values for import with XMLImporter
 		 *
 		 * @param string|array $data
-		 *	Data that should be prepared for import
+		 *  Data that should be prepared for import
+		 * @param integer $entry_id
+		 *  The current entry_id, if it exists, otherwise null.
 		 * @return array
 		 *  Return an associative array of start and end dates
 		 */
-		function prepareImportValue($data, $entry_id = null) {
-			if(!is_array($data)) $data = array($data);
-			if(is_array($data[0])) $data = $data[0];
+		public function prepareImportValue($data, $mode, $entry_id = null) {
+			$message = $status = null;
+			$modes = (object)$this->getImportModes();
 
-			// Reformat array
-			if(!array_key_exists('start', $data)) {
-				$datetime = array();
+			if($mode === $modes->getPostdata) {
+				if(!is_array($data)) $data = array($data);
+				if(is_array($data[0])) $data = $data[0];
 
-				// Start date
-				$datetime['start'] = array($data[0]);
+				// Reformat array
+				if(!array_key_exists('start', $data)) {
+					$datetime = array();
 
-				// End date
-				if($data[1]) {
-					$datetime['end'] = array($data[1]);
+					// Start date
+					$datetime['start'] = array($data[0]);
+
+					// End date
+					if($data[1]) {
+						$datetime['end'] = array($data[1]);
+					}
+					else {
+						$datetime['end'] = array($data[0]);
+					}
+
+					$data = $datetime;
 				}
-				else {
-					$datetime['end'] = array($data[0]);
-				}
 
-				return $datetime;
+				return $this->processRawFieldData($data, $status, $message, true, $entry_id);
 			}
 
-			return $data;
+			return null;
+		}
+
+	/*-------------------------------------------------------------------------
+		Export:
+	-------------------------------------------------------------------------*/
+
+		/**
+		 * Return a list of supported export modes for use with `prepareExportValue`.
+		 *
+		 * @return array
+		 */
+		public function getExportModes() {
+			return array(
+				'listDateObject' =>		ExportableField::LIST_OF + ExportableField::OBJECT,
+				'listDateValue'  =>		ExportableField::LIST_OF + ExportableField::VALUE,
+				'getPostdata'	 =>		ExportableField::POSTDATA
+			);
+		}
+
+		/**
+		 * Give the field some data and ask it to return a value using one of many
+		 * possible modes.
+		 *
+		 * @param mixed $data
+		 * @param integer $mode
+		 * @param integer $entry_id
+		 * @return DateTime|null
+		 */
+		public function prepareExportValue($data, $mode, $entry_id = null) {
+			$modes = (object)$this->getExportModes();
+			$dates = array();
+
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
+
+			if ($mode === $modes->listDateObject) {
+				$timezone = Symphony::Configuration()->get('timezone', 'region');
+
+				for($i = 0; $i < count($data['start']); $i++) {
+					$start = new DateTime($data['start'][$i]);
+					$end = new DateTime($data['end'][$i]);
+
+					$start->setTimezone(new DateTimeZone($timezone));
+					$end->setTimezone(new DateTimeZone($timezone));
+
+					$dates[] = array(
+						'start' => $start,
+						'end' => $end
+					);
+				}
+
+				return $dates;
+			}
+
+			else if ($mode === $modes->listDateValue) {
+				for($i = 0; $i < count($data['start']); $i++) {
+					$start = new DateTime($data['start'][$i]);
+					$end = new DateTime($data['end'][$i]);
+
+					// Different dates
+					if($start != $end) {
+						$dates[] = $start->format('Y-m-d H:i:s') . ' to ' . $end->format('Y-m-d H:i:s');
+					}
+
+					// Same date
+					else {
+						$dates[] = $start->format('Y-m-d H:i:s');
+					}
+				}
+
+				return $dates;
+			}
+
+			else if ($mode === $modes->getPostdata) {
+				return $data;
+			}
+
+			return null;
 		}
 
 	}
