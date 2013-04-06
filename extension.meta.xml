@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.7" date="2013-04-06" min="2.3">
+			- General fixes and compatibility updates 
+		</release>
 		<release version="3.0.6" date="2012-08-17" min="2.3">
 			- Fix language detection in Data Source 
 		</release>
