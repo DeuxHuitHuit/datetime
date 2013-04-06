@@ -642,6 +642,7 @@
 		public function getExampleFormMarkup() {
 			$label = Widget::Label($this->get('label'));
 			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][start][]'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][end][]'));
 
 			return $label;
 		}
@@ -713,7 +714,7 @@
 			}
 		}
 
-		function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
+		public function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
 
@@ -791,25 +792,7 @@
 		}
 
 		public function getParameterPoolValue(array $data, $entry_id=NULL) {
-			if(!is_array($data['start'])) $data['start'] = array($data['start']);
-			if(!is_array($data['end'])) $data['end'] = array($data['end']);
-
-			$values = array();
-			for($i = 0; $i < count($data['start']); $i++) {
-				$parts = self::parseDate($data['start'][$i]);
-
-				// Different dates
-				if($parts['start'] != $parts['end']) {
-					$values[] = $parts['start'] . ' to ' . $parts['end'];
-				}
-
-				// Same date
-				else {
-					$values[] = $parts['start'];
-				}
-			}
-
-			return $values;
+			return $this->prepareExportValue($data, ExportableField::LIST_OF + ExportableField::VALUE, $entry_id);
 		}
 
 	/*-------------------------------------------------------------------------
@@ -950,6 +933,84 @@
 				}
 
 				return $this->processRawFieldData($data, $status, $message, true, $entry_id);
+			}
+
+			return null;
+		}
+
+	/*-------------------------------------------------------------------------
+		Export:
+	-------------------------------------------------------------------------*/
+
+		/**
+		 * Return a list of supported export modes for use with `prepareExportValue`.
+		 *
+		 * @return array
+		 */
+		public function getExportModes() {
+			return array(
+				'listDateObject' =>		ExportableField::LIST_OF + ExportableField::OBJECT,
+				'listDateValue'  =>		ExportableField::LIST_OF + ExportableField::VALUE,
+				'getPostdata'	 =>		ExportableField::POSTDATA
+			);
+		}
+
+		/**
+		 * Give the field some data and ask it to return a value using one of many
+		 * possible modes.
+		 *
+		 * @param mixed $data
+		 * @param integer $mode
+		 * @param integer $entry_id
+		 * @return DateTime|null
+		 */
+		public function prepareExportValue($data, $mode, $entry_id = null) {
+			$modes = (object)$this->getExportModes();
+			$dates = array();
+
+			if(!is_array($data['start'])) $data['start'] = array($data['start']);
+			if(!is_array($data['end'])) $data['end'] = array($data['end']);
+
+			if ($mode === $modes->listDateObject) {
+				$timezone = Symphony::Configuration()->get('timezone', 'region');
+
+				for($i = 0; $i < count($data['start']); $i++) {
+					$start = new DateTime($data['start'][$i]);
+					$end = new DateTime($data['end'][$i]);
+
+					$start->setTimezone(new DateTimeZone($timezone));
+					$end->setTimezone(new DateTimeZone($timezone));
+
+					$dates[] = array(
+						'start' => $start,
+						'end' => $end
+					);
+				}
+
+				return $dates;
+			}
+
+			else if ($mode === $modes->listDateValue) {
+				for($i = 0; $i < count($data['start']); $i++) {
+					$start = new DateTime($data['start'][$i]);
+					$end = new DateTime($data['end'][$i]);
+
+					// Different dates
+					if($start != $end) {
+						$dates[] = $start->format('Y-m-d H:i:s') . ' to ' . $end->format('Y-m-d H:i:s');
+					}
+
+					// Same date
+					else {
+						$dates[] = $start->format('Y-m-d H:i:s');
+					}
+				}
+
+				return $dates;
+			}
+
+			else if ($mode === $modes->getPostdata) {
+				return $data;
 			}
 
 			return null;
