@@ -459,74 +459,8 @@
 
 			// Field label
 			$fieldname = 'fields['  .$this->get('element_name') . ']';
-			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') . ' | ' : '') . '<a class="help" data-show="' . __('Show help') . '" data-hide="' . __('Hide help') . '">' . __('Show help') . '</a></i>');
+			$label = new XMLElement('label', $this->get('label') . '<i>' . ($this->get('required') == 'no' ? __('Optional') : '') . '</i>');
 			$wrapper->appendChild($label);
-
-			// Input help
-			$helptexts[__('Using the input fields')][__('click')] = __('Clicking the date input will open the calendar');
-			if((int)$this->get('multiple') === 1) {
-				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close all calendars');
-			}
-			else {
-				$helptexts[__('Using the input fields')][__('double-click')] = __('Double-clicking a date input will close the calendar');
-			}
-			if((int)$this->get('range') === 1) {
-				$helptexts[__('Using the input fields')][__('tab')] = __('Hitting the tab key will open the range editor');
-			}
-			if((int)$this->get('multiple') === 1) {
-				$helptexts[__('Using the input fields')][__('drag')] = __('Dragging dates will sort the date listing');
-			}
-
-			// Calendar help
-			if((int)$this->get('range') === 1) {
-				$helptexts[__('Using the calendar')] = array(
-					__('click') => __('Clicking a date will create a single date'),
-					__('shift+click') => __('Clicking a second date while holding shift will create a date range')
-				);
-			}
-			else {
-				$helptexts[__('Using the calendar')] = array(
-					__('click') => __('Clicking a day will create a date'),
-				);
-			}
-
-			// Timer help
-			if((int)$this->get('time') === 1) {
-				if((int)$this->get('range') === 1) {
-					$helptexts[__('Using the timer')] = array(
-						__('click') => __('Clicking on a time will set start and end date to the same time'),
-						__('shift+click') => __('Clicking on a time while holding shift will either set the time for the start date (when the time is before the current range) or for the end date (when the time is after the current range)')
-					);
-				}
-				else {
-					$helptexts[__('Using the timer')] = array(
-						__('click') => __('Clicking on a time will set the date to that time'),
-					);
-				}
-			}
-
-			// Field help
-			$help = new XMLElement('div', $help, array('class' => 'inline frame help hidden'));
-			foreach($helptexts as $headline => $instructions) {
-
-				// Add Headline
-				$help->appendChild(
-					new XMLElement('h3', $headline)
-				);
-
-				// Add instructions
-				$list = new XMLElement('dl');
-				foreach($instructions as $action => $instruction) {
-					$list->appendChild(
-						new XMLElement('dt', '<code>' . $action . '</code>')
-					);
-					$list->appendChild(
-						new XMLElement('dd', $instruction)
-					);
-				}
-				$help->appendChild($list);
-			}
-			$wrapper->appendChild($help);
 
 			// Get settings
 			$settings = array('dark', 'frame');

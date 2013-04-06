@@ -38,8 +38,6 @@
 		// Date and time
 		$('div.field-datetime').each(function datetime() {
 			var field = $(this),
-				help = field.find('i a.help'),
-				instructions = field.find('div.help'),
 				datetime = field.find('.dark.frame'),
 				dates = datetime.find('ol'),
 				headers = dates.find('header'),
@@ -216,22 +214,6 @@
 				else if(date != validated) {
 					validate(input, date, true);			
 				}			
-			});
-			
-			// Help
-			help.on('click.datetime', function(event) {
-				
-				// Show help
-				if(instructions.is(':hidden')) {
-					instructions.slideDown('fast');
-					help.text(help.attr('data-hide'));
-				}
-				
-				// Hide help
-				else {
-					instructions.slideUp('fast');
-					help.text(help.attr('data-show'));
-				}
 			});
 						
 		/*---- Functions --------------------------------------------------------*/
