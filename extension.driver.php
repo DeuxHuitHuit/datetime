@@ -216,8 +216,11 @@
 				}
 
 				// Remove old Stage instances
-				Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
-				Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
+				$does_stage_exist = Symphony::Database()->fetchRow(0, "SHOW TABLES LIKE 'tbl_fields_stage'");
+				if(!empty($does_stage_exist)) {
+					Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
+					Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
+				}
 			}
 
 			// Report status
@@ -235,10 +238,13 @@
 		public function uninstall() {
 
 			// Remove old Stage tables if they are empty
-			$count = Symphony::Database()->query("SELECT COUNT(*) FROM `tbl_fields_stage`");
-			if($count == 0) {
-				Symphony::Database()->query("DROP TABLE `tbl_fields_stage`");
-				Symphony::Database()->query("DROP TABLE `tbl_fields_stage_sorting`");
+			$does_stage_exist = Symphony::Database()->fetchRow(0, "SHOW TABLES LIKE 'tbl_fields_stage'");
+			if(!empty($does_stage_exist)) {
+				$count = Symphony::Database()->query("SELECT COUNT(*) FROM `tbl_fields_stage`");
+				if($count == 0) {
+					Symphony::Database()->query("DROP TABLE `tbl_fields_stage`");
+					Symphony::Database()->query("DROP TABLE `tbl_fields_stage_sorting`");
+				}
 			}
 
 			// Drop date and time table
