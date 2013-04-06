@@ -136,11 +136,6 @@
 .field-datetime .frame.single li header div {
 	border-radius: 2px 2px 0 0;
 	padding-left: 7px;
-	-webkit-transition: padding 0.1s ease-out, height 0.1s ease-out;
-	-moz-transition: padding 0.1s ease-out, height 0.1s ease-out;
-	-ms-transition: padding 0.1s ease-out, height 0.1s ease-out;
-	-o-transition: padding 0.1s ease-out, height 0.1s ease-out;
-	transition: padding 0.1s ease-out, height 0.1s ease-out;
 	min-height: 23px;
 }
 
