@@ -827,7 +827,8 @@
 
 		public function getImportModes() {
 			return array(
-				'getPostdata' =>	ImportableField::ARRAY_VALUE
+				'getPostdata' =>	ImportableField::ARRAY_VALUE,
+				'getString' =>		ImportableField::STRING_VALUE
 			);
 		}
 
@@ -865,6 +866,18 @@
 					}
 
 					$data = $datetime;
+				}
+
+				return $this->processRawFieldData($data, $status, $message, true, $entry_id);
+			}
+			else if($mode === $modes->getString) {
+				$dates = explode(',', $data);
+				$data = array();
+				foreach($dates as $date_string) {
+					self::parseFilter($date_string);
+
+					$data['start'][] = $date_string['start'];
+					$data['end'][] = $date_string['end'];
 				}
 
 				return $this->processRawFieldData($data, $status, $message, true, $entry_id);
