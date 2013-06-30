@@ -740,9 +740,9 @@
 			$dates = array();
 			foreach($data as $range) {
 				$mode = $this->__getModeFromString($range);
-				self::parseFilter($range);
+				$result = self::parseFilter($range);
 
-				if(!empty($range)) {
+				if($result !== FieldDate::ERROR && !empty($range)) {
 					$range['mode'] = $mode;
 					$dates[] = $range;
 				}
