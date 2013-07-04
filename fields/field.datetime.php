@@ -610,6 +610,7 @@
 						$start->format('Y-m-d'),
 						array(
 							'iso' => $start->format('c'),
+							'timestamp' => $start->getTimestamp(),
 							'time' => $start->format('H:i'),
 							'weekday' => $start->format('N'),
 							'offset' => $start->format('O')
@@ -626,6 +627,7 @@
 							$end->format('Y-m-d'),
 							array(
 								'iso' => $end->format('c'),
+								'timestamp' => $end->getTimestamp(),
 								'time' => $end->format('H:i'),
 								'weekday' => $end->format('N'),
 								'offset' => $end->format('O')
