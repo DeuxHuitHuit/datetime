@@ -19,22 +19,26 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.1.1" date="2013-07-04" min="2.3">
+			- Improved filter error handling
+			- Add timestamps to XML output
+		</release>
 		<release version="3.1" date="2013-04-06" min="2.3">
 			- Simplify calendar opening and closing actions
 			- Remove inline help – this should be handled by developers individually
 			- Fix issues with field settings
 		</release>
 		<release version="3.0.7" date="2013-04-06" min="2.3">
-			- General fixes and compatibility updates 
+			- General fixes and compatibility updates
 		</release>
 		<release version="3.0.6" date="2012-08-17" min="2.3">
-			- Fix language detection in Data Source 
+			- Fix language detection in Data Source
 		</release>
 		<release version="3.0.5" date="2012-08-12" min="2.3">
-			- Fix collapsing state storage 
+			- Fix collapsing state storage
 		</release>
 		<release version="3.0.4" date="2012-07-12" min="2.3">
-			- Minor fixes and improvements. 
+			- Minor fixes and improvements.
 		</release>
 		<release version="3.0.3" date="2012-05-10" min="2.3">
 			- Updated German translation.
@@ -53,7 +57,7 @@
 		</release>
 		<release version="2.4" date="2012-02-14" min="2.2.1" max="2.2.5">
 			- Allow field to be required. (Thanks, Brendan!)
-			- Include languages for Date and Time Data Source in preferences. 
+			- Include languages for Date and Time Data Source in preferences.
 			- Added month and year selects.
 			- Fix timeline behaviour.
 			- General improvements. (Thanks, Brendan!)
