@@ -770,10 +770,10 @@
 			// times in the SQL, but is actually the same entry.
 			if(!preg_match('/`t' . $field_id . '`/', $joins)) {
 				$joins .= "LEFT OUTER JOIN `tbl_entries_data_" . $field_id . "` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
-				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`start` $order");
+				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`start`, `ed`.`end` $order");
 			}
 			else {
-				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`t" . $field_id . "`.`start` $order");
+				$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`t$field_id`.`start`, `t$field_id`.`end` $order");
 			}
 		}
 
