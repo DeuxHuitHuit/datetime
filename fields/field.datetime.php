@@ -681,11 +681,11 @@
 				$separator = ' &#8211; ';
 
 				// Date range
-				if($data['end'][$i] != $data['start'][$i]) {
+				if($data['end'][$i] !== $data['start'][$i]) {
 					$end = new DateTime($data['end'][$i]);
 
 					// Different start and end days
-					if($start->format('D-M-Y') != $end->format('D-M-Y')) {
+					if($start->format('d-m-Y') !== $end->format('d-m-Y')) {
 						$value[] = LANG::localizeDate($start->format($scheme) . $separator . $end->format($scheme));
 					}
 
