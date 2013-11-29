@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="datetime" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+<extension id="datetime" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Date and Time</name>
 	<description>Date and time management for Symphony</description>
 	<repo type="github">https://github.com/hananils/datetime</repo>
-	<url type="discuss">http://symphony-cms.com/discuss/thread/83265/</url>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/83265</url>
 	<types>
-		<type>Field Types</type>
+		<type>Field</type>
 		<type>Interface</type>
 	</types>
 	<authors>
@@ -32,7 +32,7 @@
 		</release>
 		<release version="3.1" date="2013-04-06" min="2.3">
 			- Simplify calendar opening and closing actions
-			- Remove inline help – this should be handled by developers individually
+			- Remove inline help – this should be handled by developers individually
 			- Fix issues with field settings
 		</release>
 		<release version="3.0.7" date="2013-04-06" min="2.3">
