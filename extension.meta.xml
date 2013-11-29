@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.2" date="2013-11-29" min="2.3">
+			- Add `time` elements to table indexes
+		</release>
 		<release version="3.1.2" date="2013-09-04" min="2.3">
 			- Fix date sorting
 			- Small corrections

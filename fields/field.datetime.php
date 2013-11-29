@@ -686,7 +686,7 @@
 
 					// Different start and end days
 					if($start->format('d-m-Y') !== $end->format('d-m-Y')) {
-						$value[] = LANG::localizeDate($start->format($scheme) . $separator . $end->format($scheme));
+						$value[] = $this->getDatetime($start, $scheme) . $separator . $this->getDatetime($end, $scheme);
 					}
 
 					// Same day
@@ -701,20 +701,20 @@
 							}
 
 							$value[] = LANG::localizeDate(
-								$start->format($scheme) . $separator . $end->format(Symphony::Configuration()->get('time_format', 'region'))
+								$this->getDatetime($start, $scheme) . $separator . $this->getDatetime($end, Symphony::Configuration()->get('time_format', 'region'))
 							);
 						}
 
 						// Hide time
 						else {
-							$value[] = LANG::localizeDate($start->format($scheme));
+							$value[] = $this->getDatetime($start, $scheme);
 						}
 					}
 				}
 
 				// Single date
 				else {
-					$value[] = LANG::localizeDate($start->format($scheme));
+					$value[] = $this->getDatetime($start, $scheme);
 				}
 			}
 
@@ -726,6 +726,10 @@
 			else {
 				return implode($value, ', <br />');
 			}
+		}
+
+		public function getDatetime($date, $scheme) {
+			return '<time datetime="' . $date->format('Y-m-d\TH:i:s\Z') . '">' . LANG::localizeDate($date->format($scheme)) . '</time>';
 		}
 
 		public function getParameterPoolValue(array $data, $entry_id=NULL) {
