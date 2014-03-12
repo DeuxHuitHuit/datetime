@@ -11,14 +11,17 @@
 	<authors>
 		<author>
 			<name github="hananils" symphony="hananils">Büro für Web- und Textgestaltung</name>
-			<website>http://hananils.de?symphony=datetime</website>
+			<website>http://hananils.de</website>
 		</author>
 		<author>
 			<name github="nilshoerrmann" symphony="Nils">Nils Hörrmann</name>
-			<website>http://nilshoerrmann.de?symphony=datetime</website>
+			<website>http://nilshoerrmann.de</website>
 		</author>
 	</authors>
 	<releases>
+		<release version="3.3" date="2013-11-29" min="2.4">
+			- Symphony 2.4 compatibility
+		</release>
 		<release version="3.2" date="2013-11-29" min="2.3">
 			- Add `time` elements to table indexes
 		</release>
