@@ -740,7 +740,7 @@
 		Filtering:
 	-------------------------------------------------------------------------*/
 
-		function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {
+		function buildDSRetrievalSQL($data, &$joins, &$where, $andOperation = false) {
 
 			// Parse dates
 			$dates = array();
