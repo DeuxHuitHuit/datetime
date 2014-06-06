@@ -517,7 +517,7 @@
 			// Append Duplicator
 			$duplicator->appendChild($list);
 			if(!is_null($flagWithError)) {
-				$wrapper->appendChild(Widget::wrapFormElementWithError($duplicator, $flagWithError));
+				$wrapper->appendChild(Widget::Error($duplicator, $flagWithError));
 			}
 			else {
 				$wrapper->appendChild($duplicator);
