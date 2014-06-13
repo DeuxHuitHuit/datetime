@@ -114,7 +114,10 @@
 
 			// Add language strings to configuration
 			Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
-			Administration::instance()->saveConfig();
+			
+			Symphony::Configuration()->write();
+			//Old code : Administration::instance()->saveConfig();
+			
 
 			// Report status
 			if(in_array(false, $status, true)) {
