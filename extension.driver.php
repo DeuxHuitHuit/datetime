@@ -114,7 +114,7 @@
 
 			// Add language strings to configuration
 			Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
-			Administration::instance()->saveConfig();
+			Symphony::Configuration()->write();
 
 			// Report status
 			if(in_array(false, $status, true)) {
@@ -196,7 +196,7 @@
 				// Move language codes to configuration
 				Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
 				Symphony::Configuration()->set('german', $this->languages['german'], 'datetime');
-				Administration::instance()->saveConfig();
+				Symphony::Configuration()->write();
 			}
 
 			// Prior version 3.0
