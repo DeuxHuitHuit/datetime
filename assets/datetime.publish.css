@@ -5,6 +5,11 @@
  * @source: http://github.com/nilshoerrmann/datetime
  */
 
+/* Overflow fix */
+html {
+	overflow-y: scroll;
+}
+
 .field-datetime + .field {
 	clear: both;
 }
