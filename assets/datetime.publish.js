@@ -136,6 +136,12 @@
 					start: from,
 					end: to
 				}, focus]);
+				
+				// Update cached max size
+				setTimeout(function () {
+					item.trigger('updatesize.collapsible');
+					item.css('max-height', item.data('heightMax'));
+				}, 250);
 			});
 			datetime.on('settime.datetime', 'li', function(event, first, last, mode, focus) {
 				var item = $(this),
@@ -226,9 +232,18 @@
 			// Close calender
 			$('body').on('click.datetime', function(event) {
 				var target = $(event.target);
-				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.parents('.collapsible').parents('.field-datetime').length == 0) {
-					datetime.find('li').trigger('collapse.collapsible');
+				if (datetime.find('.js-animate').length > 0) {
+					return;
 				}
+				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.closest('.field-datetime').length == 0) {
+					datetime.find(items).trigger('collapse.collapsible');
+				}
+			});
+			
+			// Size handling
+			datetime.on('expandbefore.collapsible collapsebefore.collapsible', items, function (event, settings) {
+				var item = $(this);
+				//item.trigger('updatesize.collapsible');
 			});
 						
 		/*---- Functions --------------------------------------------------------*/
