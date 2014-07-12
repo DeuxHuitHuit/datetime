@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.3.1" date="2014-07-11" min="2.4">
+			- Symphony 2.4 compatibility minor fix
+		</release>
 		<release version="3.3" date="2013-11-29" min="2.4">
 			- Symphony 2.4 compatibility
 		</release>
