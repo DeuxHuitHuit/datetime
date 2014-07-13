@@ -140,7 +140,7 @@
 				// Update cached max size
 				setTimeout(function () {
 					item.trigger('updatesize.collapsible');
-					item.css('max-height', item.data('heightMax'));
+					item.trigger('setsize.collapsible');
 				}, 250);
 			});
 			datetime.on('settime.datetime', 'li', function(event, first, last, mode, focus) {
