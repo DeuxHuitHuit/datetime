@@ -19,6 +19,13 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.4.0" date="2014-07-15" min="2.5.0">
+			- Symphony 2.5 compatibility
+			- Minor improvement for performance
+		</release>
+		<release version="3.3.1" date="2014-07-11" min="2.4" max="2.4.0">
+			- Symphony 2.4 compatibility minor fix
+		</release>
 		<release version="3.3" date="2013-11-29" min="2.4">
 			- Symphony 2.4 compatibility
 		</release>

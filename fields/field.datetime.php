@@ -157,7 +157,7 @@
 			}
 
 			// Generate field
-			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" /><em class="' . $type . ' label"></em>';
+			return '<input type="text" name="fields[' . $element . '][' . $type . '][]" value="' . $parsed['date'] . '" data-timestamp="' . $parsed['timestamp'] . '" class="' . $type . ' ' . $class . '" autocomplete="off" /><em class="' . $type . ' label"></em>';
 		}
 
 		private static function __createCalendar() {
@@ -517,7 +517,7 @@
 			// Append Duplicator
 			$duplicator->appendChild($list);
 			if(!is_null($flagWithError)) {
-				$wrapper->appendChild(Widget::wrapFormElementWithError($duplicator, $flagWithError));
+				$wrapper->appendChild(Widget::Error($duplicator, $flagWithError));
 			}
 			else {
 				$wrapper->appendChild($duplicator);

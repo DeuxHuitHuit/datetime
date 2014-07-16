@@ -41,6 +41,7 @@
 				datetime = field.find('.dark.frame'),
 				dates = datetime.find('ol'),
 				headers = dates.find('header'),
+				items = '> ol > li',
 				width = 0;
 			
 		/*---- Events -----------------------------------------------------------*/
@@ -60,7 +61,7 @@
 			});
 		
 			// Constructing
-			datetime.on('constructshow.duplicator', 'li', function(event) {
+			datetime.on('constructshow.duplicator', items, function(event) {
 				var item = $(this),
 					input = item.find('input.start'),
 					all = item.prevAll(),
@@ -72,7 +73,7 @@
 					input.val(prev.val()).attr('data-timestamp', prev.attr('data-timestamp'));
 				}
 			});
-			datetime.on('constructstop.duplicator', 'li', function(event) {
+			datetime.on('constructstop.duplicator', items, function(event) {
 				var item = $(this),
 					input = item.find('input.start');
 				
@@ -100,7 +101,7 @@
 			});		
 			
 			// Setting
-			datetime.on('setdate.datetime', 'li', function(event, range, focus, mode) {
+			datetime.on('setdate.datetime', items, function(event, range, focus, mode) {
 				var item = $(this),
 					start = item.find('input.start'),
 					end = item.find('input.end'),
@@ -135,6 +136,12 @@
 					start: from,
 					end: to
 				}, focus]);
+				
+				// Update cached max size
+				setTimeout(function () {
+					item.trigger('updatesize.collapsible');
+					item.trigger('setsize.collapsible');
+				}, 250);
 			});
 			datetime.on('settime.datetime', 'li', function(event, first, last, mode, focus) {
 				var item = $(this),
@@ -225,11 +232,14 @@
 			// Close calender
 			$('body').on('click.datetime', function(event) {
 				var target = $(event.target);
-				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.parents('.collapsible').parents('.field-datetime').length == 0) {
-					datetime.find('li').trigger('collapse.collapsible');
+				if (datetime.find('.js-animate').length > 0) {
+					return;
+				}
+				if(!target.is('input') && !target.is('textarea') && !target.is('select') && !target.is('button') && target.closest('.field-datetime').length == 0) {
+					datetime.find(items).trigger('collapse.collapsible');
 				}
 			});
-						
+				
 		/*---- Functions --------------------------------------------------------*/
 		
 			// Visualise date
@@ -439,7 +449,7 @@
 			if(!datetime.is('.single')) {
 			
 				// Multiple dates
-				dates.symphonyDuplicator({
+				datetime.symphonyDuplicator({
 					orderable: false,
 					collapsible: false,
 					minimum: (datetime.is('.prepopulate') ? 1 : 0),
@@ -447,7 +457,7 @@
 				
 				// Orderable dates
 				datetime.symphonyOrderable({
-					items: 'li',
+					items: items,
 					handles: 'header',
 					ignore: ''
 				});
@@ -455,7 +465,7 @@
 			
 			// Collapsible calendar
 			datetime.symphonyCollapsible({
-				items: 'li',
+				items: items,
 				handles: 'header',
 				ignore: 'input',
 				storage: 'symphony.datetime.' + Symphony.Context.get('env').section_handle + '.' + field.attr('id') + '.'
