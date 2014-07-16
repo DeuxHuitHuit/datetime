@@ -5,6 +5,11 @@
  * @source: http://github.com/nilshoerrmann/datetime
  */
 
+/* Overflow fix */
+html {
+	overflow-y: scroll;
+}
+
 .field-datetime + .field {
 	clear: both;
 }
@@ -16,12 +21,11 @@
 .field-datetime .frame {
 	overflow: visible;
 	margin-bottom: 21px;
-	float: left;
 	width: 100%;
 }
 
 .field-datetime .frame header {
-	padding: 4px 10px 3px;
+	padding: 4px 10px;
 	position: relative;
 }
 
@@ -98,6 +102,12 @@
 .field-datetime .frame header .invalid input {
 	color: #cc3311;
 }
+
+/* Multiple */
+.field-datetime .frame.multiple {
+	margin-bottom: 50px;
+}
+
 /* Ordering */
 
 .field-datetime .frame li.ordering header div {
@@ -105,12 +115,6 @@
 }
 
 /* Single dates */
-
-.field-datetime .frame.single.simple {
-	overflow: visible;
-	padding-bottom: 2px;
-}
-
 .field-datetime .frame.single ol {
 	background: none;
 	border: none;
@@ -135,33 +139,12 @@
 
 .field-datetime .frame.single li header div {
 	border-radius: 2px 2px 0 0;
-	padding-left: 7px;
 	min-height: 23px;
 }
 
 .field-datetime .frame.single li.collapsed header div {
 	border-radius: 2px;
 	padding-left: 3px;
-}
-
-.field-datetime .frame.single li.collapsed:not(.range) header div {
-	min-height: 20px;
-	height: 20px;
-}
-
-.field-datetime .frame.single li.collapsed:not(.range) header div input {
-	height: 20px;
-	border: none;
-}
-
-.field-datetime .frame.single li.collapsed:not(.range) header div em.label {
-	top: 2px;
-}
-
-.field-datetime .frame.single .content {
-	border-radius: 0 0 4px 4px;
-	margin: 0 -10px;
-	padding: 10px;
 }
 
 /* Help */
