@@ -41,7 +41,7 @@
 				datetime = field.find('.dark.frame'),
 				dates = datetime.find('ol'),
 				headers = dates.find('header'),
-				items = '>ol>li',
+				items = '> ol > li',
 				width = 0;
 			
 		/*---- Events -----------------------------------------------------------*/
@@ -239,13 +239,7 @@
 					datetime.find(items).trigger('collapse.collapsible');
 				}
 			});
-			
-			// Size handling
-			datetime.on('expandbefore.collapsible collapsebefore.collapsible', items, function (event, settings) {
-				var item = $(this);
-				//item.trigger('updatesize.collapsible');
-			});
-						
+				
 		/*---- Functions --------------------------------------------------------*/
 		
 			// Visualise date
