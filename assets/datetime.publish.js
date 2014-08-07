@@ -368,7 +368,13 @@
 				displayStatus(datespan);
 				
 				// Hide end date
-				end.attr('data-timestamp', '').val('').slideUp('fast', function() {
+				end.hide(); // hack to make events works
+				item.trigger('updatesize.collapsible');
+				item.trigger('setsize.collapsible');
+				end.attr('data-timestamp', '')
+				.val('')
+				.show()
+				.slideUp('fast', function() {
 					item.removeClass('range');
 				});
 			};
