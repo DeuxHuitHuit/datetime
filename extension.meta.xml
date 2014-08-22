@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.4.2" date="2014-08-28" min="2.5.0">
+			- Fix UI glitch when in single mode (regression bug)
+		</release>
 		<release version="3.4.1" date="2014-08-12" min="2.5.0">
 			- Fix UI glitch when removing the end of the range
 		</release>
