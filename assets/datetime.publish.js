@@ -368,15 +368,17 @@
 				displayStatus(datespan);
 				
 				// Hide end date
-				end.hide(); // hack to make events works
-				item.trigger('updatesize.collapsible');
-				item.trigger('setsize.collapsible');
-				end.attr('data-timestamp', '')
-				.val('')
-				.show()
-				.slideUp('fast', function() {
-					item.removeClass('range');
-				});
+				if (end.is(':visible')) {
+					end.hide(); // hack to make events works
+					item.trigger('updatesize.collapsible');
+					item.trigger('setsize.collapsible');
+					end.attr('data-timestamp', '')
+					.val('')
+					.show()
+					.slideUp('fast', function() {
+						item.removeClass('range');
+					});
+				}
 			};
 			
 			// Display validity status
