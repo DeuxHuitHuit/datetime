@@ -98,7 +98,7 @@
 		
 				// Visualise
 				visualise(input);
-			});		
+			});
 			
 			// Setting
 			datetime.on('setdate.datetime', items, function(event, range, focus, mode) {
@@ -182,7 +182,7 @@
 				else {
 					focus = range.end;
 				}
-							
+				
 				// Visualise
 				item.trigger('setdate', [range, focus, mode]);
 			});
@@ -225,8 +225,8 @@
 				
 				// Validate
 				else if(date != validated) {
-					validate(input, date, true);			
-				}			
+					validate(input, date, true);
+				}
 			});
 			
 			// Close calender
@@ -309,7 +309,7 @@
 			// Merge new date with old times
 			var mergeTimes = function(current, update, mode) {
 			
-				// Empty date	
+				// Empty date
 				if(update == null || update == '') {
 					return '';
 				}
@@ -360,7 +360,7 @@
 					// Keep errors
 					if(end.is('.invalid')) {
 						end.removeClass('invalid');
-						input.addClass('invalid');					
+						input.addClass('invalid');
 					}
 				}
 				
@@ -368,15 +368,17 @@
 				displayStatus(datespan);
 				
 				// Hide end date
-				end.hide(); // hack to make events works
-				item.trigger('updatesize.collapsible');
-				item.trigger('setsize.collapsible');
-				end.attr('data-timestamp', '')
-				.val('')
-				.show()
-				.slideUp('fast', function() {
-					item.removeClass('range');
-				});
+				if (end.is(':visible')) {
+					end.hide(); // hack to make events works
+					item.trigger('updatesize.collapsible');
+					item.trigger('setsize.collapsible');
+					end.attr('data-timestamp', '')
+					.val('')
+					.show()
+					.slideUp('fast', function() {
+						item.removeClass('range');
+					});
+				}
 			};
 			
 			// Display validity status
@@ -391,7 +393,7 @@
 				else {
 					datespan.removeClass('invalid');
 				}
-			};	
+			};
 
 			// Get context
 			var contextualise = function(input) {
