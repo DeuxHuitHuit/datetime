@@ -545,7 +545,7 @@
 				if(!empty($data['start'][$i])) {
 
 					// Parse start date
-					$parsed = Calendar::formatDate($data['start'][$i], true, 'Y-m-d H:i:s');
+					$parsed = $this->parseDateTime($data['start'][$i]);
 					$result['start'][] = $parsed['date'];
 
 					// Empty end date
@@ -555,7 +555,7 @@
 
 					// Specific end date
 					else {
-						$parsed = Calendar::formatDate($data['end'][$i], true, 'Y-m-d H:i:s');
+						$parsed = $this->parseDateTime($data['end'][$i]);
 						$result['end'][] = $parsed['date'];
 					}
 				}
@@ -568,6 +568,16 @@
 			else {
 				return $result;
 			}
+		}
+
+		public function parseDateTime($dateString) {
+			$dateFormat = 'Y-m-d';
+			$timeFormat = 'H:i:s';
+			$format = !$this->get('time')
+						? "$dateFormat 00:00:00"
+						: "$dateFormat $timeFormat";
+
+			return Calendar::formatDate($dateString, true, $format);
 		}
 
 	/*-------------------------------------------------------------------------
