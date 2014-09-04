@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.4.3" date="2014-09-04" min="2.5.0">
+			- Make sure 00:00:00 is saved when time is disabled
+		</release>
 		<release version="3.4.2" date="2014-08-28" min="2.5.0">
 			- Fix UI glitch when in single mode (regression bug)
 		</release>
