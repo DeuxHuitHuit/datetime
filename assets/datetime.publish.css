@@ -32,7 +32,6 @@ html {
 .field-datetime .frame header div {
 	padding: 0 3px 0;
 	margin: 0;
-	border: 1px solid rgba(0, 0, 0, 0.25);
 	border-radius: 2px;
 	background: #fff;
 	position: relative;
