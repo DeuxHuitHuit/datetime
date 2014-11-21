@@ -75,7 +75,7 @@
 			
 			// Weekdays
 			$storage['weekdays'] = array();
-			$date->modify('last Sunday');
+			$date->modify('last Monday');
 			for($i = 1; $i <= 7; $i++) {
 				$storage['weekdays'][] = $date->getTimestamp();
 				$date->modify('+1 day');
