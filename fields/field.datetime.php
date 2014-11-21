@@ -684,6 +684,9 @@
 				$scheme = __SYM_DATE_FORMAT__;
 			}
 
+			// Get timeformat
+			$timeFormat = Symphony::Configuration()->get('time_format', 'region');
+
 			// Parse dates
 			$value = array();
 			for($i = 0; $i < count($data['start']); $i++) {
@@ -706,13 +709,11 @@
 						if((int)$this->get('time') === 1) {
 
 							// Adjust separator
-							if(Symphony::Configuration()->get('time_format', 'region') == 'H:i') {
+							if($timeFormat == 'H:i') {
 								$separator = '&#8211;';
 							}
 
-							$value[] = LANG::localizeDate(
-								$this->getDatetime($start, $scheme) . $separator . $this->getDatetime($end, Symphony::Configuration()->get('time_format', 'region'))
-							);
+							$value[] = $this->getDatetime($start, $scheme) . $separator . $this->getDatetime($end, $timeFormat);
 						}
 
 						// Hide time
