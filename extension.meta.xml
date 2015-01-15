@@ -22,7 +22,7 @@
 		<release version="3.4.4" date="2014-09-04" min="2.5.0" max="2.5.2">
 			- Updated the Data Source output
 			- Fixed double border in UI
-		</release>		
+		</release>
 		<release version="3.4.3" date="2014-09-04" min="2.5.0">
 			- Make sure 00:00:00 is saved when time is disabled
 		</release>
