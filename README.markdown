@@ -6,7 +6,7 @@ Date and Time provides advanced date and time management for Symphony. It offers
 
 ## Installation
 
-Information about [installing and updating extensions](http://symphony-cms.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://symphony-cms.com/learn/>. 
+Information about [installing and updating extensions](http://www.getsymphony.com/learn/tasks/view/install-an-extension/) can be found in the Symphony documentation at <http://www.getsymphony.com/learn/>. 
 
 ## Updating
 
@@ -77,4 +77,4 @@ This extensions accepts all relative dates known to [PHP's DateTime class](http:
             
 ## Acknowledgement
 
-This extension is not a work of a single person, a lot of people tested it and [contributed to it](https://github.com/hananils/datetime/contributors). The initial layout of the date widget was inspired by Scott Hughes' [calendar mock-up for Symphony 2.0](http://symphony-cms.com/discuss/thread/103/) and Rowan Lewis' [calendar overlay](https://github.com/rowan-lewis/calendaroverlay/).
+This extension is not a work of a single person, a lot of people tested it and [contributed to it](https://github.com/hananils/datetime/contributors). The initial layout of the date widget was inspired by Scott Hughes' [calendar mock-up for Symphony 2.0](http://www.getsymphony.com/discuss/thread/103/) and Rowan Lewis' [calendar overlay](https://github.com/rowan-lewis/calendaroverlay/).
