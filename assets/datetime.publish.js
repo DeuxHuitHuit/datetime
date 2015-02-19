@@ -260,7 +260,7 @@
 			var validate = function(input, date, show) {
 				var item = input.parents('li'),
 					datespan = input.parent(),
-					calendar = item.find('div.calendar');
+					calendar = item.find('div.dt-calendar');
 				
 				// Call validator
 				if(input.attr('data-timestamp') != date) {

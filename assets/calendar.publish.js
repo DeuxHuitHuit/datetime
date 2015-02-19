@@ -26,7 +26,7 @@
 		var dates = $(this),
 			settings = {
 				item: 'li',
-				calendar: 'div.calendar'
+				calendar: 'div.dt-calendar'
 			},
 			month_list = [
 				Symphony.Language.get('August'), 

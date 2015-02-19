@@ -5,7 +5,7 @@
  * @source: http://github.com/nilshoerrmann/calendar
  */
  
-div.calendar {
+div.dt-calendar {
 	z-index: 2000;
 	position: relative;
 	-webkit-font-smoothing: antialiased;
@@ -13,18 +13,18 @@ div.calendar {
 
 /* Flip navigation*/
 
-div.calendar div.date {
+div.dt-calendar div.date {
 	width: 100%;
 	padding: 0;
 	position: relative;
 }
 
-div.calendar div.date nav {
+div.dt-calendar div.date nav {
 	border-bottom: 1px solid #41403f;
 	height: 25px;
 }
 
-div.calendar div.date nav a {
+div.dt-calendar div.date nav a {
 	display: inline-block;
 	background: url(images/arrows.png) 6px -13px no-repeat;
 	border: none;
@@ -38,23 +38,23 @@ div.calendar div.date nav a {
 	z-index: 1000;
 }
 
-div.calendar div.date nav a:hover {
+div.dt-calendar div.date nav a:hover {
 	background-position: 6px -24px;
 }
 
-div.calendar div.date nav a:last-of-type {
+div.dt-calendar div.date nav a:last-of-type {
 	background: url(images/arrows.png) -15px -13px no-repeat;
 	left: auto;
 	right: -6px;
 }
 
-div.calendar div.date nav a:last-of-type:hover {
+div.dt-calendar div.date nav a:last-of-type:hover {
 	background-position: -15px -24px;
 }
 
 /* Switch navigation */
 
-div.calendar div.switch {
+div.dt-calendar div.switch {
 	width: 180px;
 	margin: 0 0 0 -90px;
 	float: left;
@@ -74,7 +74,7 @@ div.calendar div.switch {
 	background-image:      -o-linear-gradient(top, #353533, #333331);
 }
 
-div.calendar div.switch:hover {
+div.dt-calendar div.switch:hover {
 	box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 	background: #323230;
 	background-image: -webkit-linear-gradient(top, #353533, #323230); 
@@ -83,7 +83,7 @@ div.calendar div.switch:hover {
 	background-image:      -o-linear-gradient(top, #353533, #323230);
 }
 
-div.calendar div.switch.active {
+div.dt-calendar div.switch.active {
 	background: none;
 	overflow: hidden;
 	height: auto;
@@ -91,7 +91,7 @@ div.calendar div.switch.active {
 	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.2);
 }
 
-div.calendar div.switch ul {
+div.dt-calendar div.switch ul {
 	width: 80px;
 	float: left;
 	font-size: 109.09%;
@@ -101,34 +101,34 @@ div.calendar div.switch ul {
 	margin: -117px 0 0;
 }
 
-div.calendar div.switch.active ul {
+div.dt-calendar div.switch.active ul {
 	margin: 0;
 	overflow: hidden;
 }
 
-div.calendar div.switch ul.months {
+div.dt-calendar div.switch ul.months {
 	width: 100px;
 	text-align: right;
 }
 
-div.calendar div.switch ul.months li {
+div.dt-calendar div.switch ul.months li {
 	border-right: 1px solid transparent;
 	width: 92px;
 }
 
-div.calendar div.switch.active ul.months li {
+div.dt-calendar div.switch.active ul.months li {
 	border-right: 1px solid #eaeaea;
 }
 
-div.calendar div.switch ul.months li:nth-child(6) {
+div.dt-calendar div.switch ul.months li:nth-child(6) {
 	background: url(images/arrows.png) 8px 7px no-repeat;
 }
 
-div.calendar div.switch ul.years li:nth-child(6) {
+div.dt-calendar div.switch ul.years li:nth-child(6) {
 	background: url(images/arrows.png) 70px 7px no-repeat;
 }
 
-div.calendar div.switch ul li {
+div.dt-calendar div.switch ul li {
 	color: #fff;
 	background: #fff;
 	border: none;
@@ -141,38 +141,38 @@ div.calendar div.switch ul li {
 	z-index: 3000;
 }
 
-div.calendar div.switch ul.months li:first-child {
+div.dt-calendar div.switch ul.months li:first-child {
 	border-radius: 5px 0 0 0;
 }
 
-div.calendar div.switch ul.months li:last-child {
+div.dt-calendar div.switch ul.months li:last-child {
 	border-radius: 0 0 0 5px;
 }
 
-div.calendar div.switch ul.years li:first-child {
+div.dt-calendar div.switch ul.years li:first-child {
 	border-radius: 0 5px 0 0;
 }
 
-div.calendar div.switch ul.years li:last-child {
+div.dt-calendar div.switch ul.years li:last-child {
 	border-radius: 0 0 5px 0;
 }
 
-div.calendar div.switch.active li {
+div.dt-calendar div.switch.active li {
 	color: #000;
 }
 
-div.calendar div.switch.active ul:hover li:nth-child(6) {
+div.dt-calendar div.switch.active ul:hover li:nth-child(6) {
 	background: #fff;
 	color: #000;
 }
 
-div.calendar div.switch.active ul li:nth-child(6) {
+div.dt-calendar div.switch.active ul li:nth-child(6) {
 	background: #5677c3;
 	color: #fff;
 	border-right-color: #5677c3;
 }
 
-div.calendar div.switch.active ul li:hover {
+div.dt-calendar div.switch.active ul li:hover {
 	background: #5677c3 !important;
 	color: #fff !important;
 	border-right-color: #5677c3;
@@ -180,7 +180,7 @@ div.calendar div.switch.active ul li:hover {
 
 /* Calendar sheet */
 
-div.calendar table {
+div.dt-calendar table {
 	border-collapse: collapse;
 	clear: both;
 	-webkit-user-select: none;
@@ -190,7 +190,7 @@ div.calendar table {
 	user-select: none;
 }
 
-div.calendar td {
+div.dt-calendar td {
 	background: transparent /*#323230*/;
 	border: 1px solid #41403f;
 	border-style-bottom: none;
@@ -204,59 +204,59 @@ div.calendar td {
 	text-shadow: none;
 }
 
-div.calendar thead td, 
-div.calendar thead td:first-child, 
-div.calendar thead td:last-child {
+div.dt-calendar thead td, 
+div.dt-calendar thead td:first-child, 
+div.dt-calendar thead td:last-child {
 	background: transparent;
 	border: none;
 	height: 30px;
 	color: rgba(255, 255, 255, 0.3);
 }
 
-div.calendar td.last, 
-div.calendar td.next {
+div.dt-calendar td.last, 
+div.dt-calendar td.next {
 	color: rgba(255, 255, 255, 0.3) /*#686865*/;
 }
 
-div.calendar td:first-child, 
-div.calendar td:last-child {
+div.dt-calendar td:first-child, 
+div.dt-calendar td:last-child {
 	background: #383836;
 }
 
-div.calendar td.today {
+div.dt-calendar td.today {
 	background: rgba(200, 200, 200, 0.2);
 }
 
-div.calendar td.selected {
+div.dt-calendar td.selected {
 	background: #5273c0;
 	color: #fff;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-div.calendar td:first-child.selected, 
-div.calendar td:last-child.selected {
+div.dt-calendar td:first-child.selected, 
+div.dt-calendar td:last-child.selected {
 	background: #5677c3;
 }
 
-div.calendar td.last.selected, 
-div.calendar td.next.selected {
+div.dt-calendar td.last.selected, 
+div.dt-calendar td.next.selected {
 	background: #475466;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-div.calendar td:first-child.last.selected, 
-div.calendar td:first-child.next.selected,
-div.calendar td:last-child.last.selected, 
-div.calendar td:last-child.next.selected {
+div.dt-calendar td:first-child.last.selected, 
+div.dt-calendar td:first-child.next.selected,
+div.dt-calendar td:last-child.last.selected, 
+div.dt-calendar td:last-child.next.selected {
 	background: #505f73;
 }
 
-div.calendar td.selected.today {
+div.dt-calendar td.selected.today {
 	background: #7499d2;
 	border: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-div.calendar tbody td:hover {
+div.dt-calendar tbody td:hover {
 	background: #ffb !important;
 	border: 1px solid #fff;
 	color: #9d854c;
@@ -264,12 +264,12 @@ div.calendar tbody td:hover {
 
 @media screen and (min-width: 1000px) {
 
-	fieldset.primary div.calendar {
+	fieldset.primary div.dt-calendar {
 		height: 254px;
 		padding: 18px 38px 18px 18px;
 	}
 	
-	fieldset.primary div.calendar div.date:not(:last-child) {
+	fieldset.primary div.dt-calendar div.date:not(:last-child) {
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
 		width: 50%;
@@ -279,7 +279,7 @@ div.calendar tbody td:hover {
 		left: 0;
 	}
 	
-	fieldset.primary div.calendar div.date:not(:last-child) nav a:first-of-type {
+	fieldset.primary div.dt-calendar div.date:not(:last-child) nav a:first-of-type {
 		left: 12px;
 	}
 
@@ -287,38 +287,38 @@ div.calendar tbody td:hover {
 
 /* Ordering */
 
-li.ordering div.calendar nav {
+li.ordering div.dt-calendar nav {
 	border-bottom-color: #3c5c8c;
 }
 
-li.ordering div.calendar nav a {
+li.ordering div.dt-calendar nav a {
 	display: none;
 }
 
-li.ordering div.calendar td {
+li.ordering div.dt-calendar td {
 	border: 1px solid #44689e;
 }
 
-li.ordering div.calendar thead td {
+li.ordering div.dt-calendar thead td {
 	border: none;
 	color: #3c5c8c;
 }
 
-li.ordering div.calendar tbody td:first-child, 
-li.ordering div.calendar tbody td:last-child {
+li.ordering div.dt-calendar tbody td:first-child, 
+li.ordering div.dt-calendar tbody td:last-child {
 	background: rgba(68, 104, 158, 0.5);
 }
 
-li.ordering div.calendar div.switch {
+li.ordering div.dt-calendar div.switch {
 	background: #44689e;
 }
 
 /* Single date */
 
-.frame.single div.calendar div.date nav a:first-of-type {
+.frame.single div.dt-calendar div.date nav a:first-of-type {
 	left: -6px;
 }
 
-.frame.single div.calendar div.date nav a:last-of-type {
+.frame.single div.dt-calendar div.date nav a:last-of-type {
 	right: -8px;
 }

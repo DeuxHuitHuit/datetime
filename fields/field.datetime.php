@@ -120,7 +120,7 @@
 						self::__createDateField($element, 'end', $end, $time) .
 				'	</div>
 				</header>
-				<div class="calendar content">' .
+				<div class="dt-calendar content">' .
 					self::__createCalendar() .
 					$cutter .
 				'</div>',
