@@ -4,7 +4,7 @@
  * @author: Nils Hörrmann, post@nilshoerrmann.de
  * @source: http://github.com/nilshoerrmann/calendar
  */
- 
+
 div.dt-calendar {
 	z-index: 2000;
 	position: relative;
@@ -193,7 +193,7 @@ div.dt-calendar table {
 div.dt-calendar td {
 	background: transparent /*#323230*/;
 	border: 1px solid #41403f;
-	border-style-bottom: none;
+	border-bottom-style: none;
 	color: #fff;
 	cursor: pointer;
 	height: 30px;
@@ -265,18 +265,16 @@ div.dt-calendar tbody td:hover {
 @media screen and (min-width: 1000px) {
 
 	fieldset.primary div.dt-calendar {
-		height: 254px;
 		padding: 18px 38px 18px 18px;
 	}
 	
 	fieldset.primary div.dt-calendar div.date:not(:last-child) {
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
-		width: 50%;
+		display: inline-block;
 		padding: 0 0 0 11px;
-		position: absolute;
-		top: 10px;
-		left: 0;
+		width: 50%;
+		vertical-align: top;
 	}
 	
 	fieldset.primary div.dt-calendar div.date:not(:last-child) nav a:first-of-type {

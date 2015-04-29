@@ -91,7 +91,7 @@
 				datetime.find('.focus').removeClass('focus');
 				input.parent().addClass('focus');
 				
-				// Expand	
+				// Expand
 				if(item.is('.collapsed')) {
 					item.trigger('expand.collapsible');
 				}

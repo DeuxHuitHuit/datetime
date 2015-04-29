@@ -219,7 +219,7 @@
 				$('<li />', {
 					'text': month_list[m],
 					'data-value': id
-				}).appendTo(months);				
+				}).appendTo(months);
 			}
 			
 			// Set year
@@ -227,7 +227,7 @@
 			for(y = current.year - 5; y <= current.year + 6; y++) {
 				$('<li />', {
 					'text': y
-				}).appendTo(years);				
+				}).appendTo(years);
 			}
 		
 			// Set calendar days
@@ -255,13 +255,13 @@
 				if((start <= days && days <= end) || start == days || end == days) {
 					cell.addClass('selected');
 				}
-								
+				
 				// Next month
 				if(month == current.month + 1 || (current.month == 11 && month == 0)) {
 					cell.addClass('next');
 				}
 					
-				// Check and set month context	
+				// Check and set month context
 				day++;
 				if(day > length[month]) {
 					day = 1;
@@ -274,9 +274,9 @@
 						month++;
 					}
 				}
-			});		
+			});
 		};
-				
+		
 		// Choose date
 		var choose = function(calendar, selected, key) {
 			var current = calendar.data('range'),

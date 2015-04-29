@@ -24,6 +24,10 @@ html {
 	width: 100%;
 }
 
+.field-datetime .collapsible .instance:not(.collapsed):not(.js-animate) {
+	overflow: visible;
+}
+
 .field-datetime .frame header {
 	padding: 4px 10px;
 	position: relative;
