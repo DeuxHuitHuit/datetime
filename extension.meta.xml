@@ -19,6 +19,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.5.0" date="2015-04-30" min="2.5.0" max="2.6.x">
+			- Fix css clash in 2.6.0
+			- Fix error when sorting
+			- Implemented the new prepareValues API
+		</release>
 		<release version="3.4.4" date="2014-09-04" min="2.5.0" max="2.5.2">
 			- Updated the Data Source output
 			- Fixed double border in UI
