@@ -662,18 +662,33 @@
 		}
 
 		public function prepareTableValue($data, XMLElement $link = null, $entry_id = null) {
+			$values = implode(', <br />', $this->prepareTextArray($data, $entry_id, true));
+			if (empty($values)) {
+				$values = '<span class="inactive">' . __('No Date') . '</span>';
+			}
+			// Link?
+			if($link) {
+				$link->setValue($values);
+				return $link->generate();
+			}
+			return $values;
+		}
+
+		public function prepareReadableValue($data, $entry_id = null, $truncate = false, $defaultValue = null) {
+			$defaultValue = __('No Date');
+			return parent::prepareReadableValue($data, $entry_id, $truncate, $defaultValue);
+		}
+
+		public function prepareTextValue($data, $entry_id = null) {
+			return implode(', ', $this->prepareTextArray($data, $entry_id, false));
+		}
+
+		public function prepareTextArray($data, $entry_id, $html) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
-
 			// Handle empty dates
 			if(empty($data['start'][0])) {
-				if($link) {
-					$href = $link->getAttribute('href');
-					return '<a href="' . $href . '">' . __('No Date') . '</a>';
-				}
-				else {
-					return __('No Date');
-				}
+				return array();
 			}
 
 			// Get schema
@@ -699,7 +714,7 @@
 
 					// Different start and end days
 					if($start->format('d-m-Y') !== $end->format('d-m-Y')) {
-						$value[] = $this->getDatetime($start, $scheme) . $separator . $this->getDatetime($end, $scheme);
+						$value[] = $this->getDatetime($start, $scheme, $html) . $separator . $this->getDatetime($end, $scheme, $html);
 					}
 
 					// Same day
@@ -713,33 +728,29 @@
 								$separator = '&#8211;';
 							}
 
-							$value[] = $this->getDatetime($start, $scheme) . $separator . $this->getDatetime($end, $timeFormat);
+							$value[] = $this->getDatetime($start, $scheme, $html) . $separator . $this->getDatetime($end, $timeFormat, $html);
 						}
 
 						// Hide time
 						else {
-							$value[] = $this->getDatetime($start, $scheme);
+							$value[] = $this->getDatetime($start, $scheme, $html);
 						}
 					}
 				}
 
 				// Single date
 				else {
-					$value[] = $this->getDatetime($start, $scheme);
+					$value[] = $this->getDatetime($start, $scheme, $html);
 				}
 			}
 
-			// Link?
-			if($link) {
-				$href = $link->getAttribute('href');
-				return '<a href="' . $href . '">' . implode($value, ', <br />') . '</a>';
-			}
-			else {
-				return implode($value, ', <br />');
-			}
+			return $value;
 		}
 
-		public function getDatetime($date, $scheme) {
+		public function getDatetime($date, $scheme, $html) {
+			if (!$html) {
+				return LANG::localizeDate($date->format($scheme));
+			}
 			return '<time datetime="' . $date->format('Y-m-d\TH:i:s\Z') . '">' . LANG::localizeDate($date->format($scheme)) . '</time>';
 		}
 
