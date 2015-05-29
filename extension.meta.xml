@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.5.1" date="2015-05-29" min="2.5.0" max="2.6.x">
+			- Fix issues with filtering + sorting
+		</release>
 		<release version="3.5.0" date="2015-04-30" min="2.5.0" max="2.6.x">
 			- Fix css clash in 2.6.0
 			- Fix error when sorting
