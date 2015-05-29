@@ -351,8 +351,9 @@
 			}
 
 			// Build SQL
+			$this->lastWhere = implode($connector, $tmp);
 			$joins .= " LEFT JOIN `tbl_entries_data_$field_id` AS `t$field_id` ON `e`.`id` = `t$field_id`.entry_id ";
-			$where .= " AND (" . implode($connector, $tmp) . ") ";
+			$where .= " AND (" . $this->lastWhere . ") ";
 		}
 
 	/*-------------------------------------------------------------------------
@@ -761,7 +762,7 @@
 	/*-------------------------------------------------------------------------
 		Filtering:
 	-------------------------------------------------------------------------*/
-
+		private $lastWhere = '';
 		function buildDSRetrievalSQL($data, &$joins, &$where, $andOperation = false) {
 
 			// Parse dates
@@ -780,6 +781,9 @@
 			if(!empty($dates)) {
 				$this->buildRangeFilterSQL($dates, $joins, $where, $andOperation);
 			}
+			else {
+				$this->lastWhere = '';
+			}
 
 			return true;
 		}
@@ -791,9 +795,15 @@
 		private function buildSortingSQLForTable($table, $field_id, $order) {
 			$sort = 'ORDER BY ';
 			
+			// parse the last where clause used in filtering
+			$sortFilter = preg_replace( '/`t[0-9]+`/', '`m`', $this->lastWhere);
+			if (!$sortFilter) {
+				$sortFilter = '1=1';
+			}
+
 			$where = " AND `$table`.`start` = (
 				SELECT MIN(`m`.`start`) FROM `tbl_entries_data_".$field_id."`AS `m` 
-				WHERE `m`.`entry_id` = `e`.`id` 
+				WHERE `m`.`entry_id` = `e`.`id` AND $sortFilter
 				GROUP BY `m`.`entry_id`
 				LIMIT 1
 			)";
