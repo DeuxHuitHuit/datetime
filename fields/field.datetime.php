@@ -684,6 +684,21 @@
 			return implode(', ', $this->prepareTextArray($data, $entry_id, false));
 		}
 
+		public function getScheme() {
+			$hasTime = (int)$this->get('time') === 1;
+			// Get schema
+			$scheme = trim($hasTime ? __SYM_DATETIME_FORMAT__ : __SYM_DATE_FORMAT__);
+			if (empty($scheme)) {
+				$scheme = $hasTime ? 'Y/m/d H:i:s' : 'Y/m/d';
+			}
+			return $scheme;
+		}
+
+		public function getTimeFormat() {
+			$timeFormat = trim(__SYM_TIME_FORMAT__);
+			return !empty($timeFormat) ? $timeFormat : 'H:i:s';
+		}
+
 		public function prepareTextArray($data, $entry_id, $html) {
 			if(!is_array($data['start'])) $data['start'] = array($data['start']);
 			if(!is_array($data['end'])) $data['end'] = array($data['end']);
@@ -692,16 +707,9 @@
 				return array();
 			}
 
-			// Get schema
-			if((int)$this->get('time') === 1) {
-				$scheme = __SYM_DATETIME_FORMAT__;
-			}
-			else {
-				$scheme = __SYM_DATE_FORMAT__;
-			}
+			$scheme = $this->getScheme();
 
-			// Get timeformat
-			$timeFormat = Symphony::Configuration()->get('time_format', 'region');
+			$timeFormat = $this->getTimeFormat();
 
 			// Parse dates
 			$value = array();
