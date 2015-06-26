@@ -800,6 +800,10 @@
 			if (!$sortFilter) {
 				$sortFilter = '1=1';
 			}
+			else {
+				// clear the last where since it has been consumed
+				$this->lastWhere = '';
+			}
 
 			$op = 'MIN';
 
