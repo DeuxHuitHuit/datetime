@@ -226,7 +226,7 @@
 		'novembre',
 		
 		'December' => 
-		'december',
+		'décembre',
 		
 		'Jan' => 
 		'jan',
