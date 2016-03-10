@@ -19,6 +19,10 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.5.3" date="2016-03-10" min="2.5.0" max="2.x.x">
+			- Fix issue when sorting nulls
+			- Fix décembre french translation
+		</release>
 		<release version="3.5.2" date="2015-06-26" min="2.5.0" max="2.6.x">
 			- Fix issues (regression) when sorting only
 			- Fix bug when there are not date or time formats in Symphony's config
