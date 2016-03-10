@@ -826,11 +826,17 @@
 				$op = 'MAX';
 			}
 			
-			$where = " AND `$table`.`start` = (
+			$null_clause = '';
+			if ($this->get('required') != 'yes') {
+				$null_clause = " OR `$table`.`start` IS NULL";
+			}
+			
+			$where = " AND (`$table`.`start` = (
 				SELECT $op(`m`.`start`) FROM `tbl_entries_data_".$field_id."`AS `m`
 				WHERE `m`.`entry_id` = `e`.`id` AND $sortFilter
 				GROUP BY `m`.`entry_id`
 				LIMIT 1
+				) $null_clause
 			)";
 
 			return array(
