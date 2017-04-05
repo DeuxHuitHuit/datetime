@@ -9,6 +9,7 @@
 	Class extension_datetime extends Extension {
 
 		private $languages = array(
+			'dutch' => 'nl, nl_BE.UTF8, nl_BE, nl_NL.UTF8, nl_NL',
 			'english' => 'en, en_GB.UTF8, en_GB',
 			'finnish' => 'fi, fi_FI.UTF8, fi_FI',
 			'french' => 'fr, fr_FR.UTF8, fr_FR',
