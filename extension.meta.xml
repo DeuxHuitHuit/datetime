@@ -2,8 +2,8 @@
 <extension id="datetime" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Date and Time</name>
 	<description>Date and time management for Symphony</description>
-	<repo type="github">https://github.com/hananils/datetime</repo>
-	<url type="discuss">http://symphony-cms.com/discuss/thread/83265</url>
+	<repo type="github">https://github.com/DeuxHuitHuit/datetime</repo>
+	<url type="discuss">http://getsymphony.com/discuss/thread/83265</url>
 	<types>
 		<type>Field</type>
 		<type>Interface</type>
@@ -16,6 +16,10 @@
 		<author>
 			<name github="nilshoerrmann" symphony="Nils">Nils Hörrmann</name>
 			<website>http://nilshoerrmann.de</website>
+		</author>
+		<author>
+			<name github="DeuxHuitHuit" symphony="nitriques" twitter="DeuxHuitHuit">Deux Huit Huit</name>
+			<website>https://deuxhuithuit.com/</website>
 		</author>
 	</authors>
 	<releases>
