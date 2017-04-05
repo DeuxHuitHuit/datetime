@@ -19,6 +19,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.6.0" date="2017-04-05" min="2.5.0" max="2.x.x">
+			- Add support for Dutch Language
+		</release>
 		<release version="3.5.3" date="2016-03-10" min="2.5.0" max="2.x.x">
 			- Fix issue when sorting nulls
 			- Fix décembre french translation
