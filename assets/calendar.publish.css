@@ -224,26 +224,11 @@ div.dt-calendar td.next {
 }
 
 div.dt-calendar td.today {
-	color: #fff;
-	background: #2f77eb;
+	background: #f4f8fb;
 }
 
 div.dt-calendar td.selected {
-	background: #2f77eb;
 	color: #fff;
-}
-
-div.dt-calendar td:first-child.selected,
-div.dt-calendar td:last-child.selected {
-	background: #5677c3;
-}
-
-div.dt-calendar td.last.selected,
-div.dt-calendar td.next.selected {
-	background: #475466;
-}
-
-div.dt-calendar td.selected.today {
 	background: #2f77eb;
 }
 
