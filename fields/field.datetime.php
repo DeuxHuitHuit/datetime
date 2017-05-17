@@ -811,7 +811,7 @@
 
 		private function buildSortingSQLForTable($table, $field_id, $order) {
 			$sort = 'ORDER BY ';
-			
+
 			// parse the last where clause used in filtering
 			$sortFilter = preg_replace( '/`t[0-9]+`/', '`m`', $this->lastWhere);
 			if (!$sortFilter) {
@@ -834,12 +834,12 @@
 				$sort .= "`$table`.`start` $order";
 				$op = 'MAX';
 			}
-			
+
 			$null_clause = '';
 			if ($this->get('required') != 'yes') {
 				$null_clause = " OR `$table`.`start` IS NULL";
 			}
-			
+
 			$where = " AND (`$table`.`start` = (
 				SELECT $op(`m`.`start`) FROM `tbl_entries_data_".$field_id."`AS `m`
 				WHERE `m`.`entry_id` = `e`.`id` AND $sortFilter
@@ -854,22 +854,22 @@
 			);
 		}
 
-		public function buildSortingSQL(&$joins, &$where, &$sort, $order = 'ASC'){
+		public function buildSortingSQL(&$joins, &$where, &$sort, $order = 'ASC', &$select = NULL){
 			$field_id = $this->get( 'id' );
 			$order    = strtolower( $order );
-			
+
 			// If we already have a JOIN to the entry table, don't create another one,
 			// this prevents issues where an entry with multiple dates is returned multiple
 			// times in the SQL, but is actually the same entry.
 			if( !preg_match( '/`t'.$field_id.'`/', $joins ) ){
 				$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$field_id."` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
-				
+
 				$sql = $this->buildSortingSQLForTable('ed', $field_id, $order);
 			}
 			else {
 				$sql = $this->buildSortingSQLForTable("t$field_id", $field_id, $order);
 			}
-			
+
 			$sort .= $sql['sort'];
 			$where .= $sql['where'];
 		}
