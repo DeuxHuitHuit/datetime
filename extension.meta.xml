@@ -23,6 +23,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.7.0" date="2017-05-26" min="2.5.0" max="2.x.x">
+			- Add support for Portuguese Language
+		</release>
 		<release version="3.6.0" date="2017-04-05" min="2.5.0" max="2.x.x">
 			- Add support for Dutch Language
 		</release>
