@@ -124,7 +124,7 @@
 		'hoje',
 		
 		'tomorrow' => 
-		'amanhã,
+		'amanhã',
 		
 		'now' => 
 		'agora',
