@@ -18,7 +18,8 @@
 			'norwegian' => 'no, no_NO.UTF8, no_NO',
 			'romanian' => 'ro, ro_RO.UTF8, ro_RO',
 			'russian' => 'ru, ru_RU.UTF8, ru_RU',
-			'portuguese' => 'pt, pt_PT.UTF8, pt_PT'
+			'portuguese' => 'pt, pt_PT.UTF8, pt_PT',
+			'spanish' => 'es, es_ES.UTF8, es_ES'
 		);
 
 		/**
