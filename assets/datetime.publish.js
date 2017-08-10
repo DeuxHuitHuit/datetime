@@ -267,7 +267,7 @@
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
-						url: Symphony.Context.get('root') + '/symphony/extension/datetime/get/',
+						url: Symphony.Context.get('symphony') + '/extension/datetime/get/',
 						data: { 
 							date: date,
 							time: Math.min(calendar.find('.timeline').size(), 1)
