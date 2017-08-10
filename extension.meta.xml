@@ -24,7 +24,7 @@
 	</authors>
 	<releases>
 		<release version="3.8.1" date="2017-08-10" min="2.5.0" max="2.x.x">
-			-Remove the hardcoded /symphony admin url part
+			- Remove the hardcoded /symphony admin url part
 		</release>
 		<release version="3.8.0" date="2017-06-26" min="2.5.0" max="2.x.x">
 			- Add support for Spanish Language
