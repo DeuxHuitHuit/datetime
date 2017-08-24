@@ -1,23 +1,23 @@
 <?php
 
 	require_once(TOOLKIT . '/class.datasource.php');
-	
+
 	Class datasourceDatetime extends Datasource {
-		
+
 		/**
 		 * International language codes
 		 *
 		 * Please define the included languages in your configuration
 		 */
 		public $dsParamLANG = array();
-		
+
 		/**
 		 * Initialise data source
 		 */
-		public function __construct($env=NULL, $process_params=true){
+		public function __construct($env = null, $process_params = true){
 			parent::__construct($env, $process_params);
 			$this->dsParamLANG = array();
-			
+
 			// Load language codes from configuration
 			$languages = Symphony::Configuration()->get('datetime');
 			if(is_array($languages)) {
@@ -26,7 +26,7 @@
 				}
 			}
 		}
-				
+
 		/**
 		 * About this data source
 		 */
@@ -39,22 +39,22 @@
 				),
 				'version' => '2.0',
 				'release-date' => '2012-02-07'
-			);	
+			);
 		}
-		
+
 		/**
 		 * Disallow data source parsing
 		 */
 		public function allowEditorToParse() {
 			return false;
 		}
-		
+
 		/**
 		 * This function generates a list of month and weekday names for each language provided.
 		 */
-		public function grab(array &$param_pool=NULL) {
+		public function grab(array &$param_pool = null) {
 			$result = new XMLElement('datetime');
-			
+
 			// No language specified
 			if(empty($this->dsParamLANG)) {
 				$empty = new XMLElement('error', __('No language specified. Please select one or more in the system preferences.'));
@@ -65,14 +65,14 @@
 			// Date
 			$date = new DateTime('1st January');
 			$storage = array();
-			
+
 			// Months
 			$storage['months'] = array();
 			for($i = 1; $i <= 12; $i++) {
 				$storage['months'][] = $date->getTimestamp();
 				$date->modify('+1 month');
 			}
-			
+
 			// Weekdays
 			$storage['weekdays'] = array();
 			$date->modify('last Monday');
@@ -80,12 +80,12 @@
 				$storage['weekdays'][] = $date->getTimestamp();
 				$date->modify('+1 day');
 			}
-			
+
 			// Loop through languages
 			foreach($this->dsParamLANG as $code) {
-				
+
 				// Setup current langauge
-				$lang = new XMLElement('language', NULL, array('id' => $code[0]));
+				$lang = new XMLElement('language', null, array('id' => $code[0]));
 				setlocale(LC_TIME, $code);
 
 				// Generate months
@@ -93,8 +93,8 @@
 				$count = 1;
 				foreach($storage['months'] as $month) {
 					$months->appendChild(new XMLElement(
-						'month', 
-						strftime('%B', $month), 
+						'month',
+						strftime('%B', $month),
 						array(
 							'id' => $count++,
 							'abbr' => strftime('%b', $month)
@@ -102,14 +102,14 @@
 					));
 				}
 				$lang->appendChild($months);
-				
+
 				// Generate weekdays
 				$weekdays = new XMLElement('weekdays');
 				$count = 1;
 				foreach($storage['weekdays'] as $weekday) {
 					$weekdays->appendChild(new XMLElement(
-						'day', 
-						strftime('%A', $weekday), 
+						'day',
+						strftime('%A', $weekday),
 						array(
 							'id' => $count++,
 							'abbr' => strftime('%a', $weekday)
@@ -124,5 +124,5 @@
 
 			return $result;
 		}
-		
+
 	}
