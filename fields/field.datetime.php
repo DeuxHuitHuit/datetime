@@ -865,6 +865,18 @@
 			$where .= $sql['where'];
 		}
 
+		public function buildSortingSelectSQL($sort, $order = 'ASC')
+		{
+			if ($this->isRandomOrder($order)) {
+				return null;
+			}
+			$field_id = $this->get('id');
+			if (!preg_match( '/`t'.$field_id.'`/', $this->lastWhere)) {
+				return '`ed`.`start`, `ed`.`end`';
+			}
+			return "`t$field_id`.`start`, `t$field_id`.`end`";
+		}
+
 	/*-------------------------------------------------------------------------
 		Grouping:
 	-------------------------------------------------------------------------*/
