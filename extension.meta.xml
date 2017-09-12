@@ -23,6 +23,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.8.2" date="2017-09-12" min="2.5.0" max="2.x.x">
+			- Implement the 2.7.0 `buildSortingSelectSQL()` method for MySQL 5.7
+		</release>
 		<release version="3.8.1" date="2017-08-10" min="2.5.0" max="2.x.x">
 			- Remove the hardcoded /symphony admin url part
 		</release>
