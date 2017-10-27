@@ -871,7 +871,7 @@
 				return null;
 			}
 			$field_id = $this->get('id');
-			if (!preg_match( '/`t'.$field_id.'`/', $this->lastWhere)) {
+			if (!preg_match( '/`t'.$field_id.'`/', $sort)) {
 				return '`ed`.`start`, `ed`.`end`';
 			}
 			return "`t$field_id`.`start`, `t$field_id`.`end`";
