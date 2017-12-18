@@ -9,7 +9,7 @@ div.dt-calendar {
 	-webkit-font-smoothing: antialiased;
 	position: relative;
 	margin: 0 auto;
-	padding: 1.5rem 0!important;
+	padding: 1.5rem 1rem!important;
 	border: none!important;
 	background: none!important;
 	max-width: 30rem;
@@ -169,7 +169,7 @@ div.dt-calendar div.switch.active li {
 
 div.dt-calendar div.switch.active ul:hover li:nth-child(6) {
 	background: #fff;
-	color: #757c84;
+	color: #657685;
 }
 
 div.dt-calendar div.switch.active ul li:nth-child(6) {
