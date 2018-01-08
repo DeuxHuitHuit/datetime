@@ -319,12 +319,21 @@
 
 					// Filter by start date
 					case self::START:
-						$tmp[] = "(`t$field_id`.start BETWEEN '" . $range['start'] . "' AND '" . $range['end'] . "')";
+
+						if ($range['start'] == 'IS NULL') {
+							$tmp[] = "(`t$field_id`.start IS NULL)";
+						} else {
+							$tmp[] = "(`t$field_id`.start BETWEEN '" . $range['start'] . "' AND '" . $range['end'] . "')";
+						}
 						break;
 
 					// Filter by end date
 					case self::END:
-						$tmp[] = "(`t$field_id`.end BETWEEN '" . $range['start'] . "' AND '" . $range['end'] . "')";
+						if ($range['end'] == 'IS NULL') {
+							$tmp[] = "(`t$field_id`.end IS NULL)";
+						} else {
+							$tmp[] = "(`t$field_id`.end BETWEEN '" . $range['start'] . "' AND '" . $range['end'] . "')";
+						}
 						break;
 
 					// Filter by full date range, start and end have to be in range
