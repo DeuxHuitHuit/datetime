@@ -103,12 +103,12 @@
 			// Create database field table
 			$status[] = Symphony::Database()->query(
 				"CREATE TABLE `tbl_fields_datetime` (
-					`id` int(11) unsigned NOT NULL auto_increment,
-					`field_id` int(11) unsigned NOT NULL,
-					`prepopulate` tinyint(1) DEFAULT '1',
-					`time` tinyint(1) DEFAULT '1',
-					`multiple` tinyint(1) DEFAULT '1',
-					`range` tinyint(1) DEFAULT '1',
+					`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+					`field_id` INT(11) UNSIGNED NOT NULL,
+					`prepopulate` TINYINT(1) DEFAULT '1',
+					`time` TINYINT(1) DEFAULT '1',
+					`multiple` TINYINT(1) DEFAULT '1',
+					`range` TINYINT(1) DEFAULT '1',
         	  		PRIMARY KEY  (`id`),
 			  		KEY `field_id` (`field_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
@@ -146,8 +146,8 @@
 					// New database schema
 					$status[] = Symphony::Database()->query(
 						"ALTER TABLE `tbl_entries_data_$field`
-						 MODIFY `start` datetime NOT NULL,
-						 MODIFY `end` datetime NOT NULL"
+						 MODIFY `start` DATETIME NOT NULL,
+						 MODIFY `end` DATETIME NOT NULL"
 					);
 
 					// Don't allow empty end dates
@@ -169,20 +169,20 @@
 				// Add time setting
 				if(!in_array('time', $columns)) {
 					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` ADD `time` tinyint(1) DEFAULT '1'"
+						"ALTER TABLE `tbl_fields_datetime` ADD `time` TINYINT(1) DEFAULT '1'"
 					);
 				}
 
 				// Add range setting
 				if(!in_array('range', $columns)) {
 					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` ADD `range` tinyint(1) DEFAULT '1'"
+						"ALTER TABLE `tbl_fields_datetime` ADD `range` TINYINT(1) DEFAULT '1'"
 					);
 				}
 
 				// Modify prepopulation setting
 				$status[] = Symphony::Database()->query(
-					"ALTER TABLE `tbl_fields_datetime` MODIFY `prepopulate` tinyint(1) DEFAULT '1'"
+					"ALTER TABLE `tbl_fields_datetime` MODIFY `prepopulate` TINYINT(1) DEFAULT '1'"
 				);
 
 				// Correctly store old 'no' values
@@ -207,7 +207,7 @@
 				// Add multiple setting
 				if(!in_array('multiple', $columns)) {
 					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` ADD `multiple` tinyint(1) DEFAULT '1'"
+						"ALTER TABLE `tbl_fields_datetime` ADD `multiple` TINYINT(1) DEFAULT '1'"
 					);
 				}
 

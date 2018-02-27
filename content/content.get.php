@@ -14,7 +14,7 @@
 		}
 
 		public function view(){
-			$this->_Result = Calendar::formatDate(General::sanitize($_GET['date']), General::sanitize($_GET['time']), NULL, true);
+			$this->_Result = Calendar::formatDate(General::sanitize($_GET['date']), General::sanitize($_GET['time']), null, true);
 		}
 
 		public function generate($page = null){

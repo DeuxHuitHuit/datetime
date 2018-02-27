@@ -55,10 +55,10 @@
 		function createTable() {
 			return Symphony::Database()->query(
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-				`id` int(11) unsigned NOT NULL auto_increment,
-				`entry_id` int(11) unsigned NOT NULL,
-				`start` datetime NOT NULL,
-				`end` datetime NOT NULL,
+				`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+				`entry_id` INT(11) UNSIGNED NOT NULL,
+				`start` DATETIME NOT NULL,
+				`end` DATETIME NOT NULL,
 				PRIMARY KEY (`id`),
 				KEY `entry_id` (`entry_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
@@ -85,12 +85,12 @@
 		 * @return XMLElement
 		 *  returns a date element
 		 */
-		public static function createDate($element, $start=NULL, $end=NULL, $class=NULL, $prepopulate=1, $time=1) {
+		public static function createDate($element, $start = null, $end = null, $class = null, $prepopulate = 1, $time = 1) {
 			$classes = array();
 
 			// This is hacky: remove empty end dates
 			if($end == $start) {
-				$end = NULL;
+				$end = null;
 			}
 
 			// Range
@@ -415,7 +415,7 @@
 
 			// General
 			$fieldset = new XMLElement('fieldset');
-			$group = new XMLElement('div', NULL, array('class' => 'two columns'));
+			$group = new XMLElement('div', null, array('class' => 'two columns'));
 			$this->appendRequiredCheckbox($group);
 			$this->appendShowColumnCheckbox($group);
 			$fieldset->appendChild($group);
@@ -504,7 +504,7 @@
 
 				for($i = 0; $i < count($data['start']); $i++) {
 					$list->appendChild(
-						self::createDate($this->get('element_name'), $data['start'][$i], $data['end'][$i], NULL, $this->get('prepopulate'), $this->get('time'))
+						self::createDate($this->get('element_name'), $data['start'][$i], $data['end'][$i], null, $this->get('prepopulate'), $this->get('time'))
 					);
 				}
 			}
@@ -512,13 +512,13 @@
 			// Current date and time
 			elseif((int)$this->get('prepopulate') === 1 || (int)$this->get('multiple') === 0) {
 				$list->appendChild(
-					self::createDate($this->get('element_name'), NULL, NULL, NULL, $this->get('prepopulate'), $this->get('time'))
+					self::createDate($this->get('element_name'), null, null, null, $this->get('prepopulate'), $this->get('time'))
 				);
 			}
 
 			// Add template
 			if((int)$this->get('multiple') === 1) {
-				$template = self::createDate($this->get('element_name'), NULL, NULL, 'template', $this->get('prepopulate'), $this->get('time'));
+				$template = self::createDate($this->get('element_name'), null, null, 'template', $this->get('prepopulate'), $this->get('time'));
 				$template->setAttribute('data-name', 'datetime');
 				$template->setAttribute('data-type', 'datetime');
 				$list->appendChild($template);
@@ -545,9 +545,9 @@
 			return self::__OK__;
 		}
 
-		function processRawFieldData($data, &$status, &$message=null, $simulate=false, $entry_id=null) {
+		function processRawFieldData($data, &$status, &$message = null, $simulate = false, $entry_id = null) {
 			$status = self::__OK__;
-			if(!is_array($data)) return NULL;
+			if(!is_array($data)) return null;
 
 			// Clean up dates
 			$result = array('start' => array(), 'end' => array());
@@ -573,7 +573,7 @@
 
 			// Result
 			if(empty($data['start'][0])) {
-				return NULL;
+				return null;
 			}
 			else {
 				return $result;
@@ -772,7 +772,7 @@
 			return '<time datetime="' . $date->format('Y-m-d\TH:i:s\Z') . '">' . LANG::localizeDate($date->format($scheme)) . '</time>';
 		}
 
-		public function getParameterPoolValue(array $data, $entry_id=NULL) {
+		public function getParameterPoolValue(array $data, $entry_id = null) {
 			return $this->prepareExportValue($data, ExportableField::LIST_OF + ExportableField::VALUE, $entry_id);
 		}
 
@@ -811,7 +811,7 @@
 
 		private function buildSortingSQLForTable($table, $field_id, $order) {
 			$sort = 'ORDER BY ';
-			
+
 			// parse the last where clause used in filtering
 			$sortFilter = preg_replace( '/`t[0-9]+`/', '`m`', $this->lastWhere);
 			if (!$sortFilter) {
@@ -834,12 +834,12 @@
 				$sort .= "`$table`.`start` $order";
 				$op = 'MAX';
 			}
-			
+
 			$null_clause = '';
 			if ($this->get('required') != 'yes') {
 				$null_clause = " OR `$table`.`start` IS NULL";
 			}
-			
+
 			$where = " AND (`$table`.`start` = (
 				SELECT $op(`m`.`start`) FROM `tbl_entries_data_".$field_id."`AS `m`
 				WHERE `m`.`entry_id` = `e`.`id` AND $sortFilter
@@ -857,19 +857,19 @@
 		public function buildSortingSQL(&$joins, &$where, &$sort, $order = 'ASC'){
 			$field_id = $this->get( 'id' );
 			$order    = strtolower( $order );
-			
+
 			// If we already have a JOIN to the entry table, don't create another one,
 			// this prevents issues where an entry with multiple dates is returned multiple
 			// times in the SQL, but is actually the same entry.
 			if( !preg_match( '/`t'.$field_id.'`/', $joins ) ){
 				$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$field_id."` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
-				
+
 				$sql = $this->buildSortingSQLForTable('ed', $field_id, $order);
 			}
 			else {
 				$sql = $this->buildSortingSQLForTable("t$field_id", $field_id, $order);
 			}
-			
+
 			$sort .= $sql['sort'];
 			$where .= $sql['where'];
 		}

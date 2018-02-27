@@ -6,19 +6,20 @@
  */
 
 div.timer {
-	overflow: hidden;
-	margin: 0 -4px 7px;
-	padding: 0 4px;
+	margin: 0 auto;
+	padding: 0;
+	width: 100%;
+	max-width: 30rem;
 }
 
 div.timeline {
 	position: relative;
-	margin: 39px 0 0;
+	margin: 3rem 0 0;
 	padding: 0;
-	border-top: 3px solid #323230;
-	border-bottom: 3px solid #323230;
+	border-top: 3px solid #2f77eb;
+	border-bottom: 3px solid #2f77eb;
 	height: 1px !important;
-	background: #424140;
+	background: #2f77eb;
 	width: 100%;
 }
 
@@ -33,7 +34,7 @@ div.timeline.end span.start {
 div.timeline span {
 	color: transparent;
 	border: none;
-	border-left: 1px solid #42413f;
+	border-left: 1px solid rgba(0,0,0,0.1);
 	height: 7px;
 	width: 5px !important;
 	background: none !important;
@@ -172,21 +173,19 @@ div.timeline.end div.range {
 div.timeline code {
 	position: absolute;
 	left: 0;
-	top: -23px;
-	background: #56554D;
-	border-radius: 2px;
+	top: -26px;
+	background: #fff;
+	border: 1px solid #d3dce2;
+	border-radius: 5px;
 	padding: 1px 3px;
-	color: #e4e4e4;
-	font-size: 1em;
+	color: #2f77eb;
+	font-size: 1.2rem;
 	white-space: nowrap;
 	min-width: 28px;
 	text-align: center;
 }
 
 div.timeline div.selector code {
-	background: #2a2a28;
-	color: rgba(255, 255, 255, 0.7);
-	box-shadow: 0 0 10px #353533;
 	display: block;
 }
 
@@ -237,20 +236,6 @@ div.range span.active {
 	-ms-box-sizing: border-box;
 	-o-box-sizing: border-box;
 	box-sizing: border-box;
-}
-
-@media screen and (min-width: 1000px) {
-
-	fieldset.primary div.timer {
-		vertical-align: top;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-		display: inline-block;
-		width: 50%;
-		margin: 0;
-		padding: 0 0 0 28px;
-	}
-
 }
 
 /* Ordering */
