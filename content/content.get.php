@@ -6,7 +6,7 @@
 	require_once(TOOLKIT . '/class.administrationpage.php');
 	require_once(EXTENSIONS . '/datetime/lib/class.calendar.php');
 
-	class contentExtensionDatetimeGet extends AjaxPage {
+	class contentExtensionDatetimeGet extends JSONPage {
 
 		public function handleFailedAuthorisation(){
 			$this->setHttpStatus(self::HTTP_STATUS_UNAUTHORIZED);
