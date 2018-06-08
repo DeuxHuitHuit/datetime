@@ -53,16 +53,26 @@
 	-------------------------------------------------------------------------*/
 
 		function createTable() {
-			return Symphony::Database()->query(
-				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-				`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-				`entry_id` INT(11) UNSIGNED NOT NULL,
-				`start` DATETIME NOT NULL,
-				`end` DATETIME NOT NULL,
-				PRIMARY KEY (`id`),
-				KEY `entry_id` (`entry_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
-			);
+			return Symphony::Database()
+				->create('tbl_entries_data_' . $this->get('id'))
+				->ifNotExists()
+				->charset('utf8')
+				->collate('utf8_unicode_ci')
+				->fields([
+					'id' => [
+						'type' => 'int(11)',
+						'auto' => true,
+					],
+					'entry_id' => 'int(11)',
+					'start' => 'datetime',
+					'end' => 'datetime',
+				])
+				->keys([
+					'id' => 'primary',
+					'entry_id' => 'key',
+				])
+				->execute()
+				->success();
 		}
 
 	/*-------------------------------------------------------------------------

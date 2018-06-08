@@ -100,19 +100,40 @@
 		public function install() {
 			$status = array();
 
-			// Create database field table
-			$status[] = Symphony::Database()->query(
-				"CREATE TABLE `tbl_fields_datetime` (
-					`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-					`field_id` INT(11) UNSIGNED NOT NULL,
-					`prepopulate` TINYINT(1) DEFAULT '1',
-					`time` TINYINT(1) DEFAULT '1',
-					`multiple` TINYINT(1) DEFAULT '1',
-					`range` TINYINT(1) DEFAULT '1',
-        	  		PRIMARY KEY  (`id`),
-			  		KEY `field_id` (`field_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
-			);
+			$status[] = Symphony::Database()
+				->create('tbl_fields_datetime')
+				->ifNotExists()
+				->charset('utf8')
+				->collate('utf8_unicode_ci')
+				->fields([
+					'id' => [
+						'type' => 'int(11)',
+						'auto' => true,
+					],
+					'field_id' => 'int(11)',
+					'prepopulate' => [
+						'type' => 'tinyint(1)',
+						'default' => 1,
+					],
+					'time' => [
+						'type' => 'tinyint(1)',
+						'default' => 1,
+					],
+					'multiple' => [
+						'type' => 'tinyint(1)',
+						'default' => 1,
+					],
+					'range' => [
+						'type' => 'tinyint(1)',
+						'default' => 1,
+					],
+				])
+				->keys([
+					'id' => 'primary',
+					'field_id' => 'key',
+				])
+				->execute()
+				->success();
 
 			// Add language strings to configuration
 			Symphony::Configuration()->set('english', $this->languages['english'], 'datetime');
@@ -134,62 +155,106 @@
 			$status = array();
 
 			// Get table columns
-			$columns = Symphony::Database()->fetchCol('Field', "SHOW COLUMNS FROM `tbl_fields_datetime`");
+			$columns = Symphony::Database()
+				->showColumns()
+				->from('tbl_fields_datetime')
+				->execute()
+				->column('Field');
 
 			// Prior version 2.0
 			if(version_compare($previousVersion, '2.0', '<')) {
 
 				// Update existing entries
-				$fields = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` from `tbl_fields_datetime`");
+				$fields = Symphony::Database()
+					->select(['field_id'])
+					->from('tbl_fields_datetime')
+					->execute()
+					->column('field_id');
+
 				foreach($fields as $field) {
 
 					// New database schema
-					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_entries_data_$field`
-						 MODIFY `start` DATETIME NOT NULL,
-						 MODIFY `end` DATETIME NOT NULL"
-					);
+					$status[] = Symphony::Database()
+						->alter('tbl_entries_data_' . $field)
+						->modify([
+							'start' => 'datetime',
+							'end' => 'datetime',
+						])
+						->execute()
+						->success();
 
 					// Don't allow empty end dates
-					$status[] = Symphony::Database()->query(
-						"UPDATE `tbl_entries_data_$field`
-						 SET `end` = `start`
-						 WHERE `end` = 'none'
-						 OR `end` = '0000-00-00 00:00'"
-					);
+					$status[] = Symphony::Database()
+						->update('tbl_entries_data_' . $field)
+						->set([
+							'end' => 'start',
+						])
+						->where('or',[
+							['end' => 'none'],
+							['end' => '0000-00-00 00:00'],
+						])
+						->execute()
+						->success();
 				}
 
 				// Remove allow multiple setting
 				if(in_array('allow_multiple_dates', $columns)) {
-					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` DROP `allow_multiple_dates`"
-					);
+					$status[] = Symphony::Database()
+						->alter('tbl_fields_datetime')
+						->drop('allow_multiple_dates')
+						->execute()
+						->success();
 				}
 
 				// Add time setting
 				if(!in_array('time', $columns)) {
-					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` ADD `time` TINYINT(1) DEFAULT '1'"
-					);
+					$status[] = Symphony::Database()
+						->alter('tbl_fields_datetime')
+						->add([
+							'time' => [
+								'type' => 'tinyint(1)',
+								'default' => 1,
+							],
+						])
+						->execute()
+						->success();
 				}
 
 				// Add range setting
 				if(!in_array('range', $columns)) {
-					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` ADD `range` TINYINT(1) DEFAULT '1'"
-					);
+					$status[] = Symphony::Database()
+						->alter('tbl_fields_datetime')
+						->add([
+							'range' => [
+								'type' => 'tinyint(1)',
+								'default' => 1,
+							],
+						])
+						->execute()
+						->success();
 				}
 
 				// Modify prepopulation setting
-				$status[] = Symphony::Database()->query(
-					"ALTER TABLE `tbl_fields_datetime` MODIFY `prepopulate` TINYINT(1) DEFAULT '1'"
-				);
+				$status[] = Symphony::Database()
+					->alter('tbl_fields_datetime')
+					->modify([
+						'prepopulate' => [
+							'type' => 'tinyint(1)',
+							'default' => 1,
+						],
+					])
+					->execute()
+					->success();
 
 				// Correctly store old 'no' values
-				$status[] = Symphony::Database()->query(
-					"UPDATE tbl_fields_datetime
-					 SET `prepopulate` = 0 WHERE `prepopulate` > 1"
-				);
+				$status[] = Symphony::Database()
+					->update('tbl_fields_datetime')
+					->set([
+						'prepopulate' => 0,
+					])
+					->where(['prepopulate' => ['>' => 1]])
+					->execute()
+					->success();
 			}
 
 			// Prior version 2.4
@@ -206,22 +271,56 @@
 
 				// Add multiple setting
 				if(!in_array('multiple', $columns)) {
-					$status[] = Symphony::Database()->query(
-						"ALTER TABLE `tbl_fields_datetime` ADD `multiple` TINYINT(1) DEFAULT '1'"
-					);
+					$status[] = Symphony::Database()
+						->alter('tbl_fields_datetime')
+						->add([
+							'multiple' => [
+								'type' => 'tinyint(1)',
+								'default' => 1,
+							],
+						])
+						->execute()
+						->success();
 				}
 
 				// Transfer old Stage settings
-				$constructables = Symphony::Database()->fetchCol("field_id", "SELECT `field_id` FROM  `tbl_fields_stage` WHERE  `constructable` = 0");
+				$constructables = Symphony::Database()
+					->select(['field_id'])
+					->from('tbl_fields_stage')
+					->where(['constructable' => 0])
+					->execute()
+					->column('field_id');
+
 				if(!empty($constructables) && is_array($constructables)) {
-					Symphony::Database()->query("UPDATE `tbl_fields_datetime` SET `multiple` = 0 WHERE `field_id` IN (" . implode(',', $constructables) . ")");
+					$status[] = Symphony::Database()
+						->update('tbl_fields_datetime')
+						->set([
+							'multiple' => 0,
+						])
+						->where(['field_id' => ['in' => $constructables]])
+						->execute()
+						->success();
 				}
 
 				// Remove old Stage instances
-				$does_stage_exist = Symphony::Database()->fetchRow(0, "SHOW TABLES LIKE 'tbl_fields_stage'");
+				$does_stage_exist = Symphony::Database()
+					->show()
+					->like('tbl_fields_stage')
+					->execute()
+					->rows();
+
 				if(!empty($does_stage_exist)) {
-					Symphony::Database()->query("DELETE FROM `tbl_fields_stage` WHERE `context` = 'datetime'");
-					Symphony::Database()->query("DELETE FROM `tbl_fields_stage_sorting` WHERE `context` = 'datetime'");
+					$status[] = Symphony::Database()
+						->delete('tbl_fields_stage')
+						->where(['context' => 'datetime'])
+						->execute()
+						->success();
+
+					$status[] = Symphony::Database()
+						->delete('tbl_fields_stage_sorting')
+						->where(['context' => 'datetime'])
+						->execute()
+						->success();
 				}
 			}
 
@@ -238,22 +337,54 @@
 		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#uninstall
 		 */
 		public function uninstall() {
+			$status = array();
 
 			// Remove old Stage tables if they are empty
-			$does_stage_exist = Symphony::Database()->fetchRow(0, "SHOW TABLES LIKE 'tbl_fields_stage'");
+			$does_stage_exist = Symphony::Database()
+				->show()
+				->like('tbl_fields_stage')
+				->execute()
+				->rows();
+
 			if(!empty($does_stage_exist)) {
-				$count = Symphony::Database()->query("SELECT COUNT(*) FROM `tbl_fields_stage`");
+				$count = Symphony::Database()
+					->select(['count(*)'])
+					->from('tbl_fields_stage')
+					->execute()
+					->rows();
+
 				if($count == 0) {
-					Symphony::Database()->query("DROP TABLE `tbl_fields_stage`");
-					Symphony::Database()->query("DROP TABLE `tbl_fields_stage_sorting`");
+					$status[] = Symphony::Database()
+						->drop('tbl_fields_stage')
+						->ifExists()
+						->execute()
+						->success();
+
+					$status[] = Symphony::Database()
+						->drop('tbl_fields_stage_sorting')
+						->ifExists()
+						->execute()
+						->success();
 				}
 			}
 
 			// Drop date and time table
-			Symphony::Database()->query("DROP TABLE `tbl_fields_datetime`");
+			$status[] = Symphony::Database()
+				->drop('tbl_fields_datetime')
+				->ifExists()
+				->execute()
+				->success();
 
 			// Remove language strings from configuration
 			Symphony::Configuration()->remove('datetime');
+
+			// Report status
+			if(in_array(false, $status, true)) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 
 	}

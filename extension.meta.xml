@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension id="datetime" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
-	<name>Date and Time</name>
+	<name>Field: Date and Time</name>
 	<description>Date and time management for Symphony</description>
 	<repo type="github">https://github.com/DeuxHuitHuit/datetime</repo>
 	<url type="discuss">https://www.getsymphony.com/discuss/thread/83265</url>
@@ -25,6 +25,7 @@
 	<releases>
 		<release version="4.0.0" date="TBA" min="4.0.0" max="4.x.x" php-min="5.6.x" php-max="7.x.x">
 			- Update for Symphony 4.x
+			- Code refactoring for Database and EQFA
 		</release>
 		<release version="3.9.0" date="2018-01-15" min="2.5.0" max="2.x.x">
 			- Add `IS NULL` filter for start and end mode
