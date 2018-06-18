@@ -151,7 +151,7 @@
 		/**
 		 * @see http://symphony-cms.com/learn/api/2.3/toolkit/extension/#update
 		 */
-		public function update($previousVersion = null) {
+		public function update($previousVersion = false) {
 			$status = array();
 
 			// Get table columns

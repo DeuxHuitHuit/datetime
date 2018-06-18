@@ -10,6 +10,7 @@
 
 	require_once TOOLKIT . '/fields/field.date.php';
 	require_once(EXTENSIONS . '/datetime/lib/class.calendar.php');
+	require_once EXTENSIONS . '/datetime/lib/class.entryquerydatetimeadapter.php';
 
 	Class fieldDatetime extends fieldDate {
 
@@ -26,6 +27,8 @@
 
 		function __construct() {
 			parent::__construct();
+			$this->entryQueryFieldAdapter = new EntryQueryDatetimeAdapter($this);
+
 			$this->_name = __('Date/Time');
 			$this->_required = true;
 			$this->set('location', 'sidebar');
