@@ -52,7 +52,7 @@
 		/**
 		 * This function generates a list of month and weekday names for each language provided.
 		 */
-		public function grab(array &$param_pool = null) {
+		public function execute(array &$param_pool = null) {
 			$result = new XMLElement('datetime');
 
 			// No language specified
