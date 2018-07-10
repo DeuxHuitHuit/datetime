@@ -792,6 +792,33 @@
 	/*-------------------------------------------------------------------------
 		Filtering:
 	-------------------------------------------------------------------------*/
+
+		public function fetchFilterableOperators()
+		{
+			return array(
+				array(
+					'title'				=> 'start',
+					'filter'			=> 'start:',
+					'help'				=> __('Find start dates that are equal or lesser than filter.')
+				),
+				array(
+					'title'				=> 'end',
+					'filter'			=> 'end:',
+					'help'				=> __('Find end dates that are equal or greather than filter.')
+				),
+				array(
+					'title'				=> 'strict',
+					'filter'			=> 'strict:',
+					'help'				=> __('Find dates that start before or at and end after or at filter.')
+				),
+				array(
+					'title'				=> 'extended',
+					'filter'			=> 'extended:',
+					'help'				=> __('Find start dates that are equal or lesser than filter.')
+				),
+			);
+		}
+
 		private $lastWhere = '';
 		function buildDSRetrievalSQL($data, &$joins, &$where, $andOperation = false) {
 
