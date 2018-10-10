@@ -25,17 +25,14 @@ class EntryQueryDatetimeAdapter extends EntryQueryDateAdapter
 
         if ($matches[1] == 'start') {
             $conditions[] = [$this->formatColumn('start', $field_id) => ['between' => [$range['start'], $range['end']]]];
-        }
-        if ($matches[1] == 'end') {
+        } elseif ($matches[1] == 'end') {
             $conditions[] = [$this->formatColumn('end', $field_id) => ['between' => [$range['start'], $range['end']]]];
-        }
-        if ($matches[1] == 'strict') {
+        } elseif ($matches[1] == 'strict') {
             $conditions[] = ['and' => [
                 [$this->formatColumn('start', $field_id) => ['between' => [$range['start'], $range['end']]]],
                 [$this->formatColumn('end', $field_id) => ['between' => [$range['start'], $range['end']]]]
             ]];
-        }
-        if ($matches[1] == 'extended') {
+        } elseif ($matches[1] == 'extended') {
             $conditions[] = ['or' => [
                 [$this->formatColumn('start', $field_id) => ['between' => [$range['start'], $range['end']]]],
                 [$this->formatColumn('end', $field_id) => ['between' => [$range['start'], $range['end']]]],
@@ -48,6 +45,8 @@ class EntryQueryDatetimeAdapter extends EntryQueryDateAdapter
                     [$this->formatColumn('end', $field_id) => '$'.$this->formatColumn('start', $field_id)],
                 ]]
             ]];
+        } else {
+            $conditions = parent::createFilterDateRange($filter, $columns);
         }
 
         if (count($conditions) < 2) {
