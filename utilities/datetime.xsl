@@ -6,14 +6,14 @@
 	
 	- Author: Nils Hörrmann <http://nilshoerrmann.de> based on a utility by Allen Chang <http://chaoticpattern.com>
 	- See: <http://symphony-cms.com/download/xslt-utilities/view/20506/>
-	- Version: 2.1
-	- Release date: 13th December 2011
+	- Version: 2.2
+	- Release date: 22th November 2018
 	
 	# Example usage
 	
 		<xsl:call-template name="datetime">
 			<xsl:with-param name="date" select="date" />
-		</xsl:call-template>	
+		</xsl:call-template>
 	
 	# Required Parameters:
 
@@ -43,6 +43,7 @@
 	                     iso8601: ISO 8601 formatted date
 				
 	- lang:              Takes a language name, e. g. 'en', 'de'
+	- data:              Takes a xpath query that specifies the root. Defaults to /data
 
 	# Special characters
 	
@@ -55,6 +56,10 @@
 	
 	# Change log
 	
+	## Version 2.2
+
+	- Make the xpath root configurable, because /data is not always accessible
+
 	## Version 2.1
 	
 	- Bug fixes
@@ -84,10 +89,12 @@
 	<xsl:param name="date" />
 	<xsl:param name="format" select="'m D, Y'" />
 	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="data" select="/data" />
 	<xsl:call-template name="datetime">
 		<xsl:with-param name="date" select="$date" />
 		<xsl:with-param name="format" select="$format" />
 		<xsl:with-param name="lang" select="$lang" />
+		<xsl:with-param name="data" select="$data" />
 	</xsl:call-template>
 </xsl:template>
 
@@ -96,10 +103,12 @@
 	<xsl:param name="datum" />
 	<xsl:param name="format" select="'x. M Y'" />
 	<xsl:param name="sprache" select="'de'" />
+	<xsl:param name="data" select="/data" />
 	<xsl:call-template name="datetime">
 		<xsl:with-param name="date" select="$datum" />
 		<xsl:with-param name="format" select="$format" />
 		<xsl:with-param name="lang" select="$sprache" />
+		<xsl:with-param name="data" select="$data" />
 	</xsl:call-template>
 </xsl:template>
 
@@ -112,6 +121,7 @@
 	<xsl:param name="date" />
 	<xsl:param name="format" select="'m D, Y'" />
 	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="data" select="/data" />
 	
 	<!-- Parse date -->
 	<xsl:variable name="year" select="substring($date, 1, 4)" />
@@ -127,6 +137,7 @@
 		<xsl:with-param name="weekday" select="$date/@weekday" />
 		<xsl:with-param name="format" select="$format" />
 		<xsl:with-param name="lang" select="$lang" />
+		<xsl:with-param name="data" select="$data" />
 	</xsl:call-template>
 </xsl:template>
 
@@ -135,16 +146,17 @@
 	<xsl:param name="date" />
 	<xsl:param name="format" select="'m D, Y'" />
 	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="data" select="/data" />
 
 	<!-- Parse date -->
 	<xsl:variable name="year" select="substring($date, 27, 4)" />
 	<xsl:variable name="month">
-		<xsl:if test="/data/datetime/language[@id = 'en']/months/month[@abbr = substring($date, 5, 3)]/@id &lt; 10">0</xsl:if>
-		<xsl:value-of select="/data/datetime/language[@id = 'en']/months/month[@abbr = substring($date, 5, 3)]/@id" />
+		<xsl:if test="$data/datetime/language[@id = 'en']/months/month[@abbr = substring($date, 5, 3)]/@id &lt; 10">0</xsl:if>
+		<xsl:value-of select="$data/datetime/language[@id = 'en']/months/month[@abbr = substring($date, 5, 3)]/@id" />
 	</xsl:variable>
 	<xsl:variable name="day" select="substring($date, 9, 2)" />
 	<xsl:variable name="time" select="substring($date, 12, 5)" />
-	<xsl:variable name="weekday" select="/data/datetime/language[@id = 'en']/weekdays/weekday[@abbr = substring($date, 1, 3)]/@id" />
+	<xsl:variable name="weekday" select="$data/datetime/language[@id = 'en']/weekdays/weekday[@abbr = substring($date, 1, 3)]/@id" />
 	
 	<!-- Format date -->
 	<xsl:call-template name="datetime-formatter">
@@ -155,6 +167,7 @@
 		<xsl:with-param name="weekday" select="$weekday" />
 		<xsl:with-param name="format" select="$format" />
 		<xsl:with-param name="lang" select="$lang" />
+		<xsl:with-param name="data" select="$data" />
 	</xsl:call-template>
 </xsl:template>
 
@@ -163,6 +176,7 @@
 	<xsl:param name="date" />
 	<xsl:param name="format" select="'m D, Y'" />
 	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="data" select="/data" />
 
 	<!-- Parse date -->
 	<xsl:variable name="year" select="substring($date, 1, 4)" />
@@ -178,6 +192,7 @@
 		<xsl:with-param name="time" select="$time" />
 		<xsl:with-param name="format" select="$format" />
 		<xsl:with-param name="lang" select="$lang" />
+		<xsl:with-param name="data" select="$data" />
 	</xsl:call-template>
 </xsl:template>
 
@@ -192,6 +207,7 @@
 	<xsl:param name="weekday" />
 	<xsl:param name="format" />
 	<xsl:param name="lang" select="'en'" />
+	<xsl:param name="data" select="/data" />
 	
 	<!-- Get format -->
 	<xsl:variable name="datetime-format">
@@ -219,6 +235,7 @@
 		<xsl:with-param name="weekday" select="$weekday" />
 		<xsl:with-param name="format" select="$datetime-format" />
 		<xsl:with-param name="lang" select="$lang" />
+		<xsl:with-param name="data" select="$data" />
 	</xsl:call-template>
 </xsl:template>
 
@@ -233,6 +250,7 @@
 	<xsl:param name="weekday" />
 	<xsl:param name="format" />
 	<xsl:param name="lang" />
+	<xsl:param name="data" select="/data" />
 	
 	<xsl:variable name="string" select="substring($format, 1, 1)" />
 
@@ -251,12 +269,12 @@
 		
 		<!-- Month as a full word, e. g. January, March, September -->
 		<xsl:when test="$string = 'M'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = number($month)]" />
+			<xsl:value-of select="$data/datetime/language[@id = $lang]/months/month[@id = number($month)]" />
 		</xsl:when>
 		
 		<!-- Month in 3 letters, e. g. Jan, Mar, Sep -->
 		<xsl:when test="$string = 'm'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/months/month[@id = number($month)]/@abbr" />
+			<xsl:value-of select="$data/datetime/language[@id = $lang]/months/month[@id = number($month)]/@abbr" />
 		</xsl:when>
 		
 		<!-- Month in digits without leading zero -->
@@ -320,12 +338,12 @@
 		
 		<!-- Weekday as a full word, e. g. Monday, Tuesday -->
 		<xsl:when test="$string = 'W'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/weekdays/day[@id = $weekday]" />
+			<xsl:value-of select="$data/datetime/language[@id = $lang]/weekdays/day[@id = $weekday]" />
 		</xsl:when>
 		
 		<!-- Weekday in 3 letters, e. g. Mon, Tue, Wed -->
 		<xsl:when test="$string = 'w'">
-			<xsl:value-of select="/data/datetime/language[@id = $lang]/weekdays/day[@id = $weekday]/@abbr" />
+			<xsl:value-of select="$data/datetime/language[@id = $lang]/weekdays/day[@id = $weekday]/@abbr" />
 		</xsl:when>
 		
 		<!-- Non-breaking space -->
@@ -362,6 +380,7 @@
 			<xsl:with-param name="weekday" select="$weekday" />
 			<xsl:with-param name="format" select="substring($format, $offset)" />
 			<xsl:with-param name="lang" select="$lang" />
+			<xsl:with-param name="data" select="$data" />
 		</xsl:call-template>
 	</xsl:if>
 </xsl:template>
