@@ -23,6 +23,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.10.0" date="2018-11-22" min="2.5.0" max="2.x.x">
+			- datetime.xsl: Make the xpath root configurable
+		</release>
 		<release version="3.9.0" date="2018-01-15" min="2.5.0" max="2.x.x">
 			- Add `IS NULL` filter for start and end mode
 		</release>
